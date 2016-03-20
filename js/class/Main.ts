@@ -4,6 +4,10 @@ class MainGame
 {
 	public static firstId:number = 0;
 	public static secondId:number = 0;
+	public static firstCard:Card;
+	public static secondCard:Card;
+	public static GameWidth:number = 800;
+	public static GameHeight:number = 600;
 	private arrCard:Array<Card> = new Array();
 	private card1:createjs.Bitmap;
 	private card2:createjs.Bitmap;
@@ -15,12 +19,37 @@ class MainGame
 	private allContainer:createjs.MovieClip;
 	private id:number = 0;
 	private stage = new createjs.Stage("demoCanvas");
-
+	public static timers:number = 0;
+	public static longIdle:number = 2;
 	public init()
 	{
 		createjs.Ticker.setFPS(60);
-		createjs.Ticker.addEventListener("tick", this.stage);
+		createjs.Ticker.addEventListener("tick", this.handleUpdate);
+		createjs.Ticker.addEventListener("tick",this.stage);
 		this.generateCard();
+	}
+	
+	private handleUpdate(event:any):void
+	{
+			MainGame.timers += event.delta/1000;
+			if(MainGame.timers > MainGame.longIdle)
+			{
+				if(MainGame.firstId != 0)
+				{
+					MainGame.firstCard.swapToFace(MainGame.firstCard);
+					MainGame.firstId = 0;
+				}
+
+				if(MainGame.secondId != 0)
+				{
+					MainGame.secondCard.swapToFace(MainGame.secondCard);
+					MainGame.secondId = 0;
+				}
+				MainGame.timers = 0;
+			}
+			//MainGame.timers = event.delta/100;
+			//console.log(MainGame.timers);
+			//console.log(event.delta/1000);
 	}
 
 	private generateCard()
@@ -41,6 +70,8 @@ class MainGame
 
 		this.stage.addChild(this.allContainer);
 		this.stage.update();
+		this.allContainer.x = MainGame.GameWidth/2 - 200;
+		this.allContainer.y = MainGame.GameHeight/2 - 200;
 		this.arrCard = this.shuffleArray(this.arrCard);
 		this.reArrangeAll();
 	}

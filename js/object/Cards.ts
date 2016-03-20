@@ -63,10 +63,41 @@ class Card
 
   private cardClick(e:any=null,masterCard:Card=null):void
   {
-    var b:createjs.MovieClip = e;
-    console.log(masterCard);
-    console.log("hello guys");
-    masterCard.swapToFace(masterCard);
+    MainGame.timers = 0;
+    if(MainGame.firstId == 0){
+        MainGame.firstId = masterCard.id;
+        MainGame.firstCard = masterCard;
+        masterCard.swapToFace(masterCard);
+    }
+    else if(MainGame.secondId == 0){
+        if(MainGame.firstCard == masterCard)
+        {
+          masterCard.swapToFace(masterCard);
+          MainGame.firstId = 0;
+          MainGame.secondId = 0;
+          return;
+        }
+        MainGame.secondId = masterCard.id;
+        MainGame.secondCard = masterCard
+        masterCard.swapToFace(masterCard);
+        if(MainGame.firstId == MainGame.secondId)
+        {
+          masterCard.container.removeChild(MainGame.firstCard.cardContainer);
+          masterCard.container.removeChild(MainGame.secondCard.cardContainer);
+          MainGame.firstId = 0;
+          MainGame.secondId = 0;
+        }
+    }
+    else if(MainGame.secondId != 0)
+    {
+      MainGame.firstCard.swapToFace(MainGame.firstCard);
+      MainGame.secondCard.swapToFace(MainGame.secondCard);
+      MainGame.firstId = 0;
+      MainGame.secondId = 0;
+      this.cardClick(null,masterCard);
+    }
+
+
   }
   public swapToFace(target:Card):void
   {
