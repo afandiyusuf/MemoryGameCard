@@ -2,14 +2,15 @@
 
 class MainGame
 {
-
+	public static firstId:number = 0;
+	public static secondId:number = 0;
 	private arrCard:Array<Object> = new Array();
 	private card1:createjs.Bitmap;
 	private card2:createjs.Bitmap;
 	private preload:Object;
 	private backUrl:string = "asset/card/cardBack_blue2.png";
-	private width:number = 5;
-	private height:number = 4;
+	public static width:number = 5;
+	public static height:number = 4;
 	private margin:number = 5;
 	private allContainer:createjs.MovieClip;
 
@@ -25,9 +26,9 @@ class MainGame
 	private generateCard()
 	{
 		this.allContainer = new createjs.MovieClip();
-		for(var i=0;i<this.width;i++)
+		for(var i=0;i<MainGame.width;i++)
 		{
-			for(var j=0;j<this.height;j++)
+			for(var j=0;j<MainGame.height;j++)
 			{
         var c:Card = new Card();
 				c.backImageUrl = this.backUrl;
