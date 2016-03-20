@@ -3,10 +3,13 @@ class Card
   public id:number;
   private baseImageUrl:string = "asset/card/";
   public backImageUrl:string = "";
+  private face:number = 0;
+
   public frontUrl:string;
   private backImage:createjs.Bitmap;
   private frontImage:createjs.Bitmap;
   private container:createjs.MovieClip;
+  private cardContainer:createjs.MovieClip;
   private thisStage:createjs.Stage;
   private InitScaleX:number = .5;
 
@@ -17,25 +20,33 @@ class Card
 
   public init(stage:createjs.Stage,container:createjs.MovieClip,i:number,j:number,margin:number):void
   {
+    this.cardContainer = new createjs.MovieClip();
     this.thisStage = stage;
     this.container = container;
-    this.id = i+j;
-    this.frontUrl = this.baseImageUrl+this.id+".png";
+    this.id = i+j+1;
+    this.frontUrl = this.baseImageUrl+"cardClubs"+this.id+".png";
 
     this.backImage = new createjs.Bitmap(this.backImageUrl);
     this.frontImage = new createjs.Bitmap(this.frontUrl);
 
-    console.log(i+j);
-    this.container.addChild(this.backImage);
-    this.container.addChild(this.frontImage);
     this.backImage.image.onload = ():void =>this.updateStage(this.backImage);
-    this.container.id = this.id;
-    this.container.scaleX = this.InitScaleX;
-    this.container.scaleY = this.InitScaleX;
-    this.container.x = i*((140 * this.backImage.scaleX)+margin) + 140/2;
-    this.container.y = j*((190 * this.backImage.scaleY)+margin) + 190/2;
-    this.container.addEventListener("click",this.cardClick);
+    this.frontImage.image.onload = ():void => this.updateStage(this.frontImage);
 
+    console.log(i+j);
+    //this.container.addChild(this.backImage);
+
+
+    this.cardContainer.id = this.id;
+    this.cardContainer.scaleX = this.InitScaleX;
+    this.cardContainer.scaleY = this.InitScaleX;
+    this.cardContainer.x = i*((140 * this.cardContainer.scaleX)+margin) + 140/2;
+    this.cardContainer.y = j*((190 * this.cardContainer.scaleY)+margin) + 190/2;
+
+     this.cardContainer.addEventListener("click",():void=>this.cardClick(this.cardContainer,this));
+
+    this.cardContainer.addChild(this.frontImage);
+    this.cardContainer.addChild(this.backImage);
+    this.container.addChild(this.cardContainer);
   }
 
   private updateStage(target:createjs.Bitmap):void
@@ -46,23 +57,33 @@ class Card
     this.thisStage.update();
   }
 
-  private cardClick(e:MouseEvent):void
+  private cardClick(e:any=null,masterCard:Card=null):void
   {
-    var b:createjs.MovieClip = e.currentTarget as createjs.MovieClip;
-    console.log(b.id);
+    var b:createjs.MovieClip = e;
+    console.log(masterCard);
     console.log("hello guys");
-    Card.swapToFace(b);
+    masterCard.swapToFace(masterCard);
   }
-  public static swapToFace(target:createjs.DisplayObject):void
+  public swapToFace(target:Card):void
   {
+    console.log(target.cardContainer);
       //scaleTO0
-      createjs.Tween.get(target).to({scaleX:0},100).call(completeTween,[target]);
+      createjs.Tween.get(target.cardContainer).to({scaleX:0},100).call(completeTween,[target],this);
 
-      function completeTween(target:createjs.Bitmap)
+      function completeTween(target:Card)
       {
 
-        //this.target.scaleX = 0;
-        createjs.Tween.get(target).to({scaleX:0.5},100);
+        if(target.face == 0)
+        {
+          target.face = 1;
+          target.backImage.visible = false;
+          target.frontImage.visible = true;
+        }else{
+          target.face = 0;
+          target.frontImage.visible = false;
+          target.backImage.visible = true;
+        }
+        createjs.Tween.get(target.cardContainer).to({scaleX:0.5},100);
       }
 
     //  createjs.Tween.get(target).wait(100).to({scaleX:0.5},100);

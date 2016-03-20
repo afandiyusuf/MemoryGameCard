@@ -21,7 +21,7 @@ var MainGame = (function () {
         for (var i = 0; i < this.width; i++) {
             for (var j = 0; j < this.height; j++) {
                 var c = new Card();
-                c.backImage = this.backUrl;
+                c.backImageUrl = this.backUrl;
                 c.init(this.stage, this.allContainer, i, j, this.margin);
             }
         }
@@ -32,26 +32,34 @@ var MainGame = (function () {
 }());
 var Card = (function () {
     function Card() {
-        this.backImage = "";
+        this.baseImageUrl = "asset/card/";
+        this.backImageUrl = "";
+        this.face = 0;
         this.InitScaleX = .5;
         this.Card = function () {
         };
     }
     Card.prototype.init = function (stage, container, i, j, margin) {
         var _this = this;
+        this.cardContainer = new createjs.MovieClip();
         this.thisStage = stage;
         this.container = container;
-        var bmp = new createjs.Bitmap(this.backImage);
-        this.id = i + j;
+        this.id = i + j + 1;
+        this.frontUrl = this.baseImageUrl + "cardClubs" + this.id + ".png";
+        this.backImage = new createjs.Bitmap(this.backImageUrl);
+        this.frontImage = new createjs.Bitmap(this.frontUrl);
+        this.backImage.image.onload = function () { return _this.updateStage(_this.backImage); };
+        this.frontImage.image.onload = function () { return _this.updateStage(_this.frontImage); };
         console.log(i + j);
-        this.container.addChild(bmp);
-        bmp.image.onload = function () { return _this.updateStage(bmp); };
-        bmp.image.id = "" + this.id;
-        bmp.scaleX = this.InitScaleX;
-        bmp.scaleY = this.InitScaleX;
-        bmp.x = i * ((140 * bmp.scaleX) + margin) + 140 / 2;
-        bmp.y = j * ((190 * bmp.scaleY) + margin) + 190 / 2;
-        bmp.addEventListener("click", this.cardClick);
+        this.cardContainer.id = this.id;
+        this.cardContainer.scaleX = this.InitScaleX;
+        this.cardContainer.scaleY = this.InitScaleX;
+        this.cardContainer.x = i * ((140 * this.cardContainer.scaleX) + margin) + 140 / 2;
+        this.cardContainer.y = j * ((190 * this.cardContainer.scaleY) + margin) + 190 / 2;
+        this.cardContainer.addEventListener("click", function () { return _this.cardClick(_this.cardContainer, _this); });
+        this.cardContainer.addChild(this.frontImage);
+        this.cardContainer.addChild(this.backImage);
+        this.container.addChild(this.cardContainer);
     };
     Card.prototype.updateStage = function (target) {
         this.thisStage.update();
@@ -59,16 +67,29 @@ var Card = (function () {
         target.regY = target.image.height / 2;
         this.thisStage.update();
     };
-    Card.prototype.cardClick = function (e) {
-        var b = e.currentTarget;
-        console.log(b.image.id);
+    Card.prototype.cardClick = function (e, masterCard) {
+        if (e === void 0) { e = null; }
+        if (masterCard === void 0) { masterCard = null; }
+        var b = e;
+        console.log(masterCard);
         console.log("hello guys");
-        Card.swapToFace(b);
+        masterCard.swapToFace(masterCard);
     };
-    Card.swapToFace = function (target) {
-        createjs.Tween.get(target).to({ scaleX: 0 }, 100).call(completeTween, [target]);
+    Card.prototype.swapToFace = function (target) {
+        console.log(target.cardContainer);
+        createjs.Tween.get(target.cardContainer).to({ scaleX: 0 }, 100).call(completeTween, [target], this);
         function completeTween(target) {
-            createjs.Tween.get(target).to({ scaleX: 0.5 }, 100);
+            if (target.face == 0) {
+                target.face = 1;
+                target.backImage.visible = false;
+                target.frontImage.visible = true;
+            }
+            else {
+                target.face = 0;
+                target.frontImage.visible = false;
+                target.backImage.visible = true;
+            }
+            createjs.Tween.get(target.cardContainer).to({ scaleX: 0.5 }, 100);
         }
     };
     return Card;
