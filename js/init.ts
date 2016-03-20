@@ -1,12 +1,24 @@
 function init()
 {
 	var canvas:any = document.getElementById("game");
-	canvas.width = document.body.clientWidth; //document.width is obsolete
-  canvas.height = document.body.clientHeight;
+	if(document.body.clientWidth > 950)
+	{
+			canvas.width = 950;
+			canvas.height = 450;
+	}else{
+		canvas.width = document.body.clientWidth;
+		canvas.height = canvas.width/19*9;
+	}
+
+
+
 	var mainGame = new MainGame();
 	MainGame.GameWidth = canvas.width;
 	MainGame.GameHeight = canvas.height;
+
 	mainGame.init();
+
+
 
 
 }

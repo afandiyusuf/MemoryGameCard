@@ -14,7 +14,7 @@ class MainGame
 	public static sessionTimer:number = 0;
 	public static longSession:number = 20;
 	public static scaleFactor:number;
-	public static globalScale:number =.75;
+	public static globalScale:number =.5;
 
 	public static gameTimers:GameTimer;
 	public static arrCard:Array<Card> = new Array();
@@ -31,21 +31,28 @@ class MainGame
 	public static STAGE:createjs.Stage;
 	public static gameOverScreen:GameOverScreen;
 
-	public mainScreen:MainMenu = new MainMenu();
+	public static mainScreen:MainMenu;
 
 	public init()
 	{
 		MainGame.gameOverScreen = new GameOverScreen();
+		MainGame.mainScreen = new MainMenu();
 		console.log("hello");
 		MainGame.STAGE = this.stage;
 
-		this.mainScreen.callMainMenu(this.stage);
-		this.mainScreen.mainButton.addEventListener("click",()=>this.initGame(this));
+		MainGame.mainScreen.callMainMenu(this.stage);
+		MainGame.mainScreen.mainButton.addEventListener("click",()=>this.initGame(this));
 
 		createjs.Ticker.setFPS(60);
 
 		createjs.Ticker.addEventListener("tick",this.stage);
+		createjs.Ticker.addEventListener("tick",this.updateLayout);
 	}
+	public updateLayout():void
+	{
+		MainGame.mainScreen.update();
+	}
+
 	public initGame(main:MainGame)//main:MainGame)
 	{
 
@@ -55,7 +62,7 @@ class MainGame
 		createjs.Ticker.addEventListener("tick", main.handleUpdate);
 		MainGame.gameTimers.init(main.stage,MainGame.allContainer);
 		main.generateCard();
-		main.mainScreen.destroyThis();
+		MainGame.mainScreen.destroyThis();
 	}
 
 	public static GameOver():void

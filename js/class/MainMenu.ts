@@ -19,25 +19,33 @@ class MainMenu
     this.mainButton.scaleX = 0.75;
     this.mainButton.scaleY = 0.75;
     this.stage.addChild(this.mainButton);
-    this.mainButton.x = MainGame.GameWidth - MainGame.GameWidth/4;
-    this.mainButton.y = MainGame.GameHeight/2;
+
     //create logo
     this.logoImage = new createjs.Bitmap("asset/final/Tao Kae Noi.png");
     this.logoImage.scaleX = MainGame.globalScale;
     this.logoImage.scaleY = MainGame.globalScale;
-    this.logoImage.x = MainGame.GameWidth/20;
-    this.logoImage.y = MainGame.GameHeight/20;
+
     this.stage.addChild(this.logoImage);
 
     //create big logo
     this.logo2Image = new createjs.Bitmap("asset/final/Title.png");
     this.logo2Image.scaleX = MainGame.globalScale;
     this.logo2Image.scaleY = MainGame.globalScale;
-    this.logo2Image.x = MainGame.GameWidth/5;
-    this.logo2Image.y = MainGame.GameHeight/5;
-    this.stage.addChild(this.logo2Image);
-  }
 
+    this.stage.addChild(this.logo2Image);
+
+
+  }
+  public update():void
+  {
+    this.logoImage.x = MainGame.GameWidth/20;
+    this.logoImage.y = MainGame.GameHeight/20;
+    this.logo2Image.x = this.logoImage.x+(this.logoImage.image.width*this.logoImage.scaleX)+20;
+    this.logo2Image.y = MainGame.GameHeight/5;
+    this.mainButton.x = this.logo2Image.x+(this.logo2Image.image.width*this.logo2Image.scaleX)+ 40;
+    this.mainButton.y = (this.logo2Image.image.height*this.logo2Image.scaleY)/2+this.logo2Image.y;
+
+  }
   public destroyThis():void
   {
 

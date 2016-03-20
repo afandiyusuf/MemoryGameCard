@@ -4,18 +4,22 @@ var MainGame = (function () {
         this.margin = 5;
         this.id = 0;
         this.stage = new createjs.Stage("game");
-        this.mainScreen = new MainMenu();
     }
     ;
     MainGame.prototype.init = function () {
         var _this = this;
         MainGame.gameOverScreen = new GameOverScreen();
+        MainGame.mainScreen = new MainMenu();
         console.log("hello");
         MainGame.STAGE = this.stage;
-        this.mainScreen.callMainMenu(this.stage);
-        this.mainScreen.mainButton.addEventListener("click", function () { return _this.initGame(_this); });
+        MainGame.mainScreen.callMainMenu(this.stage);
+        MainGame.mainScreen.mainButton.addEventListener("click", function () { return _this.initGame(_this); });
         createjs.Ticker.setFPS(60);
         createjs.Ticker.addEventListener("tick", this.stage);
+        createjs.Ticker.addEventListener("tick", this.updateLayout);
+    };
+    MainGame.prototype.updateLayout = function () {
+        MainGame.mainScreen.update();
     };
     MainGame.prototype.initGame = function (main) {
         MainGame.gameTimers = new GameTimer();
@@ -23,7 +27,7 @@ var MainGame = (function () {
         createjs.Ticker.addEventListener("tick", main.handleUpdate);
         MainGame.gameTimers.init(main.stage, MainGame.allContainer);
         main.generateCard();
-        main.mainScreen.destroyThis();
+        MainGame.mainScreen.destroyThis();
     };
     MainGame.GameOver = function () {
         for (var i = 0; i < MainGame.arrCard.length; i++) {
@@ -98,7 +102,7 @@ var MainGame = (function () {
     MainGame.totalCard = 0;
     MainGame.sessionTimer = 0;
     MainGame.longSession = 20;
-    MainGame.globalScale = .75;
+    MainGame.globalScale = .5;
     MainGame.arrCard = new Array();
     MainGame.width = 4;
     MainGame.height = 4;
@@ -132,20 +136,22 @@ var MainMenu = (function () {
         this.mainButton.scaleX = 0.75;
         this.mainButton.scaleY = 0.75;
         this.stage.addChild(this.mainButton);
-        this.mainButton.x = MainGame.GameWidth - MainGame.GameWidth / 4;
-        this.mainButton.y = MainGame.GameHeight / 2;
         this.logoImage = new createjs.Bitmap("asset/final/Tao Kae Noi.png");
         this.logoImage.scaleX = MainGame.globalScale;
         this.logoImage.scaleY = MainGame.globalScale;
-        this.logoImage.x = MainGame.GameWidth / 20;
-        this.logoImage.y = MainGame.GameHeight / 20;
         this.stage.addChild(this.logoImage);
         this.logo2Image = new createjs.Bitmap("asset/final/Title.png");
         this.logo2Image.scaleX = MainGame.globalScale;
         this.logo2Image.scaleY = MainGame.globalScale;
-        this.logo2Image.x = MainGame.GameWidth / 5;
-        this.logo2Image.y = MainGame.GameHeight / 5;
         this.stage.addChild(this.logo2Image);
+    };
+    MainMenu.prototype.update = function () {
+        this.logoImage.x = MainGame.GameWidth / 20;
+        this.logoImage.y = MainGame.GameHeight / 20;
+        this.logo2Image.x = this.logoImage.x + (this.logoImage.image.width * this.logoImage.scaleX) + 20;
+        this.logo2Image.y = MainGame.GameHeight / 5;
+        this.mainButton.x = this.logo2Image.x + (this.logo2Image.image.width * this.logo2Image.scaleX) + 40;
+        this.mainButton.y = (this.logo2Image.image.height * this.logo2Image.scaleY) / 2 + this.logo2Image.y;
     };
     MainMenu.prototype.destroyThis = function () {
         this.mainButton.removeAllEventListeners("click");
@@ -293,8 +299,14 @@ var Card = (function () {
 }());
 function init() {
     var canvas = document.getElementById("game");
-    canvas.width = document.body.clientWidth;
-    canvas.height = document.body.clientHeight;
+    if (document.body.clientWidth > 950) {
+        canvas.width = 950;
+        canvas.height = 450;
+    }
+    else {
+        canvas.width = document.body.clientWidth;
+        canvas.height = canvas.width / 19 * 9;
+    }
     var mainGame = new MainGame();
     MainGame.GameWidth = canvas.width;
     MainGame.GameHeight = canvas.height;
