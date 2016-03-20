@@ -1,4 +1,4 @@
-///<reference path="../tsD/createjs.d.ts"/>
+
 
 class MainGame
 {
@@ -16,7 +16,7 @@ class MainGame
 	public static scaleFactor:number;
 
 	public static gameTimers:GameTimer;
-	private arrCard:Array<Card> = new Array();
+	public static arrCard:Array<Card> = new Array();
 	private card1:createjs.Bitmap;
 	private card2:createjs.Bitmap;
 	private preload:Object;
@@ -26,28 +26,45 @@ class MainGame
 	private margin:number = 5;
 	private allContainer:createjs.MovieClip;
 	private id:number = 0;
-	private stage = new createjs.Stage("demoCanvas");
+	public stage:createjs.Stage;
+	public static STAGE = new createjs.Stage("demoCanvas");
 
+	private mainScreen:MainMenu = new MainMenu();
 
 	public init()
 	{
-		MainGame.gameTimers = new GameTimer();
-		this.allContainer = new createjs.MovieClip();
-		createjs.Ticker.setFPS(60);
-		createjs.Ticker.addEventListener("tick", this.handleUpdate);
-		createjs.Ticker.addEventListener("tick",this.stage);
+		this.stage = MainGame.STAGE;
+		this.mainScreen.callMainMenu(this.stage);
+		this.mainScreen.mainButton.addEventListener("click",()=>this.initGame(this));
 
+		createjs.Ticker.setFPS(60);
+
+		createjs.Ticker.addEventListener("tick",this.stage);
+	}
+	public initGame(main:MainGame)
+	{
+		MainGame.gameTimers = new GameTimer();
+		main.allContainer = new createjs.MovieClip();
+
+		createjs.Ticker.addEventListener("tick", this.handleUpdate);
 		MainGame.gameTimers.init(this.stage,this.allContainer);
-		this.generateCard();
+		main.generateCard();
 	}
 
 	public static GameOver():void
 	{
-		console.log("GAME OVER");
+		for(var i=0;i<MainGame.arrCard.length;i++)
+		{
+			MainGame.arrCard[i].Destroy();
+		}
+			createjs.Ticker.removeAllEventListeners("tick");
+			createjs.Ticker.addEventListener("tick",MainGame.STAGE);
 	}
 
 	private handleUpdate(event:any):void
 	{
+
+
 			MainGame.timers += event.delta/1000;
 			MainGame.sessionTimer += event.delta/1000;
 			MainGame.scaleFactor = MainGame.sessionTimer/MainGame.longSession;
@@ -73,6 +90,7 @@ class MainGame
 				}
 				MainGame.timers = 0;
 			}
+
 	}
 
 	private generateCard()
@@ -88,7 +106,7 @@ class MainGame
         var c:Card = new Card();
 				c.backImageUrl = this.backUrl;
         c.init(this.stage,this.allContainer,i,j,this.margin,this.id);
-				this.arrCard.push(c);
+				MainGame.arrCard.push(c);
 			}
 		}
 
@@ -96,7 +114,7 @@ class MainGame
 		this.stage.update();
 		this.allContainer.x = MainGame.GameWidth/2 - 200;
 		this.allContainer.y = MainGame.GameHeight/2 - 200;
-		this.arrCard = this.shuffleArray(this.arrCard);
+		MainGame.arrCard = this.shuffleArray(MainGame.arrCard);
 		this.reArrangeAll();
 
 
@@ -108,7 +126,7 @@ class MainGame
 		for(var i=0;i<MainGame.width;i++)
 		{
 			for(var j=0;j<MainGame.height;j++){
-				this.arrCard[index].reposition(i,j);
+				MainGame.arrCard[index].reposition(i,j);
 				index++;
 			}
 		}

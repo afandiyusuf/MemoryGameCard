@@ -112,7 +112,7 @@ class Card
   }
   public swapToFace(target:Card):void
   {
-    //console.log(target.cardContainer);
+      //console.log(target.cardContainer);
       //scaleTO0
       createjs.Tween.get(target.cardContainer).to({scaleX:0},100).call(completeTween,[target],this);
 
@@ -131,8 +131,14 @@ class Card
         }
         createjs.Tween.get(target.cardContainer).to({scaleX:0.5},100);
       }
-
     //  createjs.Tween.get(target).wait(100).to({scaleX:0.5},100);
+  }
 
+  public Destroy()
+  {
+    this.cardContainer.removeAllEventListeners("click");
+    this.cardContainer.removeChild(this.frontImage);
+    this.cardContainer.removeChild(this.backImage);
+    this.container.removeChild(this.cardContainer);
   }
 }
