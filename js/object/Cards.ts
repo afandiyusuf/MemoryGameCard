@@ -12,18 +12,19 @@ class Card
   private cardContainer:createjs.MovieClip;
   private thisStage:createjs.Stage;
   private InitScaleX:number = .5;
-
+  private margin:number;
   public Card = function()
   {
 
   }
 
-  public init(stage:createjs.Stage,container:createjs.MovieClip,i:number,j:number,margin:number):void
+  public init(stage:createjs.Stage,container:createjs.MovieClip,i:number,j:number,margin:number,id:number):void
   {
     this.cardContainer = new createjs.MovieClip();
     this.thisStage = stage;
     this.container = container;
-    this.id = i+j+1;
+    //console.log("width is "+MainGame.width+" Height is"+MainGame.height+" i is "+i+" j is"+j+" modulo is"+(i+j)%(MainGame.height*MainGame.width));
+    this.id = ((id)%(MainGame.width*MainGame.height/2)+1);
     this.frontUrl = this.baseImageUrl+"cardClubs"+this.id+".png";
 
     this.backImage = new createjs.Bitmap(this.backImageUrl);
@@ -31,16 +32,15 @@ class Card
 
     this.backImage.image.onload = ():void =>this.updateStage(this.backImage);
     this.frontImage.image.onload = ():void => this.updateStage(this.frontImage);
-
-    console.log(i+j);
+    this.margin = margin;
+    //console.log(this.id);
     //this.container.addChild(this.backImage);
 
 
     this.cardContainer.id = this.id;
     this.cardContainer.scaleX = this.InitScaleX;
     this.cardContainer.scaleY = this.InitScaleX;
-    this.cardContainer.x = i*((140 * this.cardContainer.scaleX)+margin) + 140/2;
-    this.cardContainer.y = j*((190 * this.cardContainer.scaleY)+margin) + 190/2;
+
 
      this.cardContainer.addEventListener("click",():void=>this.cardClick(this.cardContainer,this));
 
@@ -48,7 +48,11 @@ class Card
     this.cardContainer.addChild(this.backImage);
     this.container.addChild(this.cardContainer);
   }
-
+  public reposition(i:number,j:number):void
+  {
+    this.cardContainer.x = i*((140 * this.cardContainer.scaleX)+this.margin) + 140/2;
+    this.cardContainer.y = j*((190 * this.cardContainer.scaleY)+this.margin) + 190/2;
+  }
   private updateStage(target:createjs.Bitmap):void
   {
     this.thisStage.update();

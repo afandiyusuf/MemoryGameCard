@@ -13,7 +13,7 @@ class MainGame
 	public static height:number = 4;
 	private margin:number = 5;
 	private allContainer:createjs.MovieClip;
-
+	private id:number = 0;
 	private stage = new createjs.Stage("demoCanvas");
 
 	public init()
@@ -30,9 +30,12 @@ class MainGame
 		{
 			for(var j=0;j<MainGame.height;j++)
 			{
+				this.id++;
+				console.log(this.id);
         var c:Card = new Card();
 				c.backImageUrl = this.backUrl;
-        c.init(this.stage,this.allContainer,i,j,this.margin);
+        c.init(this.stage,this.allContainer,i,j,this.margin,this.id);
+				
 			}
 		}
 
