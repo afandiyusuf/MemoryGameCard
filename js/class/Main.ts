@@ -17,6 +17,8 @@ class MainGame
 
 	public init()
 	{
+		createjs.Ticker.setFPS(60);
+		createjs.Ticker.addEventListener("tick", this.stage);
 		this.generateCard();
 	}
 
@@ -28,7 +30,7 @@ class MainGame
 			for(var j=0;j<this.height;j++)
 			{
         var c:Card = new Card();
-				c.backImage = this.backUrl;
+				c.backImageUrl = this.backUrl;
         c.init(this.stage,this.allContainer,i,j,this.margin);
 			}
 		}
@@ -42,7 +44,6 @@ class MainGame
 	{
 		console.log("stage updated");
 		this.stage.update();
-
 	}
 
 
