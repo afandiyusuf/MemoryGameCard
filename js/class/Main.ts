@@ -4,7 +4,7 @@ class MainGame
 {
 	public static firstId:number = 0;
 	public static secondId:number = 0;
-	private arrCard:Array<Object> = new Array();
+	private arrCard:Array<Card> = new Array();
 	private card1:createjs.Bitmap;
 	private card2:createjs.Bitmap;
 	private preload:Object;
@@ -35,21 +35,38 @@ class MainGame
         var c:Card = new Card();
 				c.backImageUrl = this.backUrl;
         c.init(this.stage,this.allContainer,i,j,this.margin,this.id);
-				
+				this.arrCard.push(c);
 			}
 		}
 
 		this.stage.addChild(this.allContainer);
 		this.stage.update();
+		this.arrCard = this.shuffleArray(this.arrCard);
+		this.reArrangeAll();
 	}
 
-
-	private updateStage = function():void
+	private reArrangeAll()
 	{
-		console.log("stage updated");
-		this.stage.update();
+		var index:number = 0;
+		for(var i=0;i<MainGame.width;i++)
+		{
+			for(var j=0;j<MainGame.height;j++){
+				this.arrCard[index].reposition(i,j);
+				index++;
+			}
+		}
 	}
 
+	private shuffleArray(array:Array<Card>):Array<Card>
+	{
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
 
 
 }
