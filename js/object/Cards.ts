@@ -1,7 +1,7 @@
 class Card
 {
   public id:number;
-  private baseImageUrl:string = "asset/card/";
+  private baseImageUrl:string = "asset/final/";
   public backImageUrl:string = "";
   private face:number = 0;
 
@@ -11,8 +11,10 @@ class Card
   private container:createjs.MovieClip;
   private cardContainer:createjs.MovieClip;
   private thisStage:createjs.Stage;
-  private InitScaleX:number = .5;
+  private InitScaleX:number = 0.6;
   private margin:number;
+  private width:number = 175;
+  private height:number = 175;
   public Card = function()
   {
 
@@ -25,7 +27,8 @@ class Card
     this.container = container;
     //console.log("width is "+MainGame.width+" Height is"+MainGame.height+" i is "+i+" j is"+j+" modulo is"+(i+j)%(MainGame.height*MainGame.width));
     this.id = ((id)%(MainGame.width*MainGame.height/2)+1);
-    this.frontUrl = this.baseImageUrl+"cardClubs"+this.id+".png";
+    this.frontUrl = this.baseImageUrl+this.id+".png";
+    this.backImageUrl = this.baseImageUrl+"bcak.png";
 
     this.backImage = new createjs.Bitmap(this.backImageUrl);
     this.frontImage = new createjs.Bitmap(this.frontUrl);
@@ -50,8 +53,8 @@ class Card
   }
   public reposition(i:number,j:number):void
   {
-    this.cardContainer.x = i*((140 * this.cardContainer.scaleX)+this.margin) + 140/2;
-    this.cardContainer.y = j*((190 * this.cardContainer.scaleY)+this.margin) + 190/2;
+    this.cardContainer.x = i*((this.width * this.cardContainer.scaleX)+this.margin) + this.width/2;
+    this.cardContainer.y = j*((this.height * this.cardContainer.scaleY)+this.margin) + this.height/2;
   }
   private updateStage(target:createjs.Bitmap):void
   {
@@ -129,7 +132,7 @@ class Card
           target.frontImage.visible = false;
           target.backImage.visible = true;
         }
-        createjs.Tween.get(target.cardContainer).to({scaleX:0.5},100);
+        createjs.Tween.get(target.cardContainer).to({scaleX:target.InitScaleX},100);
       }
     //  createjs.Tween.get(target).wait(100).to({scaleX:0.5},100);
   }

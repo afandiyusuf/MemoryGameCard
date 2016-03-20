@@ -7,11 +7,11 @@
         "sourceMap": true
     },
     "files": [
-        "js/class/Main.ts",
+        "js/class/MainGame.ts",
         "js/class/GameOverScreen.ts",
+        "js/class/MainMenu.ts",
         "js/object/GameTimer.ts",
         "js/object/Cards.ts",
-        "js/class/MainMenu.ts",
         "js/init.ts"
     ]
 }
