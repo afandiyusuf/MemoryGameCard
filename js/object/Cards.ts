@@ -9,7 +9,7 @@ class Card
   private backImage:createjs.Bitmap;
   private frontImage:createjs.Bitmap;
   private container:createjs.MovieClip;
-  private cardContainer:createjs.MovieClip;
+  public cardContainer:createjs.MovieClip;
   private thisStage:createjs.Stage;
   private InitScaleX:number = 0.6;
   private margin:number;
@@ -22,6 +22,7 @@ class Card
 
   public init(stage:createjs.Stage,container:createjs.MovieClip,i:number,j:number,margin:number,id:number):void
   {
+    this.InitScaleX = MainGame.GameHeight/6/this.width;
     this.cardContainer = new createjs.MovieClip();
     this.thisStage = stage;
     this.container = container;

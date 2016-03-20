@@ -12,6 +12,7 @@ function init()
 
 
 
+
 	var mainGame = new MainGame();
 	MainGame.GameWidth = canvas.width;
 	MainGame.GameHeight = canvas.height;

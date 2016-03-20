@@ -8,6 +8,7 @@ var MainGame = (function () {
     ;
     MainGame.prototype.init = function () {
         var _this = this;
+        MainGame.globMain = this;
         MainGame.gameOverScreen = new GameOverScreen();
         MainGame.mainScreen = new MainMenu();
         console.log("hello");
@@ -18,12 +19,21 @@ var MainGame = (function () {
         createjs.Ticker.addEventListener("tick", this.stage);
         createjs.Ticker.addEventListener("tick", this.updateLayout);
     };
+    MainGame.prototype.cleanGame = function () {
+        this.stage.removeChild(MainGame.allContainer);
+        MainGame.gameTimers.Destroy();
+    };
     MainGame.prototype.updateLayout = function () {
         MainGame.mainScreen.update();
     };
     MainGame.prototype.initGame = function (main) {
         MainGame.gameTimers = new GameTimer();
         MainGame.allContainer = new createjs.MovieClip();
+        MainGame.arrCard = new Array();
+        MainGame.totalCard = 0;
+        MainGame.globMain.id = 0;
+        MainGame.timers = 0;
+        MainGame.sessionTimer = 0;
         createjs.Ticker.addEventListener("tick", main.handleUpdate);
         MainGame.gameTimers.init(main.stage, MainGame.allContainer);
         main.generateCard();
@@ -101,7 +111,7 @@ var MainGame = (function () {
     MainGame.longIdle = 1;
     MainGame.totalCard = 0;
     MainGame.sessionTimer = 0;
-    MainGame.longSession = 20;
+    MainGame.longSession = 5;
     MainGame.globalScale = .5;
     MainGame.arrCard = new Array();
     MainGame.width = 4;
@@ -115,11 +125,36 @@ var GameOverScreen = (function () {
         };
     }
     GameOverScreen.prototype.ShowGameOver = function (container) {
+        var _this = this;
+        this.container = container;
         this.BgGameOver = new createjs.Bitmap(this.bgUrl);
-        this.BgGameOver.scaleX = 0.75;
-        this.BgGameOver.scaleY = 0.75;
+        this.BgGameOver.scaleX = 0.6;
+        this.BgGameOver.scaleY = this.BgGameOver.scaleX;
         this.BgGameOver.x = -10;
         container.addChild(this.BgGameOver);
+        this.RestartButton = new createjs.Bitmap("asset/final/MAIN LAGI.PNG");
+        this.RestartButton.scaleX = 0.6;
+        this.RestartButton.scaleY = 0.6;
+        this.RestartButton.addEventListener("click", function () { return _this.RestartGame(_this); });
+        this.QuitButton = new createjs.Bitmap("asset/final/keluar.png");
+        this.QuitButton.scaleX = 0.6;
+        this.QuitButton.scaleY = 0.6;
+        this.QuitButton.y = 200;
+        this.QuitButton.x = 150;
+        this.QuitButton.addEventListener("click", function () { return _this.QuitGame(_this); });
+        container.addChild(this.QuitButton);
+    };
+    GameOverScreen.prototype.RestartGame = function (gs) {
+        window.location.reload();
+    };
+    GameOverScreen.prototype.QuitGame = function (gs) {
+        window.location.reload();
+    };
+    GameOverScreen.prototype.DestroyThis = function (gs) {
+        gs.container.removeAllEventListeners("click");
+        gs.container.removeChild(this.BgGameOver);
+        gs.container.removeChild(this.RestartButton);
+        gs.container.removeChild(this.QuitButton);
     };
     return GameOverScreen;
 }());
@@ -166,27 +201,37 @@ var GameTimer = (function () {
         this.imageUrl = "asset/final/Time.png";
         this.containerUrl = "asset/final/Time Container.png";
         this.initScale = 2;
+        this.timerWidth = 824;
         this.GameTimer = function () {
         };
     }
     GameTimer.prototype.init = function (stage, gameContainer) {
-        this.initScale = 0.5;
+        this.timerContainerClip = new createjs.MovieClip();
+        this.initScale = ((MainGame.GameHeight / 6 * 4) + (10 * 4)) / 828;
         this.stage = stage;
         this.gameContainer = gameContainer;
         this.timerContainerImage = new createjs.Bitmap(this.containerUrl);
-        this.gameContainer.addChild(this.timerContainerImage);
-        this.timerContainerImage.scaleX = 0.5;
-        this.timerContainerImage.scaleY = 0.5;
+        this.timerContainerImage.scaleX = this.initScale;
+        this.timerContainerImage.scaleY = this.initScale;
         this.timerContainerImage.x = 40;
         this.timerImage = new createjs.Bitmap(this.imageUrl);
-        this.gameContainer.addChild(this.timerImage);
-        this.timerImage.scaleX = 0.5;
-        this.timerImage.scaleY = 0.5;
-        this.timerImage.x = 93;
+        this.timerImage.scaleX = this.initScale;
+        this.timerImage.scaleY = this.timerImage.scaleX;
+        this.timerImage.x = 80;
         this.timerImage.y = 5;
+        this.timerContainerClip.addChild(this.timerContainerImage);
+        this.timerContainerClip.addChild(this.timerImage);
+        this.gameContainer.addChild(this.timerContainerClip);
+        this.timerContainerClip.x = 0;
+        this.timerContainerClip.y = 20;
     };
     GameTimer.prototype.update = function (scaleFactor) {
         this.timerImage.scaleX = scaleFactor * this.initScale;
+    };
+    GameTimer.prototype.Destroy = function () {
+        this.timerContainerClip.removeChild(this.timerContainerImage);
+        this.timerContainerClip.removeChild(this.timerImage);
+        this.gameContainer.removeChild(this.timerContainerClip);
     };
     return GameTimer;
 }());
@@ -203,6 +248,7 @@ var Card = (function () {
     }
     Card.prototype.init = function (stage, container, i, j, margin, id) {
         var _this = this;
+        this.InitScaleX = MainGame.GameHeight / 6 / this.width;
         this.cardContainer = new createjs.MovieClip();
         this.thisStage = stage;
         this.container = container;

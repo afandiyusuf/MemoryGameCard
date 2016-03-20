@@ -12,7 +12,7 @@ class MainGame
 	public static longIdle:number = 1;
 	public static totalCard:number = 0;
 	public static sessionTimer:number = 0;
-	public static longSession:number = 20;
+	public static longSession:number = 5;
 	public static scaleFactor:number;
 	public static globalScale:number =.5;
 
@@ -30,11 +30,11 @@ class MainGame
 	public stage:createjs.Stage = new createjs.Stage("game");;
 	public static STAGE:createjs.Stage;
 	public static gameOverScreen:GameOverScreen;
-
 	public static mainScreen:MainMenu;
-
+	public static globMain:MainGame;
 	public init()
 	{
+		MainGame.globMain = this;
 		MainGame.gameOverScreen = new GameOverScreen();
 		MainGame.mainScreen = new MainMenu();
 		console.log("hello");
@@ -48,17 +48,27 @@ class MainGame
 		createjs.Ticker.addEventListener("tick",this.stage);
 		createjs.Ticker.addEventListener("tick",this.updateLayout);
 	}
+	public cleanGame():void
+	{
+		
+		this.stage.removeChild(MainGame.allContainer);
+		MainGame.gameTimers.Destroy();
+	}
 	public updateLayout():void
 	{
 		MainGame.mainScreen.update();
+
 	}
 
 	public initGame(main:MainGame)//main:MainGame)
 	{
-
 		MainGame.gameTimers = new GameTimer();
 		MainGame.allContainer = new createjs.MovieClip();
-
+		MainGame.arrCard = new Array();
+		MainGame.totalCard = 0;
+		MainGame.globMain.id = 0;
+		MainGame.timers = 0;
+		MainGame.sessionTimer = 0;
 		createjs.Ticker.addEventListener("tick", main.handleUpdate);
 		MainGame.gameTimers.init(main.stage,MainGame.allContainer);
 		main.generateCard();
