@@ -136,7 +136,7 @@ class MainGame
 		this.stage.addChild(MainGame.allContainer);
 		this.stage.update();
 		MainGame.allContainer.x = MainGame.GameWidth/2 - MainGame.GameWidth/5;
-		MainGame.allContainer.y = MainGame.GameHeight/8;
+		MainGame.allContainer.y = 10;
 		MainGame.arrCard = this.shuffleArray(MainGame.arrCard);
 		this.reArrangeAll();
 
