@@ -12,7 +12,7 @@ class MainGame
 	public static longIdle:number = 1;
 	public static totalCard:number = 0;
 	public static sessionTimer:number = 0;
-	public static longSession:number = 5;
+	public static longSession:number = 60;
 	public static scaleFactor:number;
 	public static globalScale:number =.5;
 
@@ -50,7 +50,7 @@ class MainGame
 	}
 	public cleanGame():void
 	{
-		
+
 		this.stage.removeChild(MainGame.allContainer);
 		MainGame.gameTimers.Destroy();
 	}
