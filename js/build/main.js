@@ -345,6 +345,18 @@ var Card = (function () {
 }());
 function init() {
     var canvas = document.getElementById("game");
+    if (canvas.requestFullscreen) {
+        canvas.requestFullscreen();
+    }
+    else if (canvas.msRequestFullscreen) {
+        canvas.msRequestFullscreen();
+    }
+    else if (canvas.mozRequestFullScreen) {
+        canvas.mozRequestFullScreen();
+    }
+    else if (canvas.webkitRequestFullscreen) {
+        canvas.webkitRequestFullscreen();
+    }
     if (document.body.clientWidth > 950) {
         canvas.width = 950;
         canvas.height = 450;

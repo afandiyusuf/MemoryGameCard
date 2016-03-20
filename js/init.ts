@@ -1,6 +1,17 @@
 function init()
 {
 	var canvas:any = document.getElementById("game");
+
+	if (canvas.requestFullscreen) {
+	  canvas.requestFullscreen();
+	} else if (canvas.msRequestFullscreen) {
+	  canvas.msRequestFullscreen();
+	} else if (canvas.mozRequestFullScreen) {
+	  canvas.mozRequestFullScreen();
+	} else if (canvas.webkitRequestFullscreen) {
+	  canvas.webkitRequestFullscreen();
+	}
+
 	if(document.body.clientWidth > 950)
 	{
 			canvas.width = 950;
