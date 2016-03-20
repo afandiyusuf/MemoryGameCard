@@ -82,10 +82,21 @@ class Card
         masterCard.swapToFace(masterCard);
         if(MainGame.firstId == MainGame.secondId)
         {
-          masterCard.container.removeChild(MainGame.firstCard.cardContainer);
-          masterCard.container.removeChild(MainGame.secondCard.cardContainer);
+
+          //masterCard.container.removeChild(MainGame.firstCard.cardContainer);
+          //masterCard.container.removeChild(MainGame.secondCard.cardContainer);
+          MainGame.firstCard.cardContainer.removeAllEventListeners("click");
+          MainGame.secondCard.cardContainer.removeAllEventListeners("click");
+          MainGame.firstCard.cardContainer.visible = false;
+          MainGame.secondCard.cardContainer.visible = false;
           MainGame.firstId = 0;
           MainGame.secondId = 0;
+          MainGame.totalCard--;
+          MainGame.totalCard--;
+          if(MainGame.totalCard == 0)
+          {
+            MainGame.GameOver();
+          }
         }
     }
     else if(MainGame.secondId != 0)
@@ -101,7 +112,7 @@ class Card
   }
   public swapToFace(target:Card):void
   {
-    console.log(target.cardContainer);
+    //console.log(target.cardContainer);
       //scaleTO0
       createjs.Tween.get(target.cardContainer).to({scaleX:0},100).call(completeTween,[target],this);
 

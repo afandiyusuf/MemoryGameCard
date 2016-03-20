@@ -8,6 +8,14 @@ class MainGame
 	public static secondCard:Card;
 	public static GameWidth:number = 800;
 	public static GameHeight:number = 600;
+	public static timers:number = 0;
+	public static longIdle:number = 1;
+	public static totalCard:number = 0;
+	public static sessionTimer:number = 0;
+	public static longSession:number = 20;
+	public static scaleFactor:number;
+
+	public static gameTimers:GameTimer;
 	private arrCard:Array<Card> = new Array();
 	private card1:createjs.Bitmap;
 	private card2:createjs.Bitmap;
@@ -19,19 +27,37 @@ class MainGame
 	private allContainer:createjs.MovieClip;
 	private id:number = 0;
 	private stage = new createjs.Stage("demoCanvas");
-	public static timers:number = 0;
-	public static longIdle:number = 2;
+
+
 	public init()
 	{
+		MainGame.gameTimers = new GameTimer();
+		this.allContainer = new createjs.MovieClip();
 		createjs.Ticker.setFPS(60);
 		createjs.Ticker.addEventListener("tick", this.handleUpdate);
 		createjs.Ticker.addEventListener("tick",this.stage);
+
+		MainGame.gameTimers.init(this.stage,this.allContainer);
 		this.generateCard();
 	}
-	
+
+	public static GameOver():void
+	{
+		console.log("GAME OVER");
+	}
+
 	private handleUpdate(event:any):void
 	{
 			MainGame.timers += event.delta/1000;
+			MainGame.sessionTimer += event.delta/1000;
+			MainGame.scaleFactor = MainGame.sessionTimer/MainGame.longSession;
+			MainGame.gameTimers.update(MainGame.scaleFactor);
+
+			if(MainGame.scaleFactor > 1)
+			{
+				MainGame.GameOver();
+
+			}
 			if(MainGame.timers > MainGame.longIdle)
 			{
 				if(MainGame.firstId != 0)
@@ -47,19 +73,17 @@ class MainGame
 				}
 				MainGame.timers = 0;
 			}
-			//MainGame.timers = event.delta/100;
-			//console.log(MainGame.timers);
-			//console.log(event.delta/1000);
 	}
 
 	private generateCard()
 	{
-		this.allContainer = new createjs.MovieClip();
+
 		for(var i=0;i<MainGame.width;i++)
 		{
 			for(var j=0;j<MainGame.height;j++)
 			{
 				this.id++;
+				MainGame.totalCard++;
 				console.log(this.id);
         var c:Card = new Card();
 				c.backImageUrl = this.backUrl;
@@ -74,6 +98,8 @@ class MainGame
 		this.allContainer.y = MainGame.GameHeight/2 - 200;
 		this.arrCard = this.shuffleArray(this.arrCard);
 		this.reArrangeAll();
+
+
 	}
 
 	private reArrangeAll()

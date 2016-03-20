@@ -8,6 +8,7 @@
     },
     "files": [
         "js/class/Main.ts",
+        "js/object/GameTimer.ts",
         "js/object/Cards.ts",
         "js/init.ts"
     ]
