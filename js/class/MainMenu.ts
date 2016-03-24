@@ -13,7 +13,7 @@ class MainMenu
   public callMainMenu(stage:createjs.Stage):void
   {
     this.stage = stage;
-    this.mainImage = new createjs.Bitmap("asset/final/MAIN.png");
+    this.mainImage = new createjs.Bitmap("../asset/final/MAIN.png");
     this.mainButton = new createjs.MovieClip();
     this.mainButton.addChild(this.mainImage);
     this.mainButton.scaleX = 0.75;
@@ -21,14 +21,14 @@ class MainMenu
     this.stage.addChild(this.mainButton);
 
     //create logo
-    this.logoImage = new createjs.Bitmap("asset/final/Tao Kae Noi.png");
+    this.logoImage = new createjs.Bitmap("../asset/final/Tao Kae Noi.png");
     this.logoImage.scaleX = MainGame.globalScale;
     this.logoImage.scaleY = MainGame.globalScale;
 
     this.stage.addChild(this.logoImage);
 
     //create big logo
-    this.logo2Image = new createjs.Bitmap("asset/final/Title.png");
+    this.logo2Image = new createjs.Bitmap("../asset/final/Title.png");
     this.logo2Image.scaleX = MainGame.globalScale;
     this.logo2Image.scaleY = MainGame.globalScale;
 

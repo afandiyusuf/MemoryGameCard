@@ -21,7 +21,7 @@ class MainGame
 	private card1:createjs.Bitmap;
 	private card2:createjs.Bitmap;
 	private preload:Object;
-	private backUrl:string = "asset/card/cardBack_blue2.png";
+	private backUrl:string = "asset/Card/Back.png";
 	public static width:number = 4;
 	public static height:number = 4;
 	private margin:number = 5;

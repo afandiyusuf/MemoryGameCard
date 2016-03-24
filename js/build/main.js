@@ -1,6 +1,6 @@
 var MainGame = (function () {
     function MainGame() {
-        this.backUrl = "asset/card/cardBack_blue2.png";
+        this.backUrl = "asset/Card/Back.png";
         this.margin = 5;
         this.id = 0;
         this.stage = new createjs.Stage("game");
@@ -120,7 +120,7 @@ var MainGame = (function () {
 }());
 var GameOverScreen = (function () {
     function GameOverScreen() {
-        this.bgUrl = "asset/final/Border.png";
+        this.bgUrl = "asset/Card/Back.png";
         this.GameOverScreen = function () {
         };
     }
@@ -165,17 +165,17 @@ var MainMenu = (function () {
     }
     MainMenu.prototype.callMainMenu = function (stage) {
         this.stage = stage;
-        this.mainImage = new createjs.Bitmap("asset/final/MAIN.png");
+        this.mainImage = new createjs.Bitmap("../asset/final/MAIN.png");
         this.mainButton = new createjs.MovieClip();
         this.mainButton.addChild(this.mainImage);
         this.mainButton.scaleX = 0.75;
         this.mainButton.scaleY = 0.75;
         this.stage.addChild(this.mainButton);
-        this.logoImage = new createjs.Bitmap("asset/final/Tao Kae Noi.png");
+        this.logoImage = new createjs.Bitmap("../asset/final/Tao Kae Noi.png");
         this.logoImage.scaleX = MainGame.globalScale;
         this.logoImage.scaleY = MainGame.globalScale;
         this.stage.addChild(this.logoImage);
-        this.logo2Image = new createjs.Bitmap("asset/final/Title.png");
+        this.logo2Image = new createjs.Bitmap("../asset/final/Title.png");
         this.logo2Image.scaleX = MainGame.globalScale;
         this.logo2Image.scaleY = MainGame.globalScale;
         this.stage.addChild(this.logo2Image);
@@ -345,29 +345,22 @@ var Card = (function () {
 }());
 function init() {
     var canvas = document.getElementById("game");
-    if (canvas.requestFullscreen) {
-        canvas.requestFullscreen();
-    }
-    else if (canvas.msRequestFullscreen) {
-        canvas.msRequestFullscreen();
-    }
-    else if (canvas.mozRequestFullScreen) {
-        canvas.mozRequestFullScreen();
-    }
-    else if (canvas.webkitRequestFullscreen) {
-        canvas.webkitRequestFullscreen();
-    }
-    if (document.body.clientWidth > 950) {
-        canvas.width = 950;
-        canvas.height = 450;
+    if (document.body.clientWidth > document.body.clientHeight) {
+        if (document.body.clientWidth > 950) {
+            canvas.width = 950;
+            canvas.height = 450;
+        }
+        else {
+            canvas.width = document.body.clientWidth;
+            canvas.height = canvas.width / 19 * 9;
+        }
+        var mainGame = new MainGame();
+        MainGame.GameWidth = canvas.width;
+        MainGame.GameHeight = canvas.height;
+        mainGame.init();
     }
     else {
-        canvas.width = document.body.clientWidth;
-        canvas.height = canvas.width / 19 * 9;
+        window.alert("please refresh and use landscape mode");
     }
-    var mainGame = new MainGame();
-    MainGame.GameWidth = canvas.width;
-    MainGame.GameHeight = canvas.height;
-    mainGame.init();
 }
 //# sourceMappingURL=main.js.map
