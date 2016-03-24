@@ -1,0 +1,44 @@
+body{
+	 background-image: url("../asset/final/BG.jpg");
+	 background-size: 100% 100%;
+	 background-repeat: no-repeat;;
+}
+
+#container{
+	display: table;
+}
+#logo-main{
+	display: table;
+	width: 80%;
+	padding-top: 20%;
+	margin: auto;
+}
+#logo-big{
+	display: table;
+	height: 60%;
+	margin: auto;
+}
+#login-container{
+	background-image: url("../asset/splash screen/Login Back.png");
+	background-size: 100% 100%;
+}
+
+.right-content{
+	margin-top: 20px;
+	margin-left: 0px;
+}
+.right-content.left{
+	padding-left:0px
+}
+.right-content.right{
+	padding-left:40px
+}
+#form-container {
+	margin-left: -30px;
+	background-image: url("../asset/splash screen/Login Back.png");
+	background-size: 100% 100%;
+
+}
+.form-control{
+	height: 30px;
+}
