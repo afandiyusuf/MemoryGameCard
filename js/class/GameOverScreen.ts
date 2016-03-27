@@ -1,7 +1,7 @@
 class GameOverScreen
 {
   public BgGameOver:createjs.Bitmap;
-  private bgUrl:string = "asset/Card/Back.png";
+  private bgUrl:string = "../asset/Card/Back.png";
   public RestartButton:createjs.Bitmap;
   public QuitButton:createjs.Bitmap;
   public MainMenuButton:createjs.Bitmap;

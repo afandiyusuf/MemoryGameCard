@@ -1,4 +1,5 @@
 <html>
+<?php require_once('php/config.php');?>
 <head>
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -9,6 +10,8 @@
 
 	<link rel="stylesheet" href="css/main.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<script src="https://code.jquery.com/jquery-2.2.2.min.js"   integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI="   crossorigin="anonymous"></script>
+	<script src="js/build/frontPage.js"> </script>
 </head>
 
 <body >
@@ -46,25 +49,30 @@
 					Register Here
 					<br/>
 					<br/>
-				<button type="submit" class="btn btn-default">Register</button>
+				<button id="register-button" type="submit" class="btn btn-default">Register</button>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div id= "all-login-page">
+
 		<div class="login-page">
+
+			<a href="#" id="close-button">x close</a>
 		  <div class="form">
-		    <form class="login-form">
+					<div id="please-wait-screen" style="{color:red}"> Please wait</div>
+		    <div class="login-form" id="form-login">
 					<div id="title-register"> REGISTER </div>
-					<input type="text" placeholder="Username"/>
-					<input type="text" placeholder="Name"/>
-					<input type="text" placeholder="Address"/>
-					<input type="text" placeholder="E-mail"/>
-					<input type="text" placeholder="Phone"/>
-					<input type="text" placeholder="Password"/>
-					<input type="text" placeholder="ConfirmPassword"/>
-		      <button>Register</button>
-		    </form>
+					<div id="keterangan"></div>
+					<input type="text" placeholder="Username" id="username-register"/>
+					<input type="text" placeholder="Name" id="nama"/>
+					<input type="text" placeholder="Address" id="alamat"/>
+					<input type="text" placeholder="E-mail" id="email"/>
+					<input type="text" placeholder="Phone" id="no_hp"/>
+					<input type="password" placeholder="password" id="password-register"/>
+					<input type="password" placeholder="confirm-passowrd" id="confirm-passowrd"/>
+		      <button id="register-button-submit">Register</button>
+		    </div>
 		  </div>
 		</div>
 	</body>

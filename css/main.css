@@ -20,6 +20,9 @@ body{
 .login-page{
 		opacity: 1;
 }
+#all-login-page{
+	display: none;
+}
 
 #logo-main{
 	display: table;
@@ -153,4 +156,8 @@ body{
 }
 .container2 .info span .fa {
   color: #EF3B3A;
+}
+
+#please-wait-screen{
+	display: none;
 }

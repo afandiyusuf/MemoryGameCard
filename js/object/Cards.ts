@@ -1,7 +1,7 @@
 class Card
 {
   public id:number;
-  private baseImageUrl:string = "asset/final/";
+  private baseImageUrl:string = "../asset/final/";
   public backImageUrl:string = "";
   private face:number = 0;
 

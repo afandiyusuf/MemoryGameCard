@@ -7,8 +7,8 @@ class GameTimer
   public gameContainer:createjs.MovieClip;
   public timerImage:createjs.Bitmap;
   public timerContainerImage:createjs.Bitmap;
-  public imageUrl:string = "asset/final/Time.png";
-  public containerUrl:string = "asset/final/Time Container.png";
+  public imageUrl:string = "../asset/final/Time.png";
+  public containerUrl:string = "../asset/final/Time Container.png";
   private initScale:number = 2;
   private timerWidth:number = 824;
   private timerHeight:number;

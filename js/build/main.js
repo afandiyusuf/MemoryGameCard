@@ -1,6 +1,6 @@
 var MainGame = (function () {
     function MainGame() {
-        this.backUrl = "asset/Card/Back.png";
+        this.backUrl = "../asset/Card/Back.png";
         this.margin = 5;
         this.id = 0;
         this.stage = new createjs.Stage("game");
@@ -120,7 +120,7 @@ var MainGame = (function () {
 }());
 var GameOverScreen = (function () {
     function GameOverScreen() {
-        this.bgUrl = "asset/Card/Back.png";
+        this.bgUrl = "../asset/Card/Back.png";
         this.GameOverScreen = function () {
         };
     }
@@ -198,8 +198,8 @@ var MainMenu = (function () {
 }());
 var GameTimer = (function () {
     function GameTimer() {
-        this.imageUrl = "asset/final/Time.png";
-        this.containerUrl = "asset/final/Time Container.png";
+        this.imageUrl = "../asset/final/Time.png";
+        this.containerUrl = "../asset/final/Time Container.png";
         this.initScale = 2;
         this.timerWidth = 824;
         this.GameTimer = function () {
@@ -237,7 +237,7 @@ var GameTimer = (function () {
 }());
 var Card = (function () {
     function Card() {
-        this.baseImageUrl = "asset/final/";
+        this.baseImageUrl = "../asset/final/";
         this.backImageUrl = "";
         this.face = 0;
         this.InitScaleX = 0.6;
