@@ -28,18 +28,20 @@ class Card
     this.container = container;
     //console.log("width is "+MainGame.width+" Height is"+MainGame.height+" i is "+i+" j is"+j+" modulo is"+(i+j)%(MainGame.height*MainGame.width));
     this.id = ((id)%(MainGame.width*MainGame.height/2)+1);
-    this.frontUrl = queue.getResult("card", true);
+    this.frontUrl = this.baseImageUrl+this.id+".png";
     this.backImageUrl = this.baseImageUrl+"bcak.png";
 
-    this.backImage = new createjs.Bitmap(this.backImageUrl);
-    this.frontImage = new createjs.Bitmap(this.frontUrl);
+    this.backImage = new createjs.Bitmap(PreloadGame.queue.getResult("card_back"));
+    this.frontImage = new createjs.Bitmap(PreloadGame.queue.getResult("card"+this.id));
+
+    this.updateStage(this.backImage);
+    this.updateStage(this.frontImage);
 
     this.backImage.image.onload = ():void =>this.updateStage(this.backImage);
     this.frontImage.image.onload = ():void => this.updateStage(this.frontImage);
     this.margin = margin;
     //console.log(this.id);
     //this.container.addChild(this.backImage);
-
 
     this.cardContainer.id = this.id;
     this.cardContainer.scaleX = this.InitScaleX;

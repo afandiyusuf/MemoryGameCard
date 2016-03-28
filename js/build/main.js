@@ -118,6 +118,37 @@ var MainGame = (function () {
     MainGame.height = 4;
     return MainGame;
 }());
+var PreloadGame = (function () {
+    function PreloadGame() {
+    }
+    PreloadGame.prototype.init = function () {
+        var _this = this;
+        var queue = new createjs.LoadQueue(true);
+        queue.on("fileload", this.handleFileLoad, this);
+        queue.on("complete", function () { return _this.handleComplete(null, _this.mainGame); }, this);
+        queue.loadFile({ id: "card1", src: "../asset/final/1.png" });
+        queue.loadFile({ id: "card2", src: "../asset/final/2.png" });
+        queue.loadFile({ id: "card3", src: "../asset/final/3.png" });
+        queue.loadFile({ id: "card4", src: "../asset/final/4.png" });
+        queue.loadFile({ id: "card5", src: "../asset/final/5.png" });
+        queue.loadFile({ id: "card6", src: "../asset/final/6.png" });
+        queue.loadFile({ id: "card7", src: "../asset/final/7.png" });
+        queue.loadFile({ id: "card8", src: "../asset/final/8.png" });
+        queue.loadFile({ id: "card_back", src: "../asset/final/bcak.png" });
+        queue.loadFile({ id: "bg", src: "../asset/final/BG.jpg" });
+        queue.loadFile({ id: "border", src: "../asset/final/border.png" });
+        queue.loadFile({ id: "keluar-button", src: "../asset/final/keluar.png" });
+        queue.loadFile({ id: "main-lagi-button", src: "../asset/final/MAIN LAGI.png" });
+        queue.load();
+        PreloadGame.queue = queue;
+    };
+    PreloadGame.prototype.handleFileLoad = function (event) {
+    };
+    PreloadGame.prototype.handleComplete = function (event, maingame) {
+        maingame.init();
+    };
+    return PreloadGame;
+}());
 var GameOverScreen = (function () {
     function GameOverScreen() {
         this.bgUrl = "../asset/Card/Back.png";
@@ -255,8 +286,10 @@ var Card = (function () {
         this.id = ((id) % (MainGame.width * MainGame.height / 2) + 1);
         this.frontUrl = this.baseImageUrl + this.id + ".png";
         this.backImageUrl = this.baseImageUrl + "bcak.png";
-        this.backImage = new createjs.Bitmap(this.backImageUrl);
-        this.frontImage = new createjs.Bitmap(this.frontUrl);
+        this.backImage = new createjs.Bitmap(PreloadGame.queue.getResult("card_back"));
+        this.frontImage = new createjs.Bitmap(PreloadGame.queue.getResult("card" + this.id));
+        this.updateStage(this.backImage);
+        this.updateStage(this.frontImage);
         this.backImage.image.onload = function () { return _this.updateStage(_this.backImage); };
         this.frontImage.image.onload = function () { return _this.updateStage(_this.frontImage); };
         this.margin = margin;
@@ -344,23 +377,6 @@ var Card = (function () {
     return Card;
 }());
 function init() {
-    var queue = new createjs.LoadQueue(true);
-    queue.on("fileload", handleFileLoad, this);
-    queue.on("complete", handleComplete, this);
-    queue.loadFile({ id: "card1", src: "../asset/final/1.png" });
-    queue.loadFile({ id: "card2", src: "../asset/final/2.png" });
-    queue.loadFile({ id: "card3", src: "../asset/final/3.png" });
-    queue.loadFile({ id: "card4", src: "../asset/final/4.png" });
-    queue.loadFile({ id: "card5", src: "../asset/final/5.png" });
-    queue.loadFile({ id: "card6", src: "../asset/final/6.png" });
-    queue.loadFile({ id: "card7", src: "../asset/final/7.png" });
-    queue.loadFile({ id: "card8", src: "../asset/final/8.png" });
-    queue.loadFile({ id: "card_back", src: "../asset/final/bcak.png" });
-    queue.loadFile({ id: "bg", src: "../asset/final/BG.jpg" });
-    queue.loadFile({ id: "border", src: "../asset/final/border.png" });
-    queue.loadFile({ id: "keluar-button", src: "../asset/final/keluar.png" });
-    queue.loadFile({ id: "main-lagi-button", src: "../asset/final/MAIN LAGI.png" });
-    queue.load();
     var canvas = document.getElementById("game");
     if (document.body.clientWidth > document.body.clientHeight) {
         if (document.body.clientWidth > 950) {
@@ -374,7 +390,9 @@ function init() {
         var mainGame = new MainGame();
         MainGame.GameWidth = canvas.width;
         MainGame.GameHeight = canvas.height;
-        mainGame.init();
+        var preload = new PreloadGame();
+        preload.mainGame = mainGame;
+        preload.init();
     }
     else {
         window.alert("please refresh and use landscape mode");
