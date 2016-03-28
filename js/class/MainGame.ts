@@ -36,14 +36,19 @@ class MainGame
 
 	public init()
 	{
-		console.log("hello");
 			this.mainScreen = new MainMenu();
 			this.mainScreen.callMainMenu(this.stage);
-			createjs.Ticker.addEventListener("tick", ()=>this.handleTick(this.stage));
+			createjs.Ticker.addEventListener("tick", ()=>this.handleTick(this));
 	}
-	private handleTick(stage)
+
+	private handleTick(master:MainGame)
 	{
-			stage.update();
+			master.stage.update();
+	}
+
+	private DestroyThis()
+	{
+		createjs.Ticker.removeEventListener("tick", ()=>this.handleTick(this));
 	}
 
 	private generateCard()

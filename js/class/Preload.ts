@@ -3,7 +3,7 @@ class PreloadGame
   public static queue;
 
   public mainGame:MainGame;
-  
+
   public init():void
   {
     var queue = new createjs.LoadQueue(true);
@@ -22,6 +22,9 @@ class PreloadGame
   	queue.loadFile({id:"border", src:"../asset/final/border.png"});
   	queue.loadFile({id:"keluar-button", src:"../asset/final/keluar.png"});
   	queue.loadFile({id:"main-lagi-button", src:"../asset/final/MAIN LAGI.png"});
+    queue.loadFile({id:"main-button", src:"../asset/final/MAIN.png"});
+    queue.loadFile({id:"corner-logo", src:"../asset/final/Tao Kae Noi.png"})
+    queue.loadFile({id:"title-image", src:"../asset/final/Title.png"})
   	queue.load();
 
     PreloadGame.queue = queue;

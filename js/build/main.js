@@ -8,13 +8,16 @@ var MainGame = (function () {
     ;
     MainGame.prototype.init = function () {
         var _this = this;
-        console.log("hello");
         this.mainScreen = new MainMenu();
         this.mainScreen.callMainMenu(this.stage);
-        createjs.Ticker.addEventListener("tick", function () { return _this.handleTick(_this.stage); });
+        createjs.Ticker.addEventListener("tick", function () { return _this.handleTick(_this); });
     };
-    MainGame.prototype.handleTick = function (stage) {
-        stage.update();
+    MainGame.prototype.handleTick = function (master) {
+        master.stage.update();
+    };
+    MainGame.prototype.DestroyThis = function () {
+        var _this = this;
+        createjs.Ticker.removeEventListener("tick", function () { return _this.handleTick(_this); });
     };
     MainGame.prototype.generateCard = function () {
         for (var i = 0; i < MainGame.width; i++) {
@@ -88,6 +91,9 @@ var PreloadGame = (function () {
         queue.loadFile({ id: "border", src: "../asset/final/border.png" });
         queue.loadFile({ id: "keluar-button", src: "../asset/final/keluar.png" });
         queue.loadFile({ id: "main-lagi-button", src: "../asset/final/MAIN LAGI.png" });
+        queue.loadFile({ id: "main-button", src: "../asset/final/MAIN.png" });
+        queue.loadFile({ id: "corner-logo", src: "../asset/final/Tao Kae Noi.png" });
+        queue.loadFile({ id: "title-image", src: "../asset/final/Title.png" });
         queue.load();
         PreloadGame.queue = queue;
     };
@@ -145,27 +151,28 @@ var MainMenu = (function () {
     }
     MainMenu.prototype.callMainMenu = function (stage) {
         this.stage = stage;
-        this.mainImage = new createjs.Bitmap("../asset/final/MAIN.png");
+        this.mainImage = new createjs.Bitmap(PreloadGame.queue.getResult("main-button"));
         this.mainButton = new createjs.MovieClip();
         this.mainButton.addChild(this.mainImage);
         this.mainButton.scaleX = 0.75;
         this.mainButton.scaleY = 0.75;
         this.stage.addChild(this.mainButton);
-        this.logoImage = new createjs.Bitmap("../asset/final/Tao Kae Noi.png");
-        this.logoImage.scaleX = MainGame.globalScale;
-        this.logoImage.scaleY = MainGame.globalScale;
+        this.logoImage = new createjs.Bitmap(PreloadGame.queue.getResult("corner-logo"));
+        this.logoImage.scaleX = MainGame.GameWidth / 10 / this.logoImage.image.width;
+        this.logoImage.scaleY = this.logoImage.scaleX;
         this.stage.addChild(this.logoImage);
-        this.logo2Image = new createjs.Bitmap("../asset/final/Title.png");
-        this.logo2Image.scaleX = MainGame.globalScale;
-        this.logo2Image.scaleY = MainGame.globalScale;
+        this.logo2Image = new createjs.Bitmap(PreloadGame.queue.getResult("title-image"));
+        this.logo2Image.scaleY = (MainGame.GameHeight - (MainGame.GameHeight / 12)) / this.logo2Image.image.width;
+        this.logo2Image.scaleX = this.logo2Image.scaleY;
         this.stage.addChild(this.logo2Image);
+        this.reposisi();
     };
-    MainMenu.prototype.update = function () {
+    MainMenu.prototype.reposisi = function () {
         this.logoImage.x = MainGame.GameWidth / 20;
         this.logoImage.y = MainGame.GameHeight / 20;
         this.logo2Image.x = this.logoImage.x + (this.logoImage.image.width * this.logoImage.scaleX) + 20;
-        this.logo2Image.y = MainGame.GameHeight / 5;
-        this.mainButton.x = this.logo2Image.x + (this.logo2Image.image.width * this.logo2Image.scaleX) + 40;
+        this.logo2Image.y = MainGame.GameHeight / 2 - (this.logo2Image.image.height / 2 * this.logo2Image.scaleY);
+        this.mainButton.x = (this.logo2Image.x + (MainGame.GameWidth - this.logoImage.x)) / 2 + (this.mainImage.image.width * this.mainButton.scaleX);
         this.mainButton.y = (this.logo2Image.image.height * this.logo2Image.scaleY) / 2 + this.logo2Image.y;
     };
     MainMenu.prototype.destroyThis = function () {
