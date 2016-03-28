@@ -101,7 +101,7 @@ class Card
           MainGame.totalCard--;
           if(MainGame.totalCard == 0)
           {
-            MainGame.GameOver();
+          //  MainGame.GameOver();
           }
         }
     }

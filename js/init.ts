@@ -19,7 +19,6 @@ function init()
 
 		var preload = new PreloadGame();
 		preload.mainGame = mainGame;
-		
 		preload.init();
 
 	}else{

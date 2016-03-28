@@ -8,64 +8,13 @@ var MainGame = (function () {
     ;
     MainGame.prototype.init = function () {
         var _this = this;
-        MainGame.globMain = this;
-        MainGame.gameOverScreen = new GameOverScreen();
-        MainGame.mainScreen = new MainMenu();
         console.log("hello");
-        MainGame.STAGE = this.stage;
-        MainGame.mainScreen.callMainMenu(this.stage);
-        MainGame.mainScreen.mainButton.addEventListener("click", function () { return _this.initGame(_this); });
-        createjs.Ticker.setFPS(60);
-        createjs.Ticker.addEventListener("tick", this.stage);
-        createjs.Ticker.addEventListener("tick", this.updateLayout);
+        this.mainScreen = new MainMenu();
+        this.mainScreen.callMainMenu(this.stage);
+        createjs.Ticker.addEventListener("tick", function () { return _this.handleTick(_this.stage); });
     };
-    MainGame.prototype.cleanGame = function () {
-        this.stage.removeChild(MainGame.allContainer);
-        MainGame.gameTimers.Destroy();
-    };
-    MainGame.prototype.updateLayout = function () {
-        MainGame.mainScreen.update();
-    };
-    MainGame.prototype.initGame = function (main) {
-        MainGame.gameTimers = new GameTimer();
-        MainGame.allContainer = new createjs.MovieClip();
-        MainGame.arrCard = new Array();
-        MainGame.totalCard = 0;
-        MainGame.globMain.id = 0;
-        MainGame.timers = 0;
-        MainGame.sessionTimer = 0;
-        createjs.Ticker.addEventListener("tick", main.handleUpdate);
-        MainGame.gameTimers.init(main.stage, MainGame.allContainer);
-        main.generateCard();
-        MainGame.mainScreen.destroyThis();
-    };
-    MainGame.GameOver = function () {
-        for (var i = 0; i < MainGame.arrCard.length; i++) {
-            MainGame.arrCard[i].Destroy();
-        }
-        createjs.Ticker.removeAllEventListeners("tick");
-        createjs.Ticker.addEventListener("tick", MainGame.STAGE);
-        MainGame.gameOverScreen.ShowGameOver(MainGame.allContainer);
-    };
-    MainGame.prototype.handleUpdate = function (event) {
-        MainGame.timers += event.delta / 1000;
-        MainGame.sessionTimer += event.delta / 1000;
-        MainGame.scaleFactor = MainGame.sessionTimer / MainGame.longSession;
-        MainGame.gameTimers.update(MainGame.scaleFactor);
-        if (MainGame.scaleFactor > 1) {
-            MainGame.GameOver();
-        }
-        if (MainGame.timers > MainGame.longIdle) {
-            if (MainGame.firstId != 0) {
-                MainGame.firstCard.swapToFace(MainGame.firstCard);
-                MainGame.firstId = 0;
-            }
-            if (MainGame.secondId != 0) {
-                MainGame.secondCard.swapToFace(MainGame.secondCard);
-                MainGame.secondId = 0;
-            }
-            MainGame.timers = 0;
-        }
+    MainGame.prototype.handleTick = function (stage) {
+        stage.update();
     };
     MainGame.prototype.generateCard = function () {
         for (var i = 0; i < MainGame.width; i++) {
@@ -340,7 +289,6 @@ var Card = (function () {
                 MainGame.totalCard--;
                 MainGame.totalCard--;
                 if (MainGame.totalCard == 0) {
-                    MainGame.GameOver();
                 }
             }
         }
