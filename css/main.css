@@ -7,22 +7,21 @@ body{
 #container{
 	display: table;
 }
-#all-login-page{
+#all-register-page{
 	position: absolute;
 	width: 100%;
 	height: 100%;
 	top: 0;
 	left: 0;
 	background:white;
-	background-color: rgba(255, 255, 255, 0.7);;
+	background-color: rgba(255, 255, 255, 0.7);
+	display: none;
 }
 
 .login-page{
 		opacity: 1;
 }
-#all-login-page{
-	display: none;
-}
+
 
 #logo-main{
 	display: table;
@@ -39,7 +38,12 @@ body{
 	background-image: url("../asset/splash screen/Login Back.png");
 	background-size: 100% 100%;
 }
-
+#base-url{
+	display: none;
+}
+#access_token{
+	display: none;
+}
 
 .right-content{
 	margin-top: 20px;

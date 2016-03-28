@@ -1,5 +1,6 @@
 <html>
-<?php require_once('php/config.php');?>
+<?php require_once('php/config.php'); ?>
+
 <head>
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -15,6 +16,7 @@
 </head>
 
 <body >
+	<div id="base-url"><?php echo $base_url; ?></div>
 	<div class="container">
 		<div class="col-sm-2">
 			<image id="logo-main" src="asset/final/Tao Kae Noi.png"/>
@@ -29,7 +31,7 @@
 			<div id="form-container" class="col-sm-4">
 
 				<div class="col-md-6 right-content left">
-					<form>
+					<div>
 						Login with your account
 						<br/>
 						<br/>
@@ -41,9 +43,9 @@
 							<input type="password" class="form-control" id="password" placeholder="Password">
 						</div>
 						<div class="form-group">
-							<button type="submit" class="btn btn-default">Submit</button>
+							<button class="btn btn-default" id="button-login-submit">Submit</button> <div id="warning-login"></div>
 						</div>
-					</form>
+					</div>
 				</div>
 				<div class="col-md-6 right-content right">
 					Register Here
@@ -54,11 +56,11 @@
 			</div>
 		</div>
 	</div>
-	<div id= "all-login-page">
+	<div id= "all-register-page">
 
 		<div class="login-page">
 
-			<a href="#" id="close-button">x close</a>
+			<a href="#" class="close-button">x close</a>
 		  <div class="form">
 					<div id="please-wait-screen" style="{color:red}"> Please wait</div>
 		    <div class="login-form" id="form-login">

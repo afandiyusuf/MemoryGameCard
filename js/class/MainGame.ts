@@ -1,4 +1,5 @@
 /// <reference path="../tsD/createjs.d.ts" />
+/// <reference path="../tsD/jquery.d.ts" />
 
 class MainGame
 {

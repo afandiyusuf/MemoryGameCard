@@ -28,7 +28,7 @@ class Card
     this.container = container;
     //console.log("width is "+MainGame.width+" Height is"+MainGame.height+" i is "+i+" j is"+j+" modulo is"+(i+j)%(MainGame.height*MainGame.width));
     this.id = ((id)%(MainGame.width*MainGame.height/2)+1);
-    this.frontUrl = this.baseImageUrl+this.id+".png";
+    this.frontUrl = queue.getResult("card", true);
     this.backImageUrl = this.baseImageUrl+"bcak.png";
 
     this.backImage = new createjs.Bitmap(this.backImageUrl);

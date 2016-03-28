@@ -1,14 +1,57 @@
 $(function(){
-  $("#register-button").click(function(){
-    $("#all-login-page").css("display","table");
-  });
+  AddListenerButton();
+  function AddListenerButton()
+  {
+    $("#register-button").click(function(){
+      displayRegisterForm(null);
+    });
 
-  $("#close-button").click(function(){
-    $("#all-login-page").css("display","none");
-  });
+    $(".close-button").click(function(){
+      hideRegisterForm();
+    });
 
-  $('#register-button-submit').click(function(){
+    $('#register-button-submit').click(function(){
+      prosesRegister();
+    });
 
+    $('#button-login-submit').click(function(){
+      prosesLogin();
+    })
+  }
+
+  function prosesLogin()
+  {
+    var username = $("#username").val();
+    var password = $("#password").val();
+
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:90/Base-Backend-Game-API/index.php/user/login",
+      data: {
+        username : username,
+        password : password
+      },
+      success: function(data){
+        if(data.status_code == 200)
+        {
+          var baseUrl = $("#base-url").html();
+          window.location = baseUrl+"/page/game.php?access_token="+data.data.access_token;
+        }else{
+          display_warning_login(data.status_message);
+        }
+
+      },
+      error : function(data){
+        displayRegisterForm("koneksi error");
+      },
+      dataType: "JSON"
+    });
+
+  }
+
+
+  function prosesRegister()
+  {
     var password = $("#password-register").val();
     var confirm_password = $("#confirm-passowrd").val();
     var nama = $("#nama").val();
@@ -43,19 +86,54 @@ $(function(){
       success: function(data){
         if(data.status_code == 402)
         {
-          console.log("data tidak lengkap");
+          displayRegisterForm("data yang anda masukkan tidak lengkap");
+        }else if(data.status_code == 401)
+        {
+          displayRegisterForm("username sudah terpakai, pakai username yang lain");
         }else if(data.status_code == 200)
         {
-          console.log("success");
+          changeWarningText("register success , silahkan login dengan username dan passwor yang sudah dibuat <br/> <a href='' class='close-button'> close </a> ");
         }
 
       },
       error : function(data){
-        console.log("error");
-        console.log(data);
+        displayRegisterForm("koneksi error");
       },
       dataType: "JSON"
     });
+  }
 
-  });
+  function changeWarningText(val)
+  {
+    if(val != null){
+      $("#please-wait-screen").css("display","table");
+      $("#please-wait-screen").html(val);
+    }else{
+      $("#please-wait-screen").css("display","none");
+    }
+  }
+  function display_warning_login(val)
+  {
+    $("#warning-login").html(val);
+  }
+  function displayRegisterForm(keterangan)
+  {
+    if(keterangan != null)
+    {
+      $("#keterangan").css("display","table");
+      $("#keterangan").html(keterangan);
+    }else{
+      $("#keterangan").css("display","none");
+    }
+    $("#form-login").css("display","table");
+    $("#please-wait-screen").css("display","none");
+    $("#all-register-page").css("display","table");
+  }
+
+  function hideRegisterForm(keterangan)
+  {
+    $("#form-login").css("display","none");
+    $("#please-wait-screen").css("display","none");
+    $("#all-register-page").css("display","none");
+  }
 });

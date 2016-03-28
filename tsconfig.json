@@ -8,6 +8,7 @@
     },
     "files": [
         "js/class/MainGame.ts",
+        "js/class/Preload.ts",
         "js/class/GameOverScreen.ts",
         "js/class/MainMenu.ts",
         "js/object/GameTimer.ts",
