@@ -5,14 +5,31 @@ function init()
 
 	var canvas:any = document.getElementById("game");
 	if(document.body.clientWidth > document.body.clientHeight){
-		if(document.body.clientWidth > 950)
+		if(document.body.clientWidth > 800)
 		{
-			canvas.width = 950;
-			canvas.height = 450;
+			if(document.body.clientHeight < 450)
+			{
+				canvas.height = document.body.clientHeight;
+				canvas.width = canvas.height/9*16;
+			}else{
+
+				if(document.body.clientHeight < document.body.clientWidth/16*9)
+				{
+					canvas.height = document.body.clientHeight - (document.body.clientHeight / 15);
+					canvas.width = canvas.height/9*16;
+
+
+				}else{
+					canvas.width = document.body.clientWidth - (document.body.clientWidth / 15);
+					canvas.height = canvas.width/16*9;
+				}
+
+			}
 		}else{
-			canvas.width = document.body.clientWidth;
-			canvas.height = canvas.width/19*9;
+			canvas.width = document.body.offsetWidth;
+			canvas.height = canvas.width/16*9;
 		}
+		
 		var mainGame = new MainGame();
 		MainGame.GameWidth = canvas.width;
 		MainGame.GameHeight = canvas.height;

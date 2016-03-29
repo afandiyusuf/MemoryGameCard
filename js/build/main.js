@@ -1,5 +1,6 @@
 var MainGame = (function () {
     function MainGame() {
+        this.arrCard = new Array();
         this.backUrl = "../asset/Card/Back.png";
         this.margin = 5;
         this.id = 0;
@@ -8,15 +9,22 @@ var MainGame = (function () {
     ;
     MainGame.prototype.init = function () {
         var _this = this;
-        this.mainScreen = new MainMenu();
+        this.mainScreen = new MainMenu(this);
         this.mainScreen.callMainMenu(this.stage);
         createjs.Ticker.addEventListener("tick", function () { return _this.handleTick(_this); });
+        createjs.Ticker.framerate = 60;
+    };
+    MainGame.prototype.StartPlayGame = function () {
+        this.allContainer = new createjs.MovieClip();
+        this.stage.addChild(this.allContainer);
+        this.generateCard();
     };
     MainGame.prototype.handleTick = function (master) {
         master.stage.update();
     };
     MainGame.prototype.DestroyThis = function () {
         var _this = this;
+        this.stage.removeChild(this.allContainer);
         createjs.Ticker.removeEventListener("tick", function () { return _this.handleTick(_this); });
     };
     MainGame.prototype.generateCard = function () {
@@ -24,24 +32,22 @@ var MainGame = (function () {
             for (var j = 0; j < MainGame.height; j++) {
                 this.id++;
                 MainGame.totalCard++;
-                console.log(this.id);
                 var c = new Card();
-                c.init(this.stage, MainGame.allContainer, i, j, this.margin, this.id);
-                MainGame.arrCard.push(c);
+                c.init(this.stage, this.allContainer, i, j, this.margin, this.id);
+                this.arrCard.push(c);
             }
         }
-        this.stage.addChild(MainGame.allContainer);
         this.stage.update();
-        MainGame.allContainer.x = MainGame.GameWidth / 2 - MainGame.GameWidth / 5;
-        MainGame.allContainer.y = 10;
-        MainGame.arrCard = this.shuffleArray(MainGame.arrCard);
+        this.allContainer.x = MainGame.GameWidth / 2 - MainGame.GameWidth / 5;
+        this.allContainer.y = 10;
+        this.arrCard = this.shuffleArray(this.arrCard);
         this.reArrangeAll();
     };
     MainGame.prototype.reArrangeAll = function () {
         var index = 0;
         for (var i = 0; i < MainGame.width; i++) {
             for (var j = 0; j < MainGame.height; j++) {
-                MainGame.arrCard[index].reposition(i, j);
+                this.arrCard[index].reposition(i, j);
                 index++;
             }
         }
@@ -57,15 +63,12 @@ var MainGame = (function () {
     };
     MainGame.firstId = 0;
     MainGame.secondId = 0;
-    MainGame.GameWidth = 800;
-    MainGame.GameHeight = 600;
     MainGame.timers = 0;
     MainGame.longIdle = 1;
     MainGame.totalCard = 0;
     MainGame.sessionTimer = 0;
     MainGame.longSession = 60;
     MainGame.globalScale = .5;
-    MainGame.arrCard = new Array();
     MainGame.width = 4;
     MainGame.height = 4;
     return MainGame;
@@ -145,17 +148,17 @@ var GameOverScreen = (function () {
     return GameOverScreen;
 }());
 var MainMenu = (function () {
-    function MainMenu() {
-        this.MainMenu = function () {
-        };
+    function MainMenu(mainGame) {
+        this.mainGame = mainGame;
     }
     MainMenu.prototype.callMainMenu = function (stage) {
+        var _this = this;
         this.stage = stage;
         this.mainImage = new createjs.Bitmap(PreloadGame.queue.getResult("main-button"));
         this.mainButton = new createjs.MovieClip();
         this.mainButton.addChild(this.mainImage);
-        this.mainButton.scaleX = 0.75;
-        this.mainButton.scaleY = 0.75;
+        this.mainButton.scaleX = MainGame.GameWidth / 6 / this.mainImage.image.width;
+        this.mainButton.scaleY = this.mainButton.scaleX;
         this.stage.addChild(this.mainButton);
         this.logoImage = new createjs.Bitmap(PreloadGame.queue.getResult("corner-logo"));
         this.logoImage.scaleX = MainGame.GameWidth / 10 / this.logoImage.image.width;
@@ -166,17 +169,23 @@ var MainMenu = (function () {
         this.logo2Image.scaleX = this.logo2Image.scaleY;
         this.stage.addChild(this.logo2Image);
         this.reposisi();
+        this.mainButton.addEventListener("click", function () { return _this.startGame(); });
+    };
+    MainMenu.prototype.startGame = function () {
+        this.destroyThis();
+        this.mainGame.StartPlayGame();
     };
     MainMenu.prototype.reposisi = function () {
         this.logoImage.x = MainGame.GameWidth / 20;
         this.logoImage.y = MainGame.GameHeight / 20;
         this.logo2Image.x = this.logoImage.x + (this.logoImage.image.width * this.logoImage.scaleX) + 20;
         this.logo2Image.y = MainGame.GameHeight / 2 - (this.logo2Image.image.height / 2 * this.logo2Image.scaleY);
-        this.mainButton.x = (this.logo2Image.x + (MainGame.GameWidth - this.logoImage.x)) / 2 + (this.mainImage.image.width * this.mainButton.scaleX);
+        this.mainButton.x = this.logo2Image.x + (this.logo2Image.image.width * this.logo2Image.scaleX) + ((MainGame.GameWidth - (this.logo2Image.x + (this.logo2Image.image.width * this.logo2Image.scaleX))) / 2) - (this.mainImage.image.width * this.mainImage.scaleX * 0.5);
         this.mainButton.y = (this.logo2Image.image.height * this.logo2Image.scaleY) / 2 + this.logo2Image.y;
     };
     MainMenu.prototype.destroyThis = function () {
-        this.mainButton.removeAllEventListeners("click");
+        var _this = this;
+        this.mainButton.removeEventListener("click", function () { return _this.startGame(); });
         this.mainButton.removeChild(this.mainImage);
         this.stage.removeChild(this.mainButton);
         this.stage.removeChild(this.logo2Image);
@@ -250,8 +259,8 @@ var Card = (function () {
         this.frontImage.image.onload = function () { return _this.updateStage(_this.frontImage); };
         this.margin = margin;
         this.cardContainer.id = this.id;
-        this.cardContainer.scaleX = this.InitScaleX;
-        this.cardContainer.scaleY = this.InitScaleX;
+        this.cardContainer.scaleY = MainGame.GameHeight / 5 / this.frontImage.image.height;
+        this.cardContainer.scaleX = this.cardContainer.scaleY;
         this.cardContainer.addEventListener("click", function () { return _this.cardClick(_this.cardContainer, _this); });
         this.cardContainer.addChild(this.frontImage);
         this.cardContainer.addChild(this.backImage);
@@ -287,14 +296,13 @@ var Card = (function () {
             MainGame.secondCard = masterCard;
             masterCard.swapToFace(masterCard);
             if (MainGame.firstId == MainGame.secondId) {
-                MainGame.firstCard.cardContainer.removeAllEventListeners("click");
-                MainGame.secondCard.cardContainer.removeAllEventListeners("click");
                 MainGame.firstCard.cardContainer.visible = false;
                 MainGame.secondCard.cardContainer.visible = false;
                 MainGame.firstId = 0;
                 MainGame.secondId = 0;
                 MainGame.totalCard--;
                 MainGame.totalCard--;
+                this.Destroy();
                 if (MainGame.totalCard == 0) {
                 }
             }
@@ -324,7 +332,8 @@ var Card = (function () {
         }
     };
     Card.prototype.Destroy = function () {
-        this.cardContainer.removeAllEventListeners("click");
+        var _this = this;
+        this.cardContainer.removeEventListener("click", function () { return _this.cardClick(_this.cardContainer, _this); });
         this.cardContainer.removeChild(this.frontImage);
         this.cardContainer.removeChild(this.backImage);
         this.container.removeChild(this.cardContainer);
@@ -334,13 +343,25 @@ var Card = (function () {
 function init() {
     var canvas = document.getElementById("game");
     if (document.body.clientWidth > document.body.clientHeight) {
-        if (document.body.clientWidth > 950) {
-            canvas.width = 950;
-            canvas.height = 450;
+        if (document.body.clientWidth > 800) {
+            if (document.body.clientHeight < 450) {
+                canvas.height = document.body.clientHeight;
+                canvas.width = canvas.height / 9 * 16;
+            }
+            else {
+                if (document.body.clientHeight < document.body.clientWidth / 16 * 9) {
+                    canvas.height = document.body.clientHeight - (document.body.clientHeight / 15);
+                    canvas.width = canvas.height / 9 * 16;
+                }
+                else {
+                    canvas.width = document.body.clientWidth - (document.body.clientWidth / 15);
+                    canvas.height = canvas.width / 16 * 9;
+                }
+            }
         }
         else {
-            canvas.width = document.body.clientWidth;
-            canvas.height = canvas.width / 19 * 9;
+            canvas.width = document.body.offsetWidth;
+            canvas.height = canvas.width / 16 * 9;
         }
         var mainGame = new MainGame();
         MainGame.GameWidth = canvas.width;
