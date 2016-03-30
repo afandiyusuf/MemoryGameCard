@@ -60,7 +60,6 @@ class MainMenu
     this.logo2Image.y = MainGame.GameHeight/2 - (this.logo2Image.image.height/2 * this.logo2Image.scaleY);
     this.mainButton.x = this.logo2Image.x + (this.logo2Image.image.width * this.logo2Image.scaleX) + ((MainGame.GameWidth - (this.logo2Image.x + (this.logo2Image.image.width * this.logo2Image.scaleX)))/2) - (this.mainImage.image.width * this.mainImage.scaleX * 0.5);
     this.mainButton.y = (this.logo2Image.image.height*this.logo2Image.scaleY)/2+this.logo2Image.y;
-
   }
   public destroyThisMainMenu():void
   {

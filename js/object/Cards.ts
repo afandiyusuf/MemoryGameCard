@@ -12,12 +12,10 @@ class Card
   public cardContainer:createjs.MovieClip;
   private thisStage:createjs.Stage;
   private InitScaleX:number = 0.6;
-  private margin:number;
-  private width:number = 175;
-  private height:number = 175;
+  public margin:number;
 
   private mainGame:MainGame;
-
+  public trueWidth:number;
   public Card = function()
   {
 
@@ -30,7 +28,7 @@ class Card
 
   public init(stage:createjs.Stage,container:createjs.MovieClip,i:number,j:number,margin:number,id:number):void
   {
-    this.InitScaleX = MainGame.GameHeight/6/this.width;
+
     this.cardContainer = new createjs.MovieClip();
     this.thisStage = stage;
     this.container = container;
@@ -46,12 +44,16 @@ class Card
 
     this.backImage.image.onload = ():void =>this.updateStage(this.backImage);
     this.frontImage.image.onload = ():void => this.updateStage(this.frontImage);
-    this.margin = margin;
+
+
 
     this.cardContainer.id = this.id;
     this.InitScaleX = MainGame.GameHeight/5.5/this.frontImage.image.height;
     this.cardContainer.scaleY = this.InitScaleX;
     this.cardContainer.scaleX = this.cardContainer.scaleY;
+
+    this.trueWidth = this.backImage.image.width * this.InitScaleX;
+    this.margin = this.trueWidth/25;
 
      this.cardContainer.addEventListener("click",():void=>this.cardClick(this.cardContainer,this));
 
@@ -62,8 +64,8 @@ class Card
 
   public reposition(i:number,j:number):void
   {
-    this.cardContainer.x = i*((this.width * this.cardContainer.scaleX)+this.margin) + this.width/2;
-    this.cardContainer.y = j*((this.height * this.cardContainer.scaleY)+this.margin) + this.height/2;
+    this.cardContainer.x = i*((this.backImage.image.width * this.cardContainer.scaleX)+this.margin) + this.backImage.image.width/2 * this.InitScaleX;
+    this.cardContainer.y = j*((this.backImage.image.height * this.cardContainer.scaleY)+this.margin) + this.backImage.image.height /2 * this.InitScaleX;
   }
 
   private updateStage(target:createjs.Bitmap):void

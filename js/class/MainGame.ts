@@ -42,6 +42,7 @@ class MainGame
 	public static gameOverScreen:GameOverScreen;
 	public mainScreen:MainMenu;
 	public static globMain:MainGame;
+	public containerWidth:number;
 
 	public isPause:boolean = false;
 
@@ -91,7 +92,7 @@ class MainGame
 			}
 			master.idleCard = 0;
 		}
-		console.log(master.timers);
+
 		if(master.timers >master.LongGameTimer)
 		{
 			master.DestroyThis();
@@ -151,12 +152,15 @@ class MainGame
 
 
 		this.stage.update();
-		this.allContainer.x = MainGame.GameWidth/2 - MainGame.GameWidth/5;
-		this.allContainer.y = 10;
+
 		this.arrCard = this.shuffleArray(this.arrCard);
 		this.reArrangeAll();
 
-
+		this.containerWidth = (this.arrCard[0].trueWidth+this.arrCard[0].margin) * MainGame.width;
+		console.log(this.arrCard[0].trueWidth);
+		console.log(this.containerWidth);
+		this.allContainer.x = (MainGame.GameWidth - this.containerWidth)/2;
+		this.allContainer.y = (MainGame.GameHeight - this.containerWidth)/2 + MainGame.GameHeight/10;
 	}
 
 	private reArrangeAll()

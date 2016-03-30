@@ -8,6 +8,7 @@ var MainGame = (function () {
         this.margin = 5;
         this.id = 0;
         this.stage = new createjs.Stage("game");
+        this.isPause = false;
     }
     ;
     MainGame.prototype.init = function () {
@@ -32,6 +33,8 @@ var MainGame = (function () {
         this.generateCard();
     };
     MainGame.prototype.handleTick = function (master) {
+        if (master.isPause)
+            return;
         master.stage.update();
         master.timers += MainGame.deltaTime / 1000;
         master.idleCard += MainGame.deltaTime / 1000;
@@ -46,11 +49,12 @@ var MainGame = (function () {
             }
             master.idleCard = 0;
         }
-        console.log(master.timers);
         if (master.timers > master.LongGameTimer) {
             master.DestroyThis();
             master.StartPlayGame();
         }
+    };
+    MainGame.prototype.pauseGame = function () {
     };
     MainGame.prototype.deltaTimeCatcher = function (e) {
         MainGame.deltaTime = e.delta;
@@ -84,10 +88,13 @@ var MainGame = (function () {
             }
         }
         this.stage.update();
-        this.allContainer.x = MainGame.GameWidth / 2 - MainGame.GameWidth / 5;
-        this.allContainer.y = 10;
         this.arrCard = this.shuffleArray(this.arrCard);
         this.reArrangeAll();
+        this.containerWidth = (this.arrCard[0].trueWidth + this.arrCard[0].margin) * MainGame.width;
+        console.log(this.arrCard[0].trueWidth);
+        console.log(this.containerWidth);
+        this.allContainer.x = (MainGame.GameWidth - this.containerWidth) / 2;
+        this.allContainer.y = (MainGame.GameHeight - this.containerWidth) / 2 + MainGame.GameHeight / 10;
     };
     MainGame.prototype.reArrangeAll = function () {
         var index = 0;
@@ -219,8 +226,10 @@ var MainMenu = (function () {
         this.reposisi();
         this.mainButton.addEventListener("click", function () { return _this.startGame(); });
     };
+    MainMenu.prototype.CallPauseScreen = function () {
+    };
     MainMenu.prototype.startGame = function () {
-        this.destroyThis();
+        this.destroyThisMainMenu();
         this.mainGame.StartPlayGame();
     };
     MainMenu.prototype.reposisi = function () {
@@ -231,7 +240,7 @@ var MainMenu = (function () {
         this.mainButton.x = this.logo2Image.x + (this.logo2Image.image.width * this.logo2Image.scaleX) + ((MainGame.GameWidth - (this.logo2Image.x + (this.logo2Image.image.width * this.logo2Image.scaleX))) / 2) - (this.mainImage.image.width * this.mainImage.scaleX * 0.5);
         this.mainButton.y = (this.logo2Image.image.height * this.logo2Image.scaleY) / 2 + this.logo2Image.y;
     };
-    MainMenu.prototype.destroyThis = function () {
+    MainMenu.prototype.destroyThisMainMenu = function () {
         var _this = this;
         this.mainButton.removeEventListener("click", function () { return _this.startGame(); });
         this.mainButton.removeChild(this.mainImage);
@@ -285,15 +294,12 @@ var Card = (function () {
         this.backImageUrl = "";
         this.face = 0;
         this.InitScaleX = 0.6;
-        this.width = 175;
-        this.height = 175;
         this.Card = function () {
         };
         this.mainGame = mainGame;
     }
     Card.prototype.init = function (stage, container, i, j, margin, id) {
         var _this = this;
-        this.InitScaleX = MainGame.GameHeight / 6 / this.width;
         this.cardContainer = new createjs.MovieClip();
         this.thisStage = stage;
         this.container = container;
@@ -306,19 +312,20 @@ var Card = (function () {
         this.updateStage(this.frontImage);
         this.backImage.image.onload = function () { return _this.updateStage(_this.backImage); };
         this.frontImage.image.onload = function () { return _this.updateStage(_this.frontImage); };
-        this.margin = margin;
         this.cardContainer.id = this.id;
         this.InitScaleX = MainGame.GameHeight / 5.5 / this.frontImage.image.height;
         this.cardContainer.scaleY = this.InitScaleX;
         this.cardContainer.scaleX = this.cardContainer.scaleY;
+        this.trueWidth = this.backImage.image.width * this.InitScaleX;
+        this.margin = this.trueWidth / 25;
         this.cardContainer.addEventListener("click", function () { return _this.cardClick(_this.cardContainer, _this); });
         this.cardContainer.addChild(this.frontImage);
         this.cardContainer.addChild(this.backImage);
         this.container.addChild(this.cardContainer);
     };
     Card.prototype.reposition = function (i, j) {
-        this.cardContainer.x = i * ((this.width * this.cardContainer.scaleX) + this.margin) + this.width / 2;
-        this.cardContainer.y = j * ((this.height * this.cardContainer.scaleY) + this.margin) + this.height / 2;
+        this.cardContainer.x = i * ((this.backImage.image.width * this.cardContainer.scaleX) + this.margin) + this.backImage.image.width / 2 * this.InitScaleX;
+        this.cardContainer.y = j * ((this.backImage.image.height * this.cardContainer.scaleY) + this.margin) + this.backImage.image.height / 2 * this.InitScaleX;
     };
     Card.prototype.updateStage = function (target) {
         this.thisStage.update();
