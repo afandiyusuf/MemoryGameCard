@@ -30,6 +30,9 @@ class PreloadGame
     queue.loadFile({id:"pause-panel",src:"../asset/match boss/Pause.png"});
     queue.loadFile({id:"continue",src:"../asset/match boss/continue.png"});
     queue.loadFile({id:"home",src:"../asset/match boss/Home.png"});
+    queue.loadFile({id:"failed-panel",src:"../asset/match boss/Failed.png"});
+    queue.loadFile({id:"main-lagi2",src:"../asset/match boss/Main Lagi 2.png"});
+
   	queue.load();
 
     PreloadGame.queue = queue;

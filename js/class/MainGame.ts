@@ -5,7 +5,7 @@ class MainGame
 {
 	public static LogOutUrl = "http://localhost:90/MemoryGameCard/php/logout.php";
 	public static thisLevel:number = 0;
-	public static ArrTimer:Array<number> = new Array(10,30,5);
+	public static ArrTimer:Array<number> = new Array(5,30,5);
 
 	public static firstId:number = 0;
 	public static secondId:number = 0;
@@ -51,12 +51,22 @@ class MainGame
 	{
 
 		this.ui = new UI(this);
-		this.ui.callMainMenu(this.stage);
+		this.GotoMainMenu();
 		createjs.Ticker.addEventListener("tick", ()=>this.handleTick(this));
+		createjs.Ticker.addEventListener("tick",this.deltaTimeCatcher);
 
-		createjs.Ticker.framerate = 60;
 	}
 
+	public GotoMainMenu()
+	{
+
+		createjs.Ticker.framerate = 60;
+		this.timers = 0;
+		this.ui.callMainMenu(this.stage);
+		this.isPause = false;
+		this.stage.update();
+		MainGame.thisLevel = 0;
+	}
 	public StartPlayGame():void
 	{
 		MainGame.thisLevel++;
@@ -67,7 +77,7 @@ class MainGame
 		this.id = 0;
 		this.arrCard = new Array();
 		this.LongGameTimer = MainGame.ArrTimer[MainGame.thisLevel-1];
-		createjs.Ticker.addEventListener("tick",this.deltaTimeCatcher);
+
 		this.allContainer = new createjs.MovieClip();
 		this.stage.addChild(this.allContainer);
 		this.generateCard();
@@ -106,7 +116,9 @@ class MainGame
 		if(master.timers >master.LongGameTimer)
 		{
 			master.DestroyThis();
-			master.StartPlayGame();
+			master.ui.DestroyGameUI();
+			master.ui.CallFailedScreen();
+			master.isPause = true;
 		}
 	}
 
@@ -131,8 +143,6 @@ class MainGame
 	private DestroyThis()
 	{
 		this.stage.removeChild(this.allContainer);
-		createjs.Ticker.removeEventListener("tick", ()=>this.handleTick(this));
-		createjs.Ticker.removeEventListener("tick",this.deltaTimeCatcher);
 		this.DestroyAllCard();
 	}
 

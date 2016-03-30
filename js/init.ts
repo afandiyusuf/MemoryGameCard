@@ -1,7 +1,7 @@
 function init()
 {
 
-
+	window.scrollTo(0, 1);
 
 	var canvas:any = document.getElementById("game");
 	if(document.body.clientWidth > document.body.clientHeight){
@@ -29,7 +29,7 @@ function init()
 			canvas.width = document.body.offsetWidth;
 			canvas.height = canvas.width/16*9;
 		}
-		
+
 		var mainGame = new MainGame();
 		MainGame.GameWidth = canvas.width;
 		MainGame.GameHeight = canvas.height;
