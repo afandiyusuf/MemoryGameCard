@@ -5,12 +5,14 @@ class MainGame
 {
 	public static LogOutUrl = "http://localhost:90/MemoryGameCard/php/logout.php";
 	public static thisLevel:number = 1;
-	public static ArrTimer:Array<number> = new Array(5,10,15);
+	public static ArrTimer:Array<number> = new Array(100,10,15);
 
 	public static firstId:number = 0;
 	public static secondId:number = 0;
 	public static firstCard:Card;
 	public static secondCard:Card;
+	public static firstMatchCard:Card;
+	public static secondMatchCard:Card;
 	public static GameWidth:number;
 	public static GameHeight:number;
 
@@ -33,8 +35,8 @@ class MainGame
 	private card2:createjs.Bitmap;
 	private preload:Object;
 	private backUrl:string = "../asset/Card/Back.png";
-	public static width:number = 2;
-	public static height:number = 2;
+	public static width:number = 4;
+	public static height:number = 4;
 	private margin:number = 5;
 	public  allContainer:createjs.MovieClip;
 	private id:number = 0;
@@ -110,7 +112,7 @@ class MainGame
 		master.stage.update();
 		master.timers += MainGame.deltaTime/1000;
 		master.idleCard += MainGame.deltaTime/1000;
-		console.log(master.LongGameTimer - master.timers);
+
 		if(master.idleCard > master.longIdleCard)
 		{
 			if(MainGame.firstId != 0){

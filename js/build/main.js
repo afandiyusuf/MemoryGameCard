@@ -62,7 +62,6 @@ var MainGame = (function () {
         master.stage.update();
         master.timers += MainGame.deltaTime / 1000;
         master.idleCard += MainGame.deltaTime / 1000;
-        console.log(master.LongGameTimer - master.timers);
         if (master.idleCard > master.longIdleCard) {
             if (MainGame.firstId != 0) {
                 MainGame.firstCard.swapToFace(MainGame.firstCard);
@@ -140,7 +139,7 @@ var MainGame = (function () {
     };
     MainGame.LogOutUrl = "http://localhost:90/MemoryGameCard/php/logout.php";
     MainGame.thisLevel = 1;
-    MainGame.ArrTimer = new Array(5, 10, 15);
+    MainGame.ArrTimer = new Array(100, 10, 15);
     MainGame.firstId = 0;
     MainGame.secondId = 0;
     MainGame.longIdle = 1;
@@ -149,8 +148,8 @@ var MainGame = (function () {
     MainGame.longSession = 60;
     MainGame.globalScale = .5;
     MainGame.deltaTime = 0;
-    MainGame.width = 2;
-    MainGame.height = 2;
+    MainGame.width = 4;
+    MainGame.height = 4;
     return MainGame;
 }());
 var PreloadGame = (function () {
@@ -239,6 +238,32 @@ var UI = (function () {
     function UI(mainGame) {
         this.mainGame = mainGame;
     }
+    UI.prototype.callWinALL = function () {
+        var _this = this;
+        this.whiteBorder = new createjs.Bitmap(PreloadGame.queue.getResult("white-border"));
+        this.whiteBorder.scaleX = MainGame.GameWidth / this.whiteBorder.image.width;
+        this.whiteBorder.scaleY = this.whiteBorder.scaleX;
+        this.mainGame.stage.addChild(this.whiteBorder);
+        this.winPanel = new createjs.Bitmap(PreloadGame.queue.getResult("win-lvl"));
+        this.winPanel.scaleY = (MainGame.GameHeight - MainGame.GameHeight / 4) / this.winPanel.image.height;
+        this.winPanel.scaleX = this.winPanel.scaleY;
+        var widthPanel = this.winPanel.image.width * this.winPanel.scaleX;
+        var heightPanel = this.winPanel.image.height * this.winPanel.scaleY;
+        this.winPanel.x = (MainGame.GameWidth - widthPanel) / 2;
+        this.winPanel.y = (MainGame.GameHeight - heightPanel) / 2;
+        this.mainGame.stage.addChild(this.winPanel);
+        this.lanjut = new createjs.Bitmap(PreloadGame.queue.getResult("main-lagi2"));
+        this.lanjut.scaleX = this.winPanel.scaleX;
+        this.lanjut.scaleY = this.lanjut.scaleX;
+        var heightContinue = this.lanjut.image.height * this.lanjut.scaleY;
+        this.lanjut.x = this.winPanel.x + widthPanel / 2 - (this.lanjut.image.width * this.lanjut.scaleX * 0.5);
+        this.lanjut.y = this.winPanel.y + heightPanel - heightContinue - heightPanel / 10;
+        this.mainGame.stage.addChild(this.lanjut);
+        this.lanjut.addEventListener("click", function () { return _this.gotoLeaderboard(); });
+        this.mainGame.stage.update();
+    };
+    UI.prototype.gotoLeaderboard = function () {
+    };
     UI.prototype.callWinScreen = function () {
         var _this = this;
         this.whiteBorder = new createjs.Bitmap(PreloadGame.queue.getResult("white-border"));
@@ -468,6 +493,7 @@ var Card = (function () {
         this.backImageUrl = "";
         this.face = 0;
         this.InitScaleX = 0.6;
+        this.waitTime = 1000;
         this.Card = function () {
         };
         this.mainGame = mainGame;
@@ -480,6 +506,7 @@ var Card = (function () {
         this.id = ((id) % (MainGame.width * MainGame.height / 2) + 1);
         this.frontUrl = this.baseImageUrl + this.id + ".png";
         this.backImageUrl = this.baseImageUrl + "bcak.png";
+        this.picked = false;
         this.backImage = new createjs.Bitmap(PreloadGame.queue.getResult("card_back"));
         this.frontImage = new createjs.Bitmap(PreloadGame.queue.getResult("card" + this.id));
         this.updateStage(this.backImage);
@@ -510,6 +537,8 @@ var Card = (function () {
     Card.prototype.cardClick = function (e, masterCard) {
         if (e === void 0) { e = null; }
         if (masterCard === void 0) { masterCard = null; }
+        if (masterCard.picked)
+            return;
         this.mainGame.idleCard = 0;
         if (MainGame.firstId == 0) {
             MainGame.firstId = masterCard.id;
@@ -527,15 +556,16 @@ var Card = (function () {
             MainGame.secondCard = masterCard;
             masterCard.swapToFace(masterCard);
             if (MainGame.firstId == MainGame.secondId) {
-                MainGame.firstCard.cardContainer.visible = false;
-                MainGame.secondCard.cardContainer.visible = false;
+                MainGame.firstCard.picked = true;
+                MainGame.secondCard.picked = true;
                 MainGame.firstId = 0;
                 MainGame.secondId = 0;
-                MainGame.totalCard--;
-                MainGame.totalCard--;
-                this.Destroy();
-                if (MainGame.totalCard == 0) {
-                    this.mainGame.handleWin();
+                createjs.Tween.get(MainGame.firstCard.cardContainer).wait(masterCard.waitTime).to({ visible: false }, 0).call(completeTween, [masterCard], this);
+                createjs.Tween.get(MainGame.secondCard.cardContainer).wait(masterCard.waitTime).to({ visible: false }, 0).call(completeTween, [masterCard], this);
+                function completeTween(target) {
+                    MainGame.totalCard--;
+                    if (MainGame.totalCard == 0)
+                        target.mainGame.handleWin();
                 }
             }
         }

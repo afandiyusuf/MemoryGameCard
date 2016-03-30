@@ -15,7 +15,9 @@ class Card
   public margin:number;
 
   private mainGame:MainGame;
+  private waitTime:number = 1000;
   public trueWidth:number;
+  public picked:boolean;
   public Card = function()
   {
 
@@ -35,7 +37,7 @@ class Card
     this.id = ((id)%(MainGame.width*MainGame.height/2)+1);
     this.frontUrl = this.baseImageUrl+this.id+".png";
     this.backImageUrl = this.baseImageUrl+"bcak.png";
-
+    this.picked = false;
     this.backImage = new createjs.Bitmap(PreloadGame.queue.getResult("card_back"));
     this.frontImage = new createjs.Bitmap(PreloadGame.queue.getResult("card"+this.id));
 
@@ -78,6 +80,8 @@ class Card
 
   private cardClick(e:any=null,masterCard:Card=null):void
   {
+    if(masterCard.picked)
+      return;
 
     this.mainGame.idleCard = 0;
     //swap first card
@@ -106,18 +110,22 @@ class Card
         //CardMatch!!
         if(MainGame.firstId == MainGame.secondId)
         {
-          MainGame.firstCard.cardContainer.visible = false;
-          MainGame.secondCard.cardContainer.visible = false;
+
+          MainGame.firstCard.picked = true;
+          MainGame.secondCard.picked = true;
           MainGame.firstId = 0;
           MainGame.secondId = 0;
-          MainGame.totalCard--;
-          MainGame.totalCard--;
-          this.Destroy();
 
-          if(MainGame.totalCard == 0)
+          createjs.Tween.get(MainGame.firstCard.cardContainer).wait(masterCard.waitTime).to({visible:false},0).call(completeTween,[masterCard],this);
+          createjs.Tween.get(MainGame.secondCard.cardContainer).wait(masterCard.waitTime).to({visible:false},0).call(completeTween,[masterCard],this);
+
+          function completeTween(target:Card)
           {
-              this.mainGame.handleWin();
+            MainGame.totalCard--;
+            if(MainGame.totalCard == 0)
+              target.mainGame.handleWin();
           }
+
         }
     }
     else
