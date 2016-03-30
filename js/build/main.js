@@ -1,5 +1,8 @@
 var MainGame = (function () {
     function MainGame() {
+        this.idleCard = 0;
+        this.longIdleCard = 3;
+        this.timers = 0;
         this.arrCard = new Array();
         this.backUrl = "../asset/Card/Back.png";
         this.margin = 5;
@@ -15,24 +18,67 @@ var MainGame = (function () {
         createjs.Ticker.framerate = 60;
     };
     MainGame.prototype.StartPlayGame = function () {
+        MainGame.thisLevel++;
+        this.timers = 0;
+        this.idleCard = 0;
+        MainGame.firstId = 0;
+        MainGame.secondId = 0;
+        this.id = 0;
+        this.arrCard = new Array();
+        this.LongGameTimer = MainGame.ArrTimer[MainGame.thisLevel - 1];
+        createjs.Ticker.addEventListener("tick", this.deltaTimeCatcher);
         this.allContainer = new createjs.MovieClip();
         this.stage.addChild(this.allContainer);
         this.generateCard();
     };
     MainGame.prototype.handleTick = function (master) {
         master.stage.update();
+        master.timers += MainGame.deltaTime / 1000;
+        master.idleCard += MainGame.deltaTime / 1000;
+        if (master.idleCard > master.longIdleCard) {
+            if (MainGame.firstId != 0) {
+                MainGame.firstCard.swapToFace(MainGame.firstCard);
+                MainGame.firstId = 0;
+            }
+            if (MainGame.secondId != 0) {
+                MainGame.secondCard.swapToFace(MainGame.secondCard);
+                MainGame.secondId = 0;
+            }
+            master.idleCard = 0;
+        }
+        console.log(master.timers);
+        if (master.timers > master.LongGameTimer) {
+            master.DestroyThis();
+            master.StartPlayGame();
+        }
+    };
+    MainGame.prototype.deltaTimeCatcher = function (e) {
+        MainGame.deltaTime = e.delta;
+    };
+    MainGame.prototype.WIN_GAME = function () {
+        this.DestroyThis();
+    };
+    MainGame.prototype.LOSE_GAME = function () {
     };
     MainGame.prototype.DestroyThis = function () {
         var _this = this;
         this.stage.removeChild(this.allContainer);
         createjs.Ticker.removeEventListener("tick", function () { return _this.handleTick(_this); });
+        createjs.Ticker.removeEventListener("tick", this.deltaTimeCatcher);
+        this.DestroyAllCard();
+    };
+    MainGame.prototype.DestroyAllCard = function () {
+        for (var i = 0; i < this.arrCard.length; i++) {
+            this.arrCard[0].Destroy();
+        }
+        this.stage.removeChild(this.allContainer);
     };
     MainGame.prototype.generateCard = function () {
         for (var i = 0; i < MainGame.width; i++) {
             for (var j = 0; j < MainGame.height; j++) {
                 this.id++;
                 MainGame.totalCard++;
-                var c = new Card();
+                var c = new Card(this);
                 c.init(this.stage, this.allContainer, i, j, this.margin, this.id);
                 this.arrCard.push(c);
             }
@@ -61,14 +107,16 @@ var MainGame = (function () {
         }
         return array;
     };
+    MainGame.thisLevel = 0;
+    MainGame.ArrTimer = new Array(10, 30, 5);
     MainGame.firstId = 0;
     MainGame.secondId = 0;
-    MainGame.timers = 0;
     MainGame.longIdle = 1;
     MainGame.totalCard = 0;
     MainGame.sessionTimer = 0;
     MainGame.longSession = 60;
     MainGame.globalScale = .5;
+    MainGame.deltaTime = 0;
     MainGame.width = 4;
     MainGame.height = 4;
     return MainGame;
@@ -232,7 +280,7 @@ var GameTimer = (function () {
     return GameTimer;
 }());
 var Card = (function () {
-    function Card() {
+    function Card(mainGame) {
         this.baseImageUrl = "../asset/final/";
         this.backImageUrl = "";
         this.face = 0;
@@ -241,6 +289,7 @@ var Card = (function () {
         this.height = 175;
         this.Card = function () {
         };
+        this.mainGame = mainGame;
     }
     Card.prototype.init = function (stage, container, i, j, margin, id) {
         var _this = this;
@@ -259,7 +308,8 @@ var Card = (function () {
         this.frontImage.image.onload = function () { return _this.updateStage(_this.frontImage); };
         this.margin = margin;
         this.cardContainer.id = this.id;
-        this.cardContainer.scaleY = MainGame.GameHeight / 5 / this.frontImage.image.height;
+        this.InitScaleX = MainGame.GameHeight / 5.5 / this.frontImage.image.height;
+        this.cardContainer.scaleY = this.InitScaleX;
         this.cardContainer.scaleX = this.cardContainer.scaleY;
         this.cardContainer.addEventListener("click", function () { return _this.cardClick(_this.cardContainer, _this); });
         this.cardContainer.addChild(this.frontImage);
@@ -279,7 +329,7 @@ var Card = (function () {
     Card.prototype.cardClick = function (e, masterCard) {
         if (e === void 0) { e = null; }
         if (masterCard === void 0) { masterCard = null; }
-        MainGame.timers = 0;
+        this.mainGame.idleCard = 0;
         if (MainGame.firstId == 0) {
             MainGame.firstId = masterCard.id;
             MainGame.firstCard = masterCard;
@@ -307,7 +357,7 @@ var Card = (function () {
                 }
             }
         }
-        else if (MainGame.secondId != 0) {
+        else {
             MainGame.firstCard.swapToFace(MainGame.firstCard);
             MainGame.secondCard.swapToFace(MainGame.secondCard);
             MainGame.firstId = 0;

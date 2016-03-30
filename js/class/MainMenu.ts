@@ -39,14 +39,17 @@ class MainMenu
     this.stage.addChild(this.logo2Image);
 
     this.reposisi();
-
-
     //craeteListener
     this.mainButton.addEventListener("click",()=>this.startGame());
   }
+
+  public CallPauseScreen()
+  {
+
+  }
   public startGame()
   {
-    this.destroyThis();
+    this.destroyThisMainMenu();
     this.mainGame.StartPlayGame();
   }
   public reposisi():void
@@ -59,7 +62,7 @@ class MainMenu
     this.mainButton.y = (this.logo2Image.image.height*this.logo2Image.scaleY)/2+this.logo2Image.y;
 
   }
-  public destroyThis():void
+  public destroyThisMainMenu():void
   {
 
     this.mainButton.removeEventListener("click",()=>this.startGame());

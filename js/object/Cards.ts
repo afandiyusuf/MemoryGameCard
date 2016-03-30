@@ -16,9 +16,16 @@ class Card
   private width:number = 175;
   private height:number = 175;
 
+  private mainGame:MainGame;
+
   public Card = function()
   {
 
+  }
+
+  constructor(mainGame:MainGame)
+  {
+    this.mainGame = mainGame;
   }
 
   public init(stage:createjs.Stage,container:createjs.MovieClip,i:number,j:number,margin:number,id:number):void
@@ -42,8 +49,8 @@ class Card
     this.margin = margin;
 
     this.cardContainer.id = this.id;
-
-    this.cardContainer.scaleY = MainGame.GameHeight/5/this.frontImage.image.height;
+    this.InitScaleX = MainGame.GameHeight/5.5/this.frontImage.image.height;
+    this.cardContainer.scaleY = this.InitScaleX;
     this.cardContainer.scaleX = this.cardContainer.scaleY;
 
      this.cardContainer.addEventListener("click",():void=>this.cardClick(this.cardContainer,this));
@@ -69,15 +76,18 @@ class Card
 
   private cardClick(e:any=null,masterCard:Card=null):void
   {
-    MainGame.timers = 0;
 
+    this.mainGame.idleCard = 0;
+    //swap first card
     if(MainGame.firstId == 0){
         MainGame.firstId = masterCard.id;
         MainGame.firstCard = masterCard;
         masterCard.swapToFace(masterCard);
     }
-
+    //swap first swap secondCard
     else if(MainGame.secondId == 0){
+
+        //user click same card as firstcard
         if(MainGame.firstCard == masterCard)
         {
           masterCard.swapToFace(masterCard);
@@ -86,10 +96,12 @@ class Card
           return;
         }
 
+
         MainGame.secondId = masterCard.id;
         MainGame.secondCard = masterCard
         masterCard.swapToFace(masterCard);
 
+        //CardMatch!!
         if(MainGame.firstId == MainGame.secondId)
         {
           MainGame.firstCard.cardContainer.visible = false;
@@ -102,21 +114,21 @@ class Card
 
           if(MainGame.totalCard == 0)
           {
-
+              //Game WIN HERE
           }
         }
     }
-    else if(MainGame.secondId != 0)
+    else
     {
+      //backCard;
       MainGame.firstCard.swapToFace(MainGame.firstCard);
       MainGame.secondCard.swapToFace(MainGame.secondCard);
       MainGame.firstId = 0;
       MainGame.secondId = 0;
       this.cardClick(null,masterCard);
     }
-
-
   }
+
   public swapToFace(target:Card):void
   {
       createjs.Tween.get(target.cardContainer).to({scaleX:0},100).call(completeTween,[target],this);
