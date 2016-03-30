@@ -13,8 +13,7 @@ class UI
   private failedPanel:createjs.Bitmap;
 
   private whiteBorder:createjs.Bitmap;
-
-
+  
   public mainButton:createjs.MovieClip;
   public pauseButton:createjs.MovieClip;
   public continueButton:createjs.MovieClip;
@@ -28,6 +27,11 @@ class UI
   constructor(mainGame:MainGame)
   {
     this.mainGame = mainGame;
+  }
+
+  public callWinScreen()
+  {
+
   }
 
   public callMainMenu(stage:createjs.Stage):void

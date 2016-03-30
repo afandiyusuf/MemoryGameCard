@@ -59,7 +59,6 @@ class MainGame
 
 	public GotoMainMenu()
 	{
-
 		createjs.Ticker.framerate = 60;
 		this.timers = 0;
 		this.ui.callMainMenu(this.stage);
