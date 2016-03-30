@@ -16,8 +16,8 @@
 </head>
 
 <body >
-	<div id="base-url"><?php echo $base_url; ?></div>
-	<div id="base-api-url"><?php echo $base_api_url; ?></div>
+	<div id="base-url" style="display:none"><?php echo $base_url; ?></div>
+	<div id="base-api-url" style="display:none"><?php echo $base_api_url; ?></div>
 	<div class="container">
 		<div class="col-xs-2">
 			<image id="logo-main" src="asset/final/Tao Kae Noi.png"/>

@@ -221,6 +221,7 @@ var MainGame = (function () {
         return array;
     };
     MainGame.LogOutUrl = "http://localhost:90/MemoryGameCard/php/logout.php";
+    MainGame.leaderboardUrl = "http://localhost:90/MemoryGameCard/page/leaderboard.php";
     MainGame.thisLevel = 0;
     MainGame.ArrTimer = new Array(240, 240, 180, 180, 120);
     MainGame.firstId = 0;
@@ -356,7 +357,7 @@ var UI = (function () {
             },
             success: function (data) {
                 if (data.status_code == 200) {
-                    console.log(data);
+                    window.location.href = MainGame.leaderboardUrl + "?game_token=" + MainGame.gt;
                 }
                 else {
                     window.location.href = MainGame.LogOutUrl;

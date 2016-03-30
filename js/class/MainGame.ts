@@ -4,6 +4,7 @@
 class MainGame
 {
 	public static LogOutUrl = "http://localhost:90/MemoryGameCard/php/logout.php";
+	public static leaderboardUrl = "http://localhost:90/MemoryGameCard/page/leaderboard.php";
 	public static thisLevel:number = 0;
 	public static ArrTimer:Array<number> = new Array(240,240,180,180,120);
 

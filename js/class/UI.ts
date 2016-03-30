@@ -77,7 +77,7 @@ class UI
       success: function(data){
         if(data.status_code == 200)
         {
-            console.log(data);
+            window.location.href = MainGame.leaderboardUrl + "?game_token="+MainGame.gt;
         }else{
           window.location.href = MainGame.LogOutUrl;
         }

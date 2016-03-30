@@ -3,7 +3,23 @@ body{
 	 background-size: 100% 100%;
 	 background-repeat: no-repeat;;
 }
+#leaderboard-container{
+	padding-top: 2%;
+}
 
+.white-backGround{
+	background-image:url("../asset/final/Border 10px10.png");
+	background-position: center;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	height: 80%;
+}
+#current_score{
+	text-align: center;
+}
+#leaderboard-content{
+	padding-top: 10px
+}
 #container{
 	display: table;
 }

@@ -14,8 +14,8 @@ require_once('../php/validate_access_token.php');
 </head>
 
 <body onLoad="init();">
-	<div id="access_token"><?php echo $access_token ?></div>
-	<div id="base_api_url"><?php echo $base_api_url ?></div>
+	<div id="access_token" style="display:none"><?php echo $access_token ?></div>
+	<div id="base_api_url" style="display:none"><?php echo $base_api_url ?></div>
 	<canvas id="game" width="300" height="100" style=" position: absolute;
   top: 50%;
   left: 50%;
