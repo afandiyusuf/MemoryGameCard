@@ -66,6 +66,38 @@ class UI
   public gotoLeaderboard()
   {
 
+    $.ajax({
+      type: "POST",
+      url: $("#base_api_url").html()+"/game/postTotalScore",
+      data: {
+        access_token:$("#access_token").html(),
+        game_token: MainGame.gt,
+        score: this.mainGame.totalScore
+      },
+      success: function(data){
+        if(data.status_code == 200)
+        {
+            console.log(data);
+        }else{
+          window.location.href = MainGame.LogOutUrl;
+        }
+
+      },
+      error : function(data){
+          console.log("error");
+      },
+      dataType: "JSON"
+    });
+
+  }
+  public DestroyWinAll()
+  {
+    this.lanjut.removeEventListener("click",()=>this.gotoLeaderboard());
+    this.mainGame.stage.removeChild(this.whiteBorder);
+    this.mainGame.stage.removeChild(this.winPanel);
+    this.mainGame.stage.removeChild(this.lanjut);
+
+    this.mainGame.stage.update();
   }
   public callWinScreen()
   {

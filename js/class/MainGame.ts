@@ -1,11 +1,11 @@
 /// <reference path="../tsD/createjs.d.ts" />
-/// <reference path="../tsD/createjs.d.ts" />
+/// <reference path="../tsD/jquery.d.ts" />
 
 class MainGame
 {
 	public static LogOutUrl = "http://localhost:90/MemoryGameCard/php/logout.php";
-	public static thisLevel:number = 1;
-	public static ArrTimer:Array<number> = new Array(100,10,15);
+	public static thisLevel:number = 0;
+	public static ArrTimer:Array<number> = new Array(240,240,180,180,120);
 
 	public static firstId:number = 0;
 	public static secondId:number = 0;
@@ -35,8 +35,8 @@ class MainGame
 	private card2:createjs.Bitmap;
 	private preload:Object;
 	private backUrl:string = "../asset/Card/Back.png";
-	public static width:number = 4;
-	public static height:number = 4;
+	public static width:number = 2;
+	public static height:number = 2;
 	private margin:number = 5;
 	public  allContainer:createjs.MovieClip;
 	private id:number = 0;
@@ -46,6 +46,9 @@ class MainGame
 	public ui:UI;
 	public static globMain:MainGame;
 	public containerWidth:number;
+	private arrScore:Array<number> = new Array();
+	public static gt:string;
+	public totalScore:number = 0;
 
 	public isPause:boolean = false;
 
@@ -60,12 +63,36 @@ class MainGame
 
 	public GotoMainMenu()
 	{
+		this.arrScore = new Array();
 		createjs.Ticker.framerate = 60;
 		this.timers = 0;
 		this.ui.callMainMenu(this.stage);
 		this.isPause = false;
 		this.stage.update();
 		MainGame.thisLevel = 0;
+
+		$.ajax({
+			type: "POST",
+			url: $("#base_api_url").html()+"/game/creatSession",
+			data: {
+				access_token : $("#access_token").html()
+			},
+
+			success: function(data){
+				if(data.status_code == 200)
+				{
+					MainGame.gt = data.data.game_token;
+					console.log(MainGame.gt);
+				}else{
+					window.location.href = MainGame.LogOutUrl;
+				}
+
+			},
+			error : function(data){
+
+			},
+			dataType: "JSON"
+		});
 	}
 
 	public StartPlayGame():void
@@ -77,6 +104,7 @@ class MainGame
 		this.id = 0;
 		this.arrCard = new Array();
 		this.LongGameTimer = MainGame.ArrTimer[MainGame.thisLevel];
+		console.log(this.LongGameTimer);
 		MainGame.totalCard = 0;
 		this.allContainer = new createjs.MovieClip();
 		this.stage.addChild(this.allContainer);
@@ -86,8 +114,38 @@ class MainGame
 	}
 	public NextGame()
 	{
+		this.DestroyAllCard();
+		this.arrScore.push(Math.round(this.LongGameTimer - this.timers));
+		var arrscore = this.arrScore;
+		var level = MainGame.thisLevel;
+
+		$.ajax({
+			type: "POST",
+			url: $("#base_api_url").html()+"/game/postScorePerLevel",
+			data: {
+				access_token:$("#access_token").html(),
+				game_token: MainGame.gt,
+				score: arrscore[level],
+				level:'level'+(level+1)
+			},
+			success: function(data){
+				if(data.status_code == 200)
+				{
+					console.log(data);
+				}else{
+					window.location.href = MainGame.LogOutUrl;
+				}
+
+			},
+			error : function(data){
+
+			},
+			dataType: "JSON"
+		});
+
 		MainGame.thisLevel++;
 		this.StartPlayGame();
+
 	}
 	public handlePause()
 	{
@@ -100,14 +158,57 @@ class MainGame
 
 	public handleWin()
 	{
+
 		this.isPause = true;
 		this.DestroyThis();
-		this.ui.callWinScreen();
+
+
+		if(MainGame.thisLevel == MainGame.ArrTimer.length-1)
+		{
+			console.log("FINISH");
+
+			this.arrScore.push(Math.round(this.LongGameTimer - this.timers));
+			var arrscore = this.arrScore;
+			var level = MainGame.thisLevel;
+
+
+			$.ajax({
+				type: "POST",
+				url: $("#base_api_url").html()+"/game/postScorePerLevel",
+				data: {
+					access_token:$("#access_token").html(),
+					game_token: MainGame.gt,
+					score: arrscore[level],
+					level:'level'+(level+1)
+				},
+				success: function(data){
+					if(data.status_code == 200)
+					{
+						console.log(data);
+					}else{
+						window.location.href = MainGame.LogOutUrl;
+					}
+
+				},
+				error : function(data){
+					console.log("error");
+				},
+				dataType: "JSON"
+			});
+			this.totalScore = 0;
+			for(var i=0;i<this.arrScore.length;i++)
+			{
+				this.totalScore += this.arrScore[i];
+			}
+			this.ui.callWinALL();
+		}else{
+			this.ui.callWinScreen();
+		}
 	}
 	private handleTick(master:MainGame)
 	{
 		if(master.isPause)
-			return;
+		return;
 
 		master.stage.update();
 		master.timers += MainGame.deltaTime/1000;
@@ -170,7 +271,6 @@ class MainGame
 
 	private generateCard()
 	{
-
 		for(var i=0;i<MainGame.width;i++)
 		{
 			for(var j=0;j<MainGame.height;j++)

@@ -8,6 +8,8 @@ var MainGame = (function () {
         this.margin = 5;
         this.id = 0;
         this.stage = new createjs.Stage("game");
+        this.arrScore = new Array();
+        this.totalScore = 0;
         this.isPause = false;
     }
     ;
@@ -19,12 +21,32 @@ var MainGame = (function () {
         createjs.Ticker.addEventListener("tick", this.deltaTimeCatcher);
     };
     MainGame.prototype.GotoMainMenu = function () {
+        this.arrScore = new Array();
         createjs.Ticker.framerate = 60;
         this.timers = 0;
         this.ui.callMainMenu(this.stage);
         this.isPause = false;
         this.stage.update();
         MainGame.thisLevel = 0;
+        $.ajax({
+            type: "POST",
+            url: $("#base_api_url").html() + "/game/creatSession",
+            data: {
+                access_token: $("#access_token").html()
+            },
+            success: function (data) {
+                if (data.status_code == 200) {
+                    MainGame.gt = data.data.game_token;
+                    console.log(MainGame.gt);
+                }
+                else {
+                    window.location.href = MainGame.LogOutUrl;
+                }
+            },
+            error: function (data) {
+            },
+            dataType: "JSON"
+        });
     };
     MainGame.prototype.StartPlayGame = function () {
         this.timers = 0;
@@ -34,6 +56,7 @@ var MainGame = (function () {
         this.id = 0;
         this.arrCard = new Array();
         this.LongGameTimer = MainGame.ArrTimer[MainGame.thisLevel];
+        console.log(this.LongGameTimer);
         MainGame.totalCard = 0;
         this.allContainer = new createjs.MovieClip();
         this.stage.addChild(this.allContainer);
@@ -42,6 +65,31 @@ var MainGame = (function () {
         this.isPause = false;
     };
     MainGame.prototype.NextGame = function () {
+        this.DestroyAllCard();
+        this.arrScore.push(Math.round(this.LongGameTimer - this.timers));
+        var arrscore = this.arrScore;
+        var level = MainGame.thisLevel;
+        $.ajax({
+            type: "POST",
+            url: $("#base_api_url").html() + "/game/postScorePerLevel",
+            data: {
+                access_token: $("#access_token").html(),
+                game_token: MainGame.gt,
+                score: arrscore[level],
+                level: 'level' + (level + 1)
+            },
+            success: function (data) {
+                if (data.status_code == 200) {
+                    console.log(data);
+                }
+                else {
+                    window.location.href = MainGame.LogOutUrl;
+                }
+            },
+            error: function (data) {
+            },
+            dataType: "JSON"
+        });
         MainGame.thisLevel++;
         this.StartPlayGame();
     };
@@ -54,7 +102,42 @@ var MainGame = (function () {
     MainGame.prototype.handleWin = function () {
         this.isPause = true;
         this.DestroyThis();
-        this.ui.callWinScreen();
+        if (MainGame.thisLevel == MainGame.ArrTimer.length - 1) {
+            console.log("FINISH");
+            this.arrScore.push(Math.round(this.LongGameTimer - this.timers));
+            var arrscore = this.arrScore;
+            var level = MainGame.thisLevel;
+            $.ajax({
+                type: "POST",
+                url: $("#base_api_url").html() + "/game/postScorePerLevel",
+                data: {
+                    access_token: $("#access_token").html(),
+                    game_token: MainGame.gt,
+                    score: arrscore[level],
+                    level: 'level' + (level + 1)
+                },
+                success: function (data) {
+                    if (data.status_code == 200) {
+                        console.log(data);
+                    }
+                    else {
+                        window.location.href = MainGame.LogOutUrl;
+                    }
+                },
+                error: function (data) {
+                    console.log("error");
+                },
+                dataType: "JSON"
+            });
+            this.totalScore = 0;
+            for (var i = 0; i < this.arrScore.length; i++) {
+                this.totalScore += this.arrScore[i];
+            }
+            this.ui.callWinALL();
+        }
+        else {
+            this.ui.callWinScreen();
+        }
     };
     MainGame.prototype.handleTick = function (master) {
         if (master.isPause)
@@ -138,8 +221,8 @@ var MainGame = (function () {
         return array;
     };
     MainGame.LogOutUrl = "http://localhost:90/MemoryGameCard/php/logout.php";
-    MainGame.thisLevel = 1;
-    MainGame.ArrTimer = new Array(100, 10, 15);
+    MainGame.thisLevel = 0;
+    MainGame.ArrTimer = new Array(240, 240, 180, 180, 120);
     MainGame.firstId = 0;
     MainGame.secondId = 0;
     MainGame.longIdle = 1;
@@ -148,8 +231,8 @@ var MainGame = (function () {
     MainGame.longSession = 60;
     MainGame.globalScale = .5;
     MainGame.deltaTime = 0;
-    MainGame.width = 4;
-    MainGame.height = 4;
+    MainGame.width = 2;
+    MainGame.height = 2;
     return MainGame;
 }());
 var PreloadGame = (function () {
@@ -263,6 +346,35 @@ var UI = (function () {
         this.mainGame.stage.update();
     };
     UI.prototype.gotoLeaderboard = function () {
+        $.ajax({
+            type: "POST",
+            url: $("#base_api_url").html() + "/game/postTotalScore",
+            data: {
+                access_token: $("#access_token").html(),
+                game_token: MainGame.gt,
+                score: this.mainGame.totalScore
+            },
+            success: function (data) {
+                if (data.status_code == 200) {
+                    console.log(data);
+                }
+                else {
+                    window.location.href = MainGame.LogOutUrl;
+                }
+            },
+            error: function (data) {
+                console.log("error");
+            },
+            dataType: "JSON"
+        });
+    };
+    UI.prototype.DestroyWinAll = function () {
+        var _this = this;
+        this.lanjut.removeEventListener("click", function () { return _this.gotoLeaderboard(); });
+        this.mainGame.stage.removeChild(this.whiteBorder);
+        this.mainGame.stage.removeChild(this.winPanel);
+        this.mainGame.stage.removeChild(this.lanjut);
+        this.mainGame.stage.update();
     };
     UI.prototype.callWinScreen = function () {
         var _this = this;

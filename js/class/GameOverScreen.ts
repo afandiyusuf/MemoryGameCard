@@ -32,23 +32,15 @@ class GameOverScreen
     this.QuitButton.y = 200;
     this.QuitButton.x = 150;
     this.QuitButton.addEventListener("click",()=>this.QuitGame(this))
-    //container.addChild(this.RestartButton);
     container.addChild(this.QuitButton);
   }
   public RestartGame(gs:GameOverScreen):void
   {
       window.location.reload();
-      //MainGame.globMain.cleanGame();
-      //MainGame.globMain.initGame(MainGame.globMain);
-
-      //gs.DestroyThis(gs);
   }
   public QuitGame(gs:GameOverScreen):void
   {
     window.location.reload();
-    //MainGame.globMain.cleanGame();
-    //MainGame.globMain.init();
-    //gs.DestroyThis(gs);
   }
   public DestroyThis(gs:GameOverScreen):void{
     gs.container.removeAllEventListeners("click");

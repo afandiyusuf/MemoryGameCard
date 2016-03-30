@@ -27,7 +27,7 @@ $(function(){
 
     $.ajax({
       type: "POST",
-      url: "http://localhost:90/Base-Backend-Game-API/index.php/user/login",
+      url: $("#base-api-url").html()+"/user/login",
       data: {
         username : username,
         password : password
@@ -74,7 +74,7 @@ $(function(){
 
     $.ajax({
       type: "POST",
-      url: "http://localhost:90/Base-Backend-Game-API/index.php/user/register",
+      url: $("#base-api-url").html()+"/user/register",
       data: {
         username : username,
         nama_depan : nama,

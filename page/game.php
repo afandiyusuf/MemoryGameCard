@@ -6,6 +6,7 @@ require_once('../php/validate_access_token.php');
 ?>
 <html>
 <head>
+		<script src="https://code.jquery.com/jquery-2.2.2.min.js"   integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI="   crossorigin="anonymous"></script>
 	<script type="text/javascript" src="../js/easeljs/create.js"></script>
 	<script type="text/javascript" src="../js/build/main.js"></script>
 		<link rel="stylesheet" href="../css/main.css">
@@ -14,6 +15,7 @@ require_once('../php/validate_access_token.php');
 
 <body onLoad="init();">
 	<div id="access_token"><?php echo $access_token ?></div>
+	<div id="base_api_url"><?php echo $base_api_url ?></div>
 	<canvas id="game" width="300" height="100" style=" position: absolute;
   top: 50%;
   left: 50%;
