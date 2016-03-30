@@ -27,7 +27,7 @@ require_once('../php/validate_gt.php')
         <br/>
         <?php if(isset($username)) { ?>
         <h3>CONGRATS <?php echo $username; ?> YOUR SCORE IS</h3>
-        <h3 id=""><?php echo $total_scores; ?></h3>
+        <h3 id=""><?php echo 960-$total_scores; ?> detik</h3>
         <?php }?>
       </div>
     </div>
@@ -44,7 +44,8 @@ require_once('../php/validate_gt.php')
             echo $leaderboardData[$i]->nama_depan;
             echo "</div>";
             echo "<div class='col-xs-5'>";
-            echo $leaderboardData[$i]->score;
+            echo  (960 - ($leaderboardData[$i]->score));
+            echo " detik";
             echo "</div>";
           }
          ?>

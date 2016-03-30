@@ -232,8 +232,8 @@ var MainGame = (function () {
     MainGame.longSession = 60;
     MainGame.globalScale = .5;
     MainGame.deltaTime = 0;
-    MainGame.width = 2;
-    MainGame.height = 2;
+    MainGame.width = 4;
+    MainGame.height = 4;
     return MainGame;
 }());
 var PreloadGame = (function () {
