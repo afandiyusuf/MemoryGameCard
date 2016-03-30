@@ -9,11 +9,13 @@ class UI
   private continueImage:createjs.Bitmap;
   private homeImage:createjs.Bitmap;
   private mainlagi2:createjs.Bitmap;
+  private lanjut:createjs.Bitmap;
 
   private failedPanel:createjs.Bitmap;
+  private winPanel:createjs.Bitmap;
 
   private whiteBorder:createjs.Bitmap;
-  
+
   public mainButton:createjs.MovieClip;
   public pauseButton:createjs.MovieClip;
   public continueButton:createjs.MovieClip;
@@ -28,10 +30,91 @@ class UI
   {
     this.mainGame = mainGame;
   }
+  public callWinALL()
+  {
+    this.whiteBorder = new createjs.Bitmap(PreloadGame.queue.getResult("white-border"));
+    this.whiteBorder.scaleX = MainGame.GameWidth/this.whiteBorder.image.width;
+    this.whiteBorder.scaleY = this.whiteBorder.scaleX;
 
-  public callWinScreen()
+    this.mainGame.stage.addChild(this.whiteBorder);
+
+    this.winPanel = new createjs.Bitmap(PreloadGame.queue.getResult("win-lvl"));
+    this.winPanel.scaleY = (MainGame.GameHeight - MainGame.GameHeight/4)/this.winPanel.image.height;
+    this.winPanel.scaleX = this.winPanel.scaleY;
+
+    var widthPanel:number = this.winPanel.image.width * this.winPanel.scaleX;
+    var heightPanel:number = this.winPanel.image.height * this.winPanel.scaleY;
+
+    this.winPanel.x = (MainGame.GameWidth - widthPanel)/2;
+    this.winPanel.y = (MainGame.GameHeight - heightPanel)/2;
+
+    this.mainGame.stage.addChild(this.winPanel);
+
+    this.lanjut = new createjs.Bitmap(PreloadGame.queue.getResult("main-lagi2"));
+    this.lanjut.scaleX = this.winPanel.scaleX;
+    this.lanjut.scaleY = this.lanjut.scaleX;
+
+    var heightContinue:number = this.lanjut.image.height*this.lanjut.scaleY;
+
+    this.lanjut.x = this.winPanel.x + widthPanel/2 - (this.lanjut.image.width * this.lanjut.scaleX*0.5);
+    this.lanjut.y = this.winPanel.y + heightPanel - heightContinue - heightPanel/10;
+    this.mainGame.stage.addChild(this.lanjut);
+
+    this.lanjut.addEventListener("click",()=>this.gotoLeaderboard());
+    this.mainGame.stage.update();
+  }
+  public gotoLeaderboard()
   {
 
+  }
+  public callWinScreen()
+  {
+    this.whiteBorder = new createjs.Bitmap(PreloadGame.queue.getResult("white-border"));
+    this.whiteBorder.scaleX = MainGame.GameWidth/this.whiteBorder.image.width;
+    this.whiteBorder.scaleY = this.whiteBorder.scaleX;
+
+    this.mainGame.stage.addChild(this.whiteBorder);
+
+    this.winPanel = new createjs.Bitmap(PreloadGame.queue.getResult("win-lvl"));
+    this.winPanel.scaleY = (MainGame.GameHeight - MainGame.GameHeight/4)/this.winPanel.image.height;
+    this.winPanel.scaleX = this.winPanel.scaleY;
+
+    var widthPanel:number = this.winPanel.image.width * this.winPanel.scaleX;
+    var heightPanel:number = this.winPanel.image.height * this.winPanel.scaleY;
+
+    this.winPanel.x = (MainGame.GameWidth - widthPanel)/2;
+    this.winPanel.y = (MainGame.GameHeight - heightPanel)/2;
+
+    this.mainGame.stage.addChild(this.winPanel);
+
+    this.lanjut = new createjs.Bitmap(PreloadGame.queue.getResult("main-lagi2"));
+    this.lanjut.scaleX = this.winPanel.scaleX;
+    this.lanjut.scaleY = this.lanjut.scaleX;
+
+    var heightContinue:number = this.lanjut.image.height*this.lanjut.scaleY;
+
+    this.lanjut.x = this.winPanel.x + widthPanel/2 - (this.lanjut.image.width * this.lanjut.scaleX*0.5);
+    this.lanjut.y = this.winPanel.y + heightPanel - heightContinue - heightPanel/10;
+    this.mainGame.stage.addChild(this.lanjut);
+
+    this.lanjut.addEventListener("click",()=>this.LanjutGame());
+    this.mainGame.stage.update();
+  }
+
+  private DestroyWinScreen()
+  {
+    this.lanjut.removeEventListener("click",()=>this.GotoMainMenu());
+    this.mainGame.stage.removeChild(this.whiteBorder);
+    this.mainGame.stage.removeChild(this.winPanel);
+    this.mainGame.stage.removeChild(this.lanjut);
+
+    this.mainGame.stage.update();
+  }
+
+  public LanjutGame()
+  {
+    this.DestroyWinScreen();
+    this.mainGame.NextGame();
   }
 
   public callMainMenu(stage:createjs.Stage):void
@@ -132,6 +215,7 @@ class UI
     this.mainlagi2.addEventListener("click",()=>this.GotoMainMenu());
     this.mainGame.stage.update();
   }
+
   private DestroyFailScreen()
   {
     this.mainGame.stage.removeChild(this.mainlagi2);
@@ -139,6 +223,7 @@ class UI
     this.mainGame.stage.removeChild(this.whiteBorder);
     this.mainlagi2.removeEventListener("click",()=>this.GotoMainMenu());
   }
+
   public GotoMainMenu()
   {
       this.DestroyFailScreen();
@@ -146,6 +231,7 @@ class UI
       this.mainGame.GotoMainMenu();
 
   }
+
   public CallPauseScreen()
   {
     this.whiteBorder = new createjs.Bitmap(PreloadGame.queue.getResult("white-border"));
@@ -189,34 +275,33 @@ class UI
 
     this.continueImage.addEventListener("click",()=>this.clickContinue());
     this.homeImage.addEventListener("click",()=>this.clickHome());
-
-
   }
+
   public clickContinue()
   {
     this.DestroyPauseScreen();
     this.mainGame.handleResume();
     this.CallGameUi();
   }
+
   public clickHome()
   {
     window.location.href = MainGame.LogOutUrl;
   }
+
   public startGame()
   {
     this.DestroyMainMenu();
     this.mainGame.StartPlayGame();
   }
+
   public DestroyMainMenu():void
   {
-
     this.mainButton.removeEventListener("click",()=>this.startGame());
     this.mainButton.removeChild(this.mainImage);
     this.stage.removeChild(this.mainButton);
     this.stage.removeChild(this.logo2Image);
   }
-
-
 
   public DestroyPauseScreen():void
   {

@@ -4,8 +4,8 @@
 class MainGame
 {
 	public static LogOutUrl = "http://localhost:90/MemoryGameCard/php/logout.php";
-	public static thisLevel:number = 0;
-	public static ArrTimer:Array<number> = new Array(5,30,5);
+	public static thisLevel:number = 1;
+	public static ArrTimer:Array<number> = new Array(5,10,15);
 
 	public static firstId:number = 0;
 	public static secondId:number = 0;
@@ -33,8 +33,8 @@ class MainGame
 	private card2:createjs.Bitmap;
 	private preload:Object;
 	private backUrl:string = "../asset/Card/Back.png";
-	public static width:number = 4;
-	public static height:number = 4;
+	public static width:number = 2;
+	public static height:number = 2;
 	private margin:number = 5;
 	public  allContainer:createjs.MovieClip;
 	private id:number = 0;
@@ -54,7 +54,6 @@ class MainGame
 		this.GotoMainMenu();
 		createjs.Ticker.addEventListener("tick", ()=>this.handleTick(this));
 		createjs.Ticker.addEventListener("tick",this.deltaTimeCatcher);
-
 	}
 
 	public GotoMainMenu()
@@ -66,21 +65,27 @@ class MainGame
 		this.stage.update();
 		MainGame.thisLevel = 0;
 	}
+
 	public StartPlayGame():void
 	{
-		MainGame.thisLevel++;
 		this.timers = 0;
 		this.idleCard = 0;
 		MainGame.firstId = 0;
 		MainGame.secondId = 0;
 		this.id = 0;
 		this.arrCard = new Array();
-		this.LongGameTimer = MainGame.ArrTimer[MainGame.thisLevel-1];
-
+		this.LongGameTimer = MainGame.ArrTimer[MainGame.thisLevel];
+		MainGame.totalCard = 0;
 		this.allContainer = new createjs.MovieClip();
 		this.stage.addChild(this.allContainer);
 		this.generateCard();
 		this.ui.CallGameUi();
+		this.isPause = false;
+	}
+	public NextGame()
+	{
+		MainGame.thisLevel++;
+		this.StartPlayGame();
 	}
 	public handlePause()
 	{
@@ -90,6 +95,13 @@ class MainGame
 	{
 		this.isPause = false;
 	}
+
+	public handleWin()
+	{
+		this.isPause = true;
+		this.DestroyThis();
+		this.ui.callWinScreen();
+	}
 	private handleTick(master:MainGame)
 	{
 		if(master.isPause)
@@ -98,7 +110,7 @@ class MainGame
 		master.stage.update();
 		master.timers += MainGame.deltaTime/1000;
 		master.idleCard += MainGame.deltaTime/1000;
-
+		console.log(master.LongGameTimer - master.timers);
 		if(master.idleCard > master.longIdleCard)
 		{
 			if(MainGame.firstId != 0){

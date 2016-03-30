@@ -27,18 +27,23 @@ var MainGame = (function () {
         MainGame.thisLevel = 0;
     };
     MainGame.prototype.StartPlayGame = function () {
-        MainGame.thisLevel++;
         this.timers = 0;
         this.idleCard = 0;
         MainGame.firstId = 0;
         MainGame.secondId = 0;
         this.id = 0;
         this.arrCard = new Array();
-        this.LongGameTimer = MainGame.ArrTimer[MainGame.thisLevel - 1];
+        this.LongGameTimer = MainGame.ArrTimer[MainGame.thisLevel];
+        MainGame.totalCard = 0;
         this.allContainer = new createjs.MovieClip();
         this.stage.addChild(this.allContainer);
         this.generateCard();
         this.ui.CallGameUi();
+        this.isPause = false;
+    };
+    MainGame.prototype.NextGame = function () {
+        MainGame.thisLevel++;
+        this.StartPlayGame();
     };
     MainGame.prototype.handlePause = function () {
         this.isPause = true;
@@ -46,12 +51,18 @@ var MainGame = (function () {
     MainGame.prototype.handleResume = function () {
         this.isPause = false;
     };
+    MainGame.prototype.handleWin = function () {
+        this.isPause = true;
+        this.DestroyThis();
+        this.ui.callWinScreen();
+    };
     MainGame.prototype.handleTick = function (master) {
         if (master.isPause)
             return;
         master.stage.update();
         master.timers += MainGame.deltaTime / 1000;
         master.idleCard += MainGame.deltaTime / 1000;
+        console.log(master.LongGameTimer - master.timers);
         if (master.idleCard > master.longIdleCard) {
             if (MainGame.firstId != 0) {
                 MainGame.firstCard.swapToFace(MainGame.firstCard);
@@ -128,8 +139,8 @@ var MainGame = (function () {
         return array;
     };
     MainGame.LogOutUrl = "http://localhost:90/MemoryGameCard/php/logout.php";
-    MainGame.thisLevel = 0;
-    MainGame.ArrTimer = new Array(5, 30, 5);
+    MainGame.thisLevel = 1;
+    MainGame.ArrTimer = new Array(5, 10, 15);
     MainGame.firstId = 0;
     MainGame.secondId = 0;
     MainGame.longIdle = 1;
@@ -138,8 +149,8 @@ var MainGame = (function () {
     MainGame.longSession = 60;
     MainGame.globalScale = .5;
     MainGame.deltaTime = 0;
-    MainGame.width = 4;
-    MainGame.height = 4;
+    MainGame.width = 2;
+    MainGame.height = 2;
     return MainGame;
 }());
 var PreloadGame = (function () {
@@ -173,6 +184,7 @@ var PreloadGame = (function () {
         queue.loadFile({ id: "home", src: "../asset/match boss/Home.png" });
         queue.loadFile({ id: "failed-panel", src: "../asset/match boss/Failed.png" });
         queue.loadFile({ id: "main-lagi2", src: "../asset/match boss/Main Lagi 2.png" });
+        queue.loadFile({ id: "win-lvl", src: "../asset/match boss/Succed.png" });
         queue.load();
         PreloadGame.queue = queue;
     };
@@ -227,6 +239,42 @@ var UI = (function () {
     function UI(mainGame) {
         this.mainGame = mainGame;
     }
+    UI.prototype.callWinScreen = function () {
+        var _this = this;
+        this.whiteBorder = new createjs.Bitmap(PreloadGame.queue.getResult("white-border"));
+        this.whiteBorder.scaleX = MainGame.GameWidth / this.whiteBorder.image.width;
+        this.whiteBorder.scaleY = this.whiteBorder.scaleX;
+        this.mainGame.stage.addChild(this.whiteBorder);
+        this.winPanel = new createjs.Bitmap(PreloadGame.queue.getResult("win-lvl"));
+        this.winPanel.scaleY = (MainGame.GameHeight - MainGame.GameHeight / 4) / this.winPanel.image.height;
+        this.winPanel.scaleX = this.winPanel.scaleY;
+        var widthPanel = this.winPanel.image.width * this.winPanel.scaleX;
+        var heightPanel = this.winPanel.image.height * this.winPanel.scaleY;
+        this.winPanel.x = (MainGame.GameWidth - widthPanel) / 2;
+        this.winPanel.y = (MainGame.GameHeight - heightPanel) / 2;
+        this.mainGame.stage.addChild(this.winPanel);
+        this.lanjut = new createjs.Bitmap(PreloadGame.queue.getResult("main-lagi2"));
+        this.lanjut.scaleX = this.winPanel.scaleX;
+        this.lanjut.scaleY = this.lanjut.scaleX;
+        var heightContinue = this.lanjut.image.height * this.lanjut.scaleY;
+        this.lanjut.x = this.winPanel.x + widthPanel / 2 - (this.lanjut.image.width * this.lanjut.scaleX * 0.5);
+        this.lanjut.y = this.winPanel.y + heightPanel - heightContinue - heightPanel / 10;
+        this.mainGame.stage.addChild(this.lanjut);
+        this.lanjut.addEventListener("click", function () { return _this.LanjutGame(); });
+        this.mainGame.stage.update();
+    };
+    UI.prototype.DestroyWinScreen = function () {
+        var _this = this;
+        this.lanjut.removeEventListener("click", function () { return _this.GotoMainMenu(); });
+        this.mainGame.stage.removeChild(this.whiteBorder);
+        this.mainGame.stage.removeChild(this.winPanel);
+        this.mainGame.stage.removeChild(this.lanjut);
+        this.mainGame.stage.update();
+    };
+    UI.prototype.LanjutGame = function () {
+        this.DestroyWinScreen();
+        this.mainGame.NextGame();
+    };
     UI.prototype.callMainMenu = function (stage) {
         var _this = this;
         this.stage = stage;
@@ -487,6 +535,7 @@ var Card = (function () {
                 MainGame.totalCard--;
                 this.Destroy();
                 if (MainGame.totalCard == 0) {
+                    this.mainGame.handleWin();
                 }
             }
         }

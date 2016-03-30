@@ -116,7 +116,7 @@ class Card
 
           if(MainGame.totalCard == 0)
           {
-              //Game WIN HERE
+              this.mainGame.handleWin();
           }
         }
     }

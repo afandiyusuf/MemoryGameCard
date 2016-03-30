@@ -32,7 +32,7 @@ class PreloadGame
     queue.loadFile({id:"home",src:"../asset/match boss/Home.png"});
     queue.loadFile({id:"failed-panel",src:"../asset/match boss/Failed.png"});
     queue.loadFile({id:"main-lagi2",src:"../asset/match boss/Main Lagi 2.png"});
-    queue.loadFile({id:"win-lvl",src:"../asset/match boss/Succeed.png"});
+    queue.loadFile({id:"win-lvl",src:"../asset/match boss/Succed.png"});
 
   	queue.load();
 
