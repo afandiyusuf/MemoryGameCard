@@ -3,6 +3,7 @@
 
 class MainGame
 {
+	public static LogOutUrl = "http://localhost:90/MemoryGameCard/php/logout.php";
 	public static thisLevel:number = 0;
 	public static ArrTimer:Array<number> = new Array(10,30,5);
 
@@ -40,7 +41,7 @@ class MainGame
 	public stage:createjs.Stage = new createjs.Stage("game");;
 	public static STAGE:createjs.Stage;
 	public static gameOverScreen:GameOverScreen;
-	public mainScreen:MainMenu;
+	public ui:UI;
 	public static globMain:MainGame;
 	public containerWidth:number;
 
@@ -49,8 +50,8 @@ class MainGame
 	public init()
 	{
 
-		this.mainScreen = new MainMenu(this);
-		this.mainScreen.callMainMenu(this.stage);
+		this.ui = new UI(this);
+		this.ui.callMainMenu(this.stage);
 		createjs.Ticker.addEventListener("tick", ()=>this.handleTick(this));
 
 		createjs.Ticker.framerate = 60;
@@ -70,6 +71,15 @@ class MainGame
 		this.allContainer = new createjs.MovieClip();
 		this.stage.addChild(this.allContainer);
 		this.generateCard();
+		this.ui.CallGameUi();
+	}
+	public handlePause()
+	{
+		this.isPause = true;
+	}
+	public handleResume()
+	{
+		this.isPause = false;
 	}
 	private handleTick(master:MainGame)
 	{

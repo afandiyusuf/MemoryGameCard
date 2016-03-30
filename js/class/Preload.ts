@@ -23,8 +23,13 @@ class PreloadGame
   	queue.loadFile({id:"keluar-button", src:"../asset/final/keluar.png"});
   	queue.loadFile({id:"main-lagi-button", src:"../asset/final/MAIN LAGI.png"});
     queue.loadFile({id:"main-button", src:"../asset/final/MAIN.png"});
-    queue.loadFile({id:"corner-logo", src:"../asset/final/Tao Kae Noi.png"})
-    queue.loadFile({id:"title-image", src:"../asset/final/Title.png"})
+    queue.loadFile({id:"corner-logo", src:"../asset/final/Tao Kae Noi.png"});
+    queue.loadFile({id:"title-image", src:"../asset/final/Title.png"});
+    queue.loadFile({id:"white-border",src:"../asset/final/Border 10px10.png"});
+    queue.loadFile({id:"pause",src:"../asset/match boss/Pause Button.png"});
+    queue.loadFile({id:"pause-panel",src:"../asset/match boss/Pause.png"});
+    queue.loadFile({id:"continue",src:"../asset/match boss/continue.png"});
+    queue.loadFile({id:"home",src:"../asset/match boss/Home.png"});
   	queue.load();
 
     PreloadGame.queue = queue;

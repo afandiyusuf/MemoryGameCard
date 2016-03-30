@@ -10,7 +10,7 @@
         "js/class/MainGame.ts",
         "js/class/Preload.ts",
         "js/class/GameOverScreen.ts",
-        "js/class/MainMenu.ts",
+        "js/class/UI.ts",
         "js/object/GameTimer.ts",
         "js/object/Cards.ts",
         "js/init.ts"

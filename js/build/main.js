@@ -13,8 +13,8 @@ var MainGame = (function () {
     ;
     MainGame.prototype.init = function () {
         var _this = this;
-        this.mainScreen = new MainMenu(this);
-        this.mainScreen.callMainMenu(this.stage);
+        this.ui = new UI(this);
+        this.ui.callMainMenu(this.stage);
         createjs.Ticker.addEventListener("tick", function () { return _this.handleTick(_this); });
         createjs.Ticker.framerate = 60;
     };
@@ -31,6 +31,13 @@ var MainGame = (function () {
         this.allContainer = new createjs.MovieClip();
         this.stage.addChild(this.allContainer);
         this.generateCard();
+        this.ui.CallGameUi();
+    };
+    MainGame.prototype.handlePause = function () {
+        this.isPause = true;
+    };
+    MainGame.prototype.handleResume = function () {
+        this.isPause = false;
     };
     MainGame.prototype.handleTick = function (master) {
         if (master.isPause)
@@ -114,6 +121,7 @@ var MainGame = (function () {
         }
         return array;
     };
+    MainGame.LogOutUrl = "http://localhost:90/MemoryGameCard/php/logout.php";
     MainGame.thisLevel = 0;
     MainGame.ArrTimer = new Array(10, 30, 5);
     MainGame.firstId = 0;
@@ -152,6 +160,11 @@ var PreloadGame = (function () {
         queue.loadFile({ id: "main-button", src: "../asset/final/MAIN.png" });
         queue.loadFile({ id: "corner-logo", src: "../asset/final/Tao Kae Noi.png" });
         queue.loadFile({ id: "title-image", src: "../asset/final/Title.png" });
+        queue.loadFile({ id: "white-border", src: "../asset/final/Border 10px10.png" });
+        queue.loadFile({ id: "pause", src: "../asset/match boss/Pause Button.png" });
+        queue.loadFile({ id: "pause-panel", src: "../asset/match boss/Pause.png" });
+        queue.loadFile({ id: "continue", src: "../asset/match boss/continue.png" });
+        queue.loadFile({ id: "home", src: "../asset/match boss/Home.png" });
         queue.load();
         PreloadGame.queue = queue;
     };
@@ -202,11 +215,11 @@ var GameOverScreen = (function () {
     };
     return GameOverScreen;
 }());
-var MainMenu = (function () {
-    function MainMenu(mainGame) {
+var UI = (function () {
+    function UI(mainGame) {
         this.mainGame = mainGame;
     }
-    MainMenu.prototype.callMainMenu = function (stage) {
+    UI.prototype.callMainMenu = function (stage) {
         var _this = this;
         this.stage = stage;
         this.mainImage = new createjs.Bitmap(PreloadGame.queue.getResult("main-button"));
@@ -226,13 +239,75 @@ var MainMenu = (function () {
         this.reposisi();
         this.mainButton.addEventListener("click", function () { return _this.startGame(); });
     };
-    MainMenu.prototype.CallPauseScreen = function () {
+    UI.prototype.CallGameUi = function () {
+        var _this = this;
+        this.pauseImage = new createjs.Bitmap(PreloadGame.queue.getResult("pause"));
+        this.pauseImage.scaleX = MainGame.GameWidth / 25 / this.pauseImage.image.width;
+        this.pauseImage.scaleY = this.pauseImage.scaleX;
+        this.pauseImage.x = MainGame.GameWidth - (this.pauseImage.image.width * this.pauseImage.scaleX) - (MainGame.GameWidth / 25);
+        this.pauseImage.y = MainGame.GameHeight / 25;
+        this.pauseButton = new createjs.MovieClip();
+        this.pauseButton.addChild(this.pauseImage);
+        this.mainGame.stage.addChild(this.pauseButton);
+        this.pauseButton.addEventListener("click", function () { return _this.pauseGame(); });
     };
-    MainMenu.prototype.startGame = function () {
-        this.destroyThisMainMenu();
+    UI.prototype.DestroyGameUI = function () {
+        var _this = this;
+        this.pauseButton.removeChild(this.pauseImage);
+        this.mainGame.stage.removeChild(this.pauseButton);
+        this.pauseButton.removeEventListener("click", function () { return _this.pauseGame(); });
+    };
+    UI.prototype.pauseGame = function () {
+        this.DestroyGameUI();
+        this.mainGame.handlePause();
+        this.CallPauseScreen();
+        this.mainGame.stage.update();
+    };
+    UI.prototype.CallPauseScreen = function () {
+        var _this = this;
+        this.whiteBorder = new createjs.Bitmap(PreloadGame.queue.getResult("white-border"));
+        this.whiteBorder.scaleX = MainGame.GameWidth / this.whiteBorder.image.width;
+        this.whiteBorder.scaleY = this.whiteBorder.scaleX;
+        this.mainGame.stage.addChild(this.whiteBorder);
+        this.pausePanel = new createjs.Bitmap(PreloadGame.queue.getResult("pause-panel"));
+        this.pausePanel.scaleY = (MainGame.GameHeight - MainGame.GameHeight / 4) / this.pausePanel.image.height;
+        this.pausePanel.scaleX = this.pausePanel.scaleY;
+        var widthPanel = this.pausePanel.image.width * this.pausePanel.scaleX;
+        var heightPanel = this.pausePanel.image.height * this.pausePanel.scaleY;
+        this.pausePanel.x = (MainGame.GameWidth - widthPanel) / 2;
+        this.pausePanel.y = (MainGame.GameHeight - heightPanel) / 2;
+        this.mainGame.stage.addChild(this.pausePanel);
+        this.continueImage = new createjs.Bitmap(PreloadGame.queue.getResult("continue"));
+        this.continueImage.scaleX = this.pausePanel.scaleX;
+        this.continueImage.scaleY = this.continueImage.scaleX;
+        var heightContinue = this.continueImage.image.height * this.continueImage.scaleY;
+        this.continueImage.x = this.pausePanel.x + widthPanel / 10;
+        this.continueImage.y = this.pausePanel.y + heightPanel - heightContinue - heightPanel / 10;
+        this.mainGame.stage.addChild(this.continueImage);
+        this.homeImage = new createjs.Bitmap(PreloadGame.queue.getResult("home"));
+        this.homeImage.scaleX = this.continueImage.scaleX;
+        this.homeImage.scaleY = this.homeImage.scaleX;
+        var heightHome = this.homeImage.image.height * this.homeImage.scaleY;
+        var widthHome = this.homeImage.image.width * this.homeImage.scaleX;
+        this.homeImage.y = this.pausePanel.y + heightPanel - heightHome - heightPanel / 10;
+        this.homeImage.x = widthPanel + this.pausePanel.x - widthHome - widthPanel / 10;
+        this.mainGame.stage.addChild(this.homeImage);
+        this.continueImage.addEventListener("click", function () { return _this.clickContinue(); });
+        this.homeImage.addEventListener("click", function () { return _this.clickHome(); });
+    };
+    UI.prototype.clickContinue = function () {
+        this.DestroyPauseScreen();
+        this.mainGame.handleResume();
+        this.CallGameUi();
+    };
+    UI.prototype.clickHome = function () {
+        window.location.href = MainGame.LogOutUrl;
+    };
+    UI.prototype.startGame = function () {
+        this.DestroyMainMenu();
         this.mainGame.StartPlayGame();
     };
-    MainMenu.prototype.reposisi = function () {
+    UI.prototype.reposisi = function () {
         this.logoImage.x = MainGame.GameWidth / 20;
         this.logoImage.y = MainGame.GameHeight / 20;
         this.logo2Image.x = this.logoImage.x + (this.logoImage.image.width * this.logoImage.scaleX) + 20;
@@ -240,14 +315,23 @@ var MainMenu = (function () {
         this.mainButton.x = this.logo2Image.x + (this.logo2Image.image.width * this.logo2Image.scaleX) + ((MainGame.GameWidth - (this.logo2Image.x + (this.logo2Image.image.width * this.logo2Image.scaleX))) / 2) - (this.mainImage.image.width * this.mainImage.scaleX * 0.5);
         this.mainButton.y = (this.logo2Image.image.height * this.logo2Image.scaleY) / 2 + this.logo2Image.y;
     };
-    MainMenu.prototype.destroyThisMainMenu = function () {
+    UI.prototype.DestroyMainMenu = function () {
         var _this = this;
         this.mainButton.removeEventListener("click", function () { return _this.startGame(); });
         this.mainButton.removeChild(this.mainImage);
         this.stage.removeChild(this.mainButton);
         this.stage.removeChild(this.logo2Image);
     };
-    return MainMenu;
+    UI.prototype.DestroyPauseScreen = function () {
+        var _this = this;
+        this.continueImage.removeEventListener("click", function () { return _this.clickContinue(); });
+        this.homeImage.removeEventListener("click", function () { return _this.clickHome(); });
+        this.mainGame.stage.removeChild(this.homeImage);
+        this.mainGame.stage.removeChild(this.pausePanel);
+        this.mainGame.stage.removeChild(this.whiteBorder);
+        this.mainGame.stage.removeChild(this.continueImage);
+    };
+    return UI;
 }());
 var GameTimer = (function () {
     function GameTimer() {
