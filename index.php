@@ -18,19 +18,19 @@
 <body >
 	<div id="base-url"><?php echo $base_url; ?></div>
 	<div class="container">
-		<div class="col-sm-2">
+		<div class="col-xs-2">
 			<image id="logo-main" src="asset/final/Tao Kae Noi.png"/>
 		</div>
 	</div>
 	<div class="container">
-		<div class="container-logo-big col-md-12">
-			<div class="col-sm-8">
+		<div class="container-logo-big col-xs-12">
+			<div class="col-xs-6">
 				<image id="logo-big" src="asset/final/Title.png"/>
 			</div>
 
-			<div id="form-container" class="col-sm-4">
+			<div id="form-container" class="col-xs-6">
 
-				<div class="col-md-6 right-content left">
+				<div class="col-xs-6 right-content left">
 					<div>
 						Login with your account
 						<br/>
@@ -47,7 +47,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-6 right-content right">
+				<div class="col-xs-6 right-content right">
 					Register Here
 					<br/>
 					<br/>
