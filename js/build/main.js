@@ -200,7 +200,7 @@ var MainGame = (function () {
         console.log(this.arrCard[0].trueWidth);
         console.log(this.containerWidth);
         this.allContainer.x = (MainGame.GameWidth - this.containerWidth) / 2;
-        this.allContainer.y = (MainGame.GameHeight - this.containerWidth) / 2 + MainGame.GameHeight / 10;
+        this.allContainer.y = (MainGame.GameHeight - this.containerWidth) / 2;
     };
     MainGame.prototype.reArrangeAll = function () {
         var index = 0;
@@ -220,8 +220,8 @@ var MainGame = (function () {
         }
         return array;
     };
-    MainGame.LogOutUrl = "http://localhost:90/MemoryGameCard/php/logout.php";
-    MainGame.leaderboardUrl = "http://localhost:90/MemoryGameCard/page/leaderboard.php";
+    MainGame.LogOutUrl = "http://www.siboskecil.com/php/logout.php";
+    MainGame.leaderboardUrl = "http://www.siboskecil.com/page/leaderboard.php";
     MainGame.thisLevel = 0;
     MainGame.ArrTimer = new Array(240, 240, 180, 180, 120);
     MainGame.firstId = 0;
@@ -254,16 +254,16 @@ var PreloadGame = (function () {
         queue.loadFile({ id: "card8", src: "../asset/final/8.png" });
         queue.loadFile({ id: "card_back", src: "../asset/final/bcak.png" });
         queue.loadFile({ id: "bg", src: "../asset/final/BG.jpg" });
-        queue.loadFile({ id: "border", src: "../asset/final/border.png" });
+        queue.loadFile({ id: "border", src: "../asset/final/Border.png" });
         queue.loadFile({ id: "keluar-button", src: "../asset/final/keluar.png" });
-        queue.loadFile({ id: "main-lagi-button", src: "../asset/final/MAIN LAGI.png" });
+        queue.loadFile({ id: "main-lagi-button", src: "../asset/final/MAIN LAGI.PNG" });
         queue.loadFile({ id: "main-button", src: "../asset/final/MAIN.png" });
         queue.loadFile({ id: "corner-logo", src: "../asset/final/Tao Kae Noi.png" });
         queue.loadFile({ id: "title-image", src: "../asset/final/Title.png" });
         queue.loadFile({ id: "white-border", src: "../asset/final/Border 10px10.png" });
         queue.loadFile({ id: "pause", src: "../asset/match boss/Pause Button.png" });
         queue.loadFile({ id: "pause-panel", src: "../asset/match boss/Pause.png" });
-        queue.loadFile({ id: "continue", src: "../asset/match boss/continue.png" });
+        queue.loadFile({ id: "continue", src: "../asset/match boss/Continue.png" });
         queue.loadFile({ id: "home", src: "../asset/match boss/Home.png" });
         queue.loadFile({ id: "failed-panel", src: "../asset/match boss/Failed.png" });
         queue.loadFile({ id: "main-lagi2", src: "../asset/match boss/Main Lagi 2.png" });

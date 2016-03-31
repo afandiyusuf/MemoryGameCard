@@ -4,7 +4,7 @@ $(function(){
   function AddListenerButton()
   {
     $('#home-button').click(function(){
-      window.location.href = "http://localhost:90/MemoryGameCard/index.php";
+      window.location.href = "http://www.siboskecil.com/index.php";
     });
     $("#register-button").click(function(){
       displayRegisterForm(null);
