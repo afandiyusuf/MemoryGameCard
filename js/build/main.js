@@ -236,8 +236,8 @@ var MainGame = (function () {
     MainGame.longSession = 60;
     MainGame.globalScale = .5;
     MainGame.deltaTime = 0;
-    MainGame.width = 4;
-    MainGame.height = 4;
+    MainGame.width = 2;
+    MainGame.height = 2;
     return MainGame;
 }());
 var PreloadGame = (function () {
@@ -274,10 +274,12 @@ var PreloadGame = (function () {
         queue.loadFile({ id: "home", src: "../asset/match boss/Home.png" });
         queue.loadFile({ id: "failed-panel", src: "../asset/match boss/Failed.png" });
         queue.loadFile({ id: "main-lagi2", src: "../asset/match boss/Main Lagi 2.png" });
+        queue.loadFile({ id: "lanjut", src: "../asset/match boss/Lanjut.png" });
         queue.loadFile({ id: "win-lvl", src: "../asset/match boss/Succed.png" });
         queue.loadFile({ id: "time", src: "../asset/final/Time.png" });
         queue.loadFile({ id: "time-container", src: "../asset/final/Time Container.png" });
         queue.loadFile({ id: "bg1", src: "../asset/match boss/BG 1.png" });
+        queue.loadFile({ id: "fb-share", src: "../asset/match boss/FB Share.png" });
         queue.load();
         PreloadGame.queue = queue;
     };
@@ -360,9 +362,9 @@ var UI = (function () {
         this.winPanel.x = (MainGame.GameWidth - widthPanel) / 2;
         this.winPanel.y = (MainGame.GameHeight - heightPanel) / 2;
         this.mainGame.stage.addChild(this.winPanel);
-        this.lanjut = new createjs.Bitmap(PreloadGame.queue.getResult("main-lagi2"));
+        this.lanjut = new createjs.Bitmap(PreloadGame.queue.getResult("lanjut"));
         this.lanjut.scaleX = this.winPanel.scaleX * 1.5;
-        this.lanjut.scaleY = this.lanjut.scaleX * 1.5;
+        this.lanjut.scaleY = this.winPanel.scaleX * 1.5;
         var heightContinue = this.lanjut.image.height * this.lanjut.scaleY;
         this.lanjut.x = this.winPanel.x + widthPanel / 2 - (this.lanjut.image.width * this.lanjut.scaleX * 0.5);
         this.lanjut.y = this.winPanel.y + heightPanel - heightContinue - heightPanel / 10;
@@ -415,19 +417,40 @@ var UI = (function () {
         this.winPanel.x = (MainGame.GameWidth - widthPanel) / 2;
         this.winPanel.y = (MainGame.GameHeight - heightPanel) / 2;
         this.mainGame.stage.addChild(this.winPanel);
-        this.lanjut = new createjs.Bitmap(PreloadGame.queue.getResult("main-lagi2"));
+        this.lanjut = new createjs.Bitmap(PreloadGame.queue.getResult("lanjut"));
         this.lanjut.scaleX = this.winPanel.scaleX * 1.5;
-        this.lanjut.scaleY = this.lanjut.scaleX * 1.5;
+        this.lanjut.scaleY = this.winPanel.scaleX * 1.5;
         var heightContinue = this.lanjut.image.height * this.lanjut.scaleY;
-        this.lanjut.x = this.winPanel.x + widthPanel / 2 - (this.lanjut.image.width * this.lanjut.scaleX * 0.5);
-        this.lanjut.y = this.winPanel.y + heightPanel - heightContinue - heightPanel / 10;
+        this.lanjut.x = this.winPanel.x + widthPanel / 2 - (this.lanjut.image.width * this.lanjut.scaleX * 0.5) - this.lanjut.image.width * this.lanjut.scaleX * 0.5;
+        this.lanjut.y = this.winPanel.y + heightPanel - heightContinue - heightPanel / 20;
         this.mainGame.stage.addChild(this.lanjut);
+        this.fb_button = new createjs.Bitmap(PreloadGame.queue.getResult("fb-share"));
+        this.fb_button.scaleX = this.winPanel.scaleX * 1.5;
+        this.fb_button.scaleY = this.winPanel.scaleX * 1.5;
+        var heightContinue = this.fb_button.image.height * this.fb_button.scaleY;
+        this.fb_button.x = this.lanjut.x + (this.lanjut.scaleX * this.lanjut.image.width) + 20;
+        this.fb_button.y = this.lanjut.y;
+        this.fb_button.addEventListener("click", function () { return _this.ShareFB(); });
+        this.mainGame.stage.addChild(this.fb_button);
         this.lanjut.addEventListener("click", function () { return _this.LanjutGame(); });
         this.mainGame.stage.update();
+    };
+    UI.prototype.ShareFB = function () {
+        FB.ui({
+            method: 'share',
+            href: 'http://www.siboskecil.com',
+        }, function (response) {
+            if (response && !response.error_message) {
+            }
+            else {
+            }
+        });
     };
     UI.prototype.DestroyWinScreen = function () {
         var _this = this;
         this.lanjut.removeEventListener("click", function () { return _this.GotoMainMenu(); });
+        this.fb_button.removeEventListener("click", function () { return _this.ShareFB(); });
+        this.mainGame.stage.removeChild(this.fb_button);
         this.mainGame.stage.removeChild(this.whiteBorder);
         this.mainGame.stage.removeChild(this.winPanel);
         this.mainGame.stage.removeChild(this.lanjut);

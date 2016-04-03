@@ -9,6 +9,7 @@ class UI
   private continueImage:createjs.Bitmap;
   private homeImage:createjs.Bitmap;
   private mainlagi2:createjs.Bitmap;
+  private fb_button:createjs.Bitmap;
   private lanjut:createjs.Bitmap;
 
   private failedPanel:createjs.Bitmap;
@@ -55,9 +56,9 @@ class UI
 
     this.mainGame.stage.addChild(this.winPanel);
 
-    this.lanjut = new createjs.Bitmap(PreloadGame.queue.getResult("main-lagi2"));
+    this.lanjut = new createjs.Bitmap(PreloadGame.queue.getResult("lanjut"));
     this.lanjut.scaleX = this.winPanel.scaleX*1.5;
-    this.lanjut.scaleY = this.lanjut.scaleX *1.5;
+    this.lanjut.scaleY = this.winPanel.scaleX*1.5;
 
     var heightContinue:number = this.lanjut.image.height*this.lanjut.scaleY;
 
@@ -124,23 +125,51 @@ class UI
 
     this.mainGame.stage.addChild(this.winPanel);
 
-    this.lanjut = new createjs.Bitmap(PreloadGame.queue.getResult("main-lagi2"));
+    this.lanjut = new createjs.Bitmap(PreloadGame.queue.getResult("lanjut"));
     this.lanjut.scaleX = this.winPanel.scaleX*1.5;
-    this.lanjut.scaleY = this.lanjut.scaleX*1.5;
+    this.lanjut.scaleY = this.winPanel.scaleX*1.5;
 
     var heightContinue:number = this.lanjut.image.height*this.lanjut.scaleY;
 
-    this.lanjut.x = this.winPanel.x + widthPanel/2 - (this.lanjut.image.width * this.lanjut.scaleX*0.5);
-    this.lanjut.y = this.winPanel.y + heightPanel - heightContinue - heightPanel/10;
+    this.lanjut.x = this.winPanel.x + widthPanel/2 - (this.lanjut.image.width * this.lanjut.scaleX*0.5) - this.lanjut.image.width * this.lanjut.scaleX * 0.5;
+    this.lanjut.y = this.winPanel.y + heightPanel - heightContinue - heightPanel/20;
     this.mainGame.stage.addChild(this.lanjut);
+
+
+    this.fb_button = new createjs.Bitmap(PreloadGame.queue.getResult("fb-share"));
+    this.fb_button.scaleX = this.winPanel.scaleX*1.5;
+    this.fb_button.scaleY = this.winPanel.scaleX*1.5;
+
+    var heightContinue:number = this.fb_button.image.height*this.fb_button.scaleY;
+
+    this.fb_button.x =  this.lanjut.x + (this.lanjut.scaleX * this.lanjut.image.width) +20;
+    this.fb_button.y = this.lanjut.y;
+    this.fb_button.addEventListener("click",()=>this.ShareFB())
+    this.mainGame.stage.addChild(this.fb_button);
 
     this.lanjut.addEventListener("click",()=>this.LanjutGame());
     this.mainGame.stage.update();
   }
-
+  private ShareFB()
+  {
+    FB.ui(
+    {
+      method: 'share',
+      href: 'http://www.siboskecil.com',
+    },
+    // callback
+    function(response) {
+      if (response && !response.error_message) {
+      } else {
+      }
+    }
+  );
+  }
   private DestroyWinScreen()
   {
     this.lanjut.removeEventListener("click",()=>this.GotoMainMenu());
+    this.fb_button.removeEventListener("click",()=>this.ShareFB())
+    this.mainGame.stage.removeChild(this.fb_button);
     this.mainGame.stage.removeChild(this.whiteBorder);
     this.mainGame.stage.removeChild(this.winPanel);
     this.mainGame.stage.removeChild(this.lanjut);

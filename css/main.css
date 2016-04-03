@@ -72,9 +72,6 @@ body{
 .right-content.left{
 	padding-left:0px
 }
-.right-content.right{
-	padding-left:40px
-}
 #form-container {
 	margin-left: -30px;
 	background-image: url("../asset/splash screen/Login Back.png");
@@ -200,7 +197,29 @@ body {
   padding: 20px;
   text-align: center;
 }
-
+#warning-parent{
+	display: none;
+	position: absolute;
+	top:0px;
+	width: 100%;
+	height: 100%;
+	background-color: white;
+}
+#login-fb-button{
+	display: table;
+	margin: auto;
+}
+#login-text{
+	display: table;
+	margin: auto;
+}
+#image-warning-rotate{
+position: absolute;
+ top: 50%;
+ left: 50%;
+ transform: translate(-50%, -80%);
+ text-align: center;
+}
 #progress {
   font-size: 50px;
   left: 50%;

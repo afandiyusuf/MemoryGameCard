@@ -2,6 +2,16 @@
 <?php require_once('php/config.php'); ?>
 
 <head>
+	<meta property="og:type"               content="article" />
+	<meta property="og:title"              content="Memory Game Si Boss kecil" />
+
+	<meta property="og:url"                content="http://www.siboskecil.com" />
+	<meta property="og:description"        content="Aku sudah bermain game si boss kecil, Ayo kalian juga ikut main!!" />
+	<meta property="og:image:url"              content="http://www.siboskecil.com/asset/other/fbImage5.png" />
+
+		<meta property="fb:app_id"					content="1700571170226419"/>
+
+
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
@@ -13,6 +23,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<script src="https://code.jquery.com/jquery-2.2.2.min.js"   integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI="   crossorigin="anonymous"></script>
 	<script src="js/build/frontPage.js"> </script>
+		<script src="js/build/forceLandscape.js"> </script>
 </head>
 
 <body >
@@ -25,12 +36,12 @@
 	</div>
 	<div class="container">
 		<div class="container-logo-big col-xs-12">
-			<div class="col-xs-6">
+			<div class="col-xs-8">
 				<image id="logo-big" src="asset/final/Title.png"/>
 			</div>
 
-			<div id="form-container" class="col-xs-6">
-
+			<div id="form-container" class="col-xs-4">
+				<!--
 				<div class="col-xs-6 right-content left">
 					<div>
 						Login with your account
@@ -47,14 +58,19 @@
 							<button class="btn btn-default" id="button-login-submit">Submit</button> <div id="warning-login"></div>
 						</div>
 					</div>
-				</div>
-				<div class="col-xs-6 right-content right">
-					Register Here
-					<br/>
-					<br/>
+				</div>-->
+				<div class="col-xs-12 right-content right">
+					<strong id="login-text">Login</strong>
 
-					<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-					</fb:login-button>
+					<br/>
+					<a href="#" onclick="fb_login();">
+						<img style="max-width:100%;" src="asset/splash screen/FB Button.png" border="0" alt="">
+<br/>
+<br/>
+						<div class="fb-share-button" data-href="http://www.siboskecil.com" data-layout="button"></div>
+					</a>
+					<br/>
+					<br/>
 
 				</div>
 			</div>
@@ -83,6 +99,13 @@
 		  </div>
 		</div>
 	</body>
+	</div>
+	<div id="warning-parent">
+		<div id="image-warning-rotate">
+		<image src = "asset/other/icon-horizontal.png"/>
+		<br/><br/><br/>
+		<strong> Please Rotate Your device <br/>and<br/> Refresh Your Browser </strong>
+	</div>
 	</div>
 </body>
 

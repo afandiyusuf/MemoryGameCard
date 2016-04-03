@@ -35,11 +35,12 @@ class PreloadGame
     queue.loadFile({id:"home",src:"../asset/match boss/Home.png"});
     queue.loadFile({id:"failed-panel",src:"../asset/match boss/Failed.png"});
     queue.loadFile({id:"main-lagi2",src:"../asset/match boss/Main Lagi 2.png"});
+    queue.loadFile({id:"lanjut",src:"../asset/match boss/Lanjut.png"});
     queue.loadFile({id:"win-lvl",src:"../asset/match boss/Succed.png"});
     queue.loadFile({id:"time",src:"../asset/final/Time.png"});
     queue.loadFile({id:"time-container",src:"../asset/final/Time Container.png"});
     queue.loadFile({id:"bg1",src:"../asset/match boss/BG 1.png"});
-
+    queue.loadFile({id:"fb-share",src:"../asset/match boss/FB Share.png"});
 
   	queue.load();
 

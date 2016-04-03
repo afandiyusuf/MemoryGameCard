@@ -36,8 +36,8 @@ class MainGame
 	private card2:createjs.Bitmap;
 	private preload:Object;
 	private backUrl:string = "../asset/Card/Back.png";
-	public static width:number = 4;
-	public static height:number = 4;
+	public static width:number = 2;
+	public static height:number = 2;
 	private margin:number = 5;
 	public  allContainer:createjs.MovieClip;
 	private id:number = 0;
