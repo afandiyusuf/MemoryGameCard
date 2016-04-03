@@ -27,10 +27,10 @@ class MainGame
 	public idleCard:number = 0;
 	public longIdleCard:number = 3;
 	public static deltaTime:number = 0;
-
+	public urlBG:Array<string> = new Array("../asset/match boss/BG 1.png","../asset/match boss/BG 2.png","../asset/match boss/BG 3.png","../asset/match boss/BG 1.png","../asset/match boss/BG 2.png");
 	public timers:number = 0;
 	public LongGameTimer:number;
-	public GameTimer:GameTimer;
+	public gameTimer:GameTimer;
 	public arrCard:Array<Card> = new Array();
 	private card1:createjs.Bitmap;
 	private card2:createjs.Bitmap;
@@ -51,13 +51,14 @@ class MainGame
 	public static gt:string;
 	public totalScore:number = 0;
 
-	public isPause:boolean = false;
+	public isPause:boolean = true;
 
 	public init()
 	{
 
 		this.ui = new UI(this);
 		this.GotoMainMenu();
+		this.gameTimer = new GameTimer();
 		createjs.Ticker.addEventListener("tick", ()=>this.handleTick(this));
 		createjs.Ticker.addEventListener("tick",this.deltaTimeCatcher);
 	}
@@ -68,7 +69,7 @@ class MainGame
 		createjs.Ticker.framerate = 60;
 		this.timers = 0;
 		this.ui.callMainMenu(this.stage);
-		this.isPause = false;
+
 		this.stage.update();
 		MainGame.thisLevel = 0;
 
@@ -98,6 +99,7 @@ class MainGame
 
 	public StartPlayGame():void
 	{
+		this.gameTimer.init(this);
 		this.timers = 0;
 		this.idleCard = 0;
 		MainGame.firstId = 0;
@@ -115,6 +117,8 @@ class MainGame
 	}
 	public NextGame()
 	{
+		this.gameTimer.Destroy();
+
 		this.DestroyAllCard();
 		this.arrScore.push(Math.round(this.LongGameTimer - this.timers));
 		var arrscore = this.arrScore;
@@ -132,7 +136,7 @@ class MainGame
 			success: function(data){
 				if(data.status_code == 200)
 				{
-					console.log(data);
+
 				}else{
 					window.location.href = MainGame.LogOutUrl;
 				}
@@ -145,6 +149,7 @@ class MainGame
 		});
 
 		MainGame.thisLevel++;
+		this.ui.changeBodyBG(this.urlBG[MainGame.thisLevel]);
 		this.StartPlayGame();
 
 	}
@@ -214,6 +219,7 @@ class MainGame
 		master.stage.update();
 		master.timers += MainGame.deltaTime/1000;
 		master.idleCard += MainGame.deltaTime/1000;
+		this.gameTimer.update((master.LongGameTimer - master.timers) / master.LongGameTimer);
 
 		if(master.idleCard > master.longIdleCard)
 		{

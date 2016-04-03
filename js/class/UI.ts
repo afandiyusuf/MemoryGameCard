@@ -30,6 +30,11 @@ class UI
   {
     this.mainGame = mainGame;
   }
+  public changeBodyBG(string2)
+  {
+    console.log("change bg"+string2);
+    $(document.body).css("background-image","url('"+string2+"')");
+  }
   public callWinALL()
   {
     this.whiteBorder = new createjs.Bitmap(PreloadGame.queue.getResult("white-border"));
@@ -51,8 +56,8 @@ class UI
     this.mainGame.stage.addChild(this.winPanel);
 
     this.lanjut = new createjs.Bitmap(PreloadGame.queue.getResult("main-lagi2"));
-    this.lanjut.scaleX = this.winPanel.scaleX;
-    this.lanjut.scaleY = this.lanjut.scaleX;
+    this.lanjut.scaleX = this.winPanel.scaleX*1.5;
+    this.lanjut.scaleY = this.lanjut.scaleX *1.5;
 
     var heightContinue:number = this.lanjut.image.height*this.lanjut.scaleY;
 
@@ -120,8 +125,8 @@ class UI
     this.mainGame.stage.addChild(this.winPanel);
 
     this.lanjut = new createjs.Bitmap(PreloadGame.queue.getResult("main-lagi2"));
-    this.lanjut.scaleX = this.winPanel.scaleX;
-    this.lanjut.scaleY = this.lanjut.scaleX;
+    this.lanjut.scaleX = this.winPanel.scaleX*1.5;
+    this.lanjut.scaleY = this.lanjut.scaleX*1.5;
 
     var heightContinue:number = this.lanjut.image.height*this.lanjut.scaleY;
 
@@ -235,8 +240,8 @@ class UI
     this.mainGame.stage.addChild(this.failedPanel);
 
     this.mainlagi2 = new createjs.Bitmap(PreloadGame.queue.getResult("main-lagi2"));
-    this.mainlagi2.scaleX = this.failedPanel.scaleX;
-    this.mainlagi2.scaleY = this.mainlagi2.scaleX;
+    this.mainlagi2.scaleX = this.failedPanel.scaleX*2;
+    this.mainlagi2.scaleY = this.mainlagi2.scaleX*2;
 
     var heightContinue:number = this.mainlagi2.image.height*this.mainlagi2.scaleY;
 

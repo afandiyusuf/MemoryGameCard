@@ -52,11 +52,15 @@
 					Register Here
 					<br/>
 					<br/>
-				<button id="register-button" type="submit" class="btn btn-default">Register</button>
+
+					<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+					</fb:login-button>
+
 				</div>
 			</div>
 		</div>
 	</div>
+
 	<div id= "all-register-page">
 
 		<div class="login-page">
@@ -67,13 +71,13 @@
 		    <div class="login-form" id="form-login">
 					<div id="title-register"> REGISTER </div>
 					<div id="keterangan"></div>
-					<input type="text" placeholder="Username" id="username-register"/>
-					<input type="text" placeholder="Name" id="nama"/>
-					<input type="text" placeholder="Address" id="alamat"/>
-					<input type="text" placeholder="E-mail" id="email"/>
-					<input type="text" placeholder="Phone" id="no_hp"/>
-					<input type="password" placeholder="password" id="password-register"/>
-					<input type="password" placeholder="confirm-passowrd" id="confirm-passowrd"/>
+					<input type="text" placeholder="Username" id="username-register">
+					<input type="text" id="nama" value="test" readonly>
+					<input type="text" placeholder="Address" id="alamat">
+					<input type="text" value ="test" id="email" readonly>
+					<input type="text" placeholder="Phone" id="no_hp">
+					<input type="password" placeholder="password" id="password-register">
+					<input type="password" placeholder="confirm-passowrd" id="confirm-passowrd">
 		      <button id="register-button-submit">Register</button>
 		    </div>
 		  </div>

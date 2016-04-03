@@ -1,8 +1,6 @@
 function init()
 {
-
 	window.scrollTo(0, 1);
-	
 
 	var canvas:any = document.getElementById("game");
 	if(document.body.clientWidth > document.body.clientHeight){
