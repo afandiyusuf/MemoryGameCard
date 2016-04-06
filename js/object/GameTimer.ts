@@ -33,7 +33,7 @@ class GameTimer
     this.timerContainerImage.scaleX = this.initScale;
     this.timerContainerImage.scaleY = this.timerContainerImage.scaleX;
     this.timerContainerImage.x = MainGame.GameWidth/2 - (this.timerContainerImage.image.width * this.timerContainerImage.scaleX * 0.5);
-    this.timerContainerImage.y = MainGame.GameHeight/20;
+    this.timerContainerImage.y = MainGame.GameHeight / 10;
     //add Timer
     this.timerImage = new createjs.Bitmap(PreloadGame.queue.getResult("time"));
 

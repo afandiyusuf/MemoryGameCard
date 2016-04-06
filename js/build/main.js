@@ -204,7 +204,7 @@ var MainGame = (function () {
         console.log(this.arrCard[0].trueWidth);
         console.log(this.containerWidth);
         this.allContainer.x = (MainGame.GameWidth - this.containerWidth) / 2;
-        this.allContainer.y = (MainGame.GameHeight - this.containerWidth) / 2;
+        this.allContainer.y = (MainGame.GameHeight - this.containerWidth) / 2 + MainGame.GameHeight / 30;
     };
     MainGame.prototype.reArrangeAll = function () {
         var index = 0;
@@ -236,10 +236,11 @@ var MainGame = (function () {
     MainGame.longSession = 60;
     MainGame.globalScale = .5;
     MainGame.deltaTime = 0;
-    MainGame.width = 2;
-    MainGame.height = 2;
+    MainGame.width = 4;
+    MainGame.height = 4;
     return MainGame;
 }());
+;
 var PreloadGame = (function () {
     function PreloadGame() {
     }
@@ -473,17 +474,19 @@ var UI = (function () {
         this.logoImage.scaleX = MainGame.GameWidth / 10 / this.logoImage.image.width;
         this.logoImage.scaleY = this.logoImage.scaleX;
         this.stage.addChild(this.logoImage);
+        this.logoImage.regY = -this.logoImage.image.height * 0.5;
         this.logo2Image = new createjs.Bitmap(PreloadGame.queue.getResult("title-image"));
         this.logo2Image.scaleY = (MainGame.GameHeight - (MainGame.GameHeight / 12)) / this.logo2Image.image.width;
         this.logo2Image.scaleX = this.logo2Image.scaleY;
         this.stage.addChild(this.logo2Image);
         this.logoImage.x = MainGame.GameWidth / 20;
-        this.logoImage.y = MainGame.GameHeight / 20;
+        this.logoImage.y = MainGame.GameHeight / 10;
         this.logo2Image.x = this.logoImage.x + (this.logoImage.image.width * this.logoImage.scaleX) + 20;
         this.logo2Image.y = MainGame.GameHeight / 2 - (this.logo2Image.image.height / 2 * this.logo2Image.scaleY);
         var widthlogo2 = this.logo2Image.image.width * this.logo2Image.scaleX;
         this.mainButton.x = this.logo2Image.x + widthlogo2 + (MainGame.GameWidth - (widthlogo2 + this.logo2Image.x)) / 2 - (this.mainImage.image.width * this.mainButton.scaleX * 0.5);
         this.mainButton.y = (this.logo2Image.image.height * this.logo2Image.scaleY) / 2 + this.logo2Image.y;
+        console.log((this.logo2Image.image.height * this.logo2Image.scaleY) / 2 + this.logo2Image.y);
         this.mainButton.addEventListener("click", function () { return _this.startGame(); });
     };
     UI.prototype.CallGameUi = function () {
@@ -492,7 +495,7 @@ var UI = (function () {
         this.pauseImage.scaleX = MainGame.GameWidth / 25 / this.pauseImage.image.width;
         this.pauseImage.scaleY = this.pauseImage.scaleX;
         this.pauseImage.x = MainGame.GameWidth - (this.pauseImage.image.width * this.pauseImage.scaleX) - (MainGame.GameWidth / 25);
-        this.pauseImage.y = MainGame.GameHeight / 25;
+        this.pauseImage.y = MainGame.GameHeight / 10;
         this.pauseButton = new createjs.MovieClip();
         this.pauseButton.addChild(this.pauseImage);
         this.mainGame.stage.addChild(this.pauseButton);
@@ -627,7 +630,7 @@ var GameTimer = (function () {
         this.timerContainerImage.scaleX = this.initScale;
         this.timerContainerImage.scaleY = this.timerContainerImage.scaleX;
         this.timerContainerImage.x = MainGame.GameWidth / 2 - (this.timerContainerImage.image.width * this.timerContainerImage.scaleX * 0.5);
-        this.timerContainerImage.y = MainGame.GameHeight / 20;
+        this.timerContainerImage.y = MainGame.GameHeight / 10;
         this.timerImage = new createjs.Bitmap(PreloadGame.queue.getResult("time"));
         this.timerImage.scaleX = this.timerContainerImage.scaleX;
         this.timerImage.scaleY = this.timerContainerImage.scaleX;
@@ -767,37 +770,32 @@ var Card = (function () {
 function init() {
     window.scrollTo(0, 1);
     var canvas = document.getElementById("game");
-    if (document.body.clientWidth > document.body.clientHeight) {
-        if (document.body.clientWidth > 800) {
-            if (document.body.clientHeight < 450) {
-                canvas.height = document.body.clientHeight;
+    if (document.body.clientWidth > 800) {
+        if (document.body.clientHeight < 450) {
+            canvas.height = document.body.clientHeight;
+            canvas.width = canvas.height / 9 * 16;
+        }
+        else {
+            if (document.body.clientHeight < document.body.clientWidth / 16 * 9) {
+                canvas.height = document.body.clientHeight - (document.body.clientHeight / 15);
                 canvas.width = canvas.height / 9 * 16;
             }
             else {
-                if (document.body.clientHeight < document.body.clientWidth / 16 * 9) {
-                    canvas.height = document.body.clientHeight - (document.body.clientHeight / 15);
-                    canvas.width = canvas.height / 9 * 16;
-                }
-                else {
-                    canvas.width = document.body.clientWidth - (document.body.clientWidth / 15);
-                    canvas.height = canvas.width / 16 * 9;
-                }
+                canvas.width = document.body.clientWidth - (document.body.clientWidth / 15);
+                canvas.height = canvas.width / 16 * 9;
             }
         }
-        else {
-            canvas.width = document.body.offsetWidth;
-            canvas.height = canvas.width / 16 * 9;
-        }
-        var mainGame = new MainGame();
-        MainGame.GameWidth = canvas.width;
-        MainGame.GameHeight = canvas.height;
-        var preload = new PreloadGame();
-        preload.mainGame = mainGame;
-        preload.init();
     }
     else {
-        window.alert("please refresh and use landscape mode");
+        canvas.width = document.body.offsetWidth;
+        canvas.height = canvas.width / 16 * 9;
     }
+    var mainGame = new MainGame();
+    MainGame.GameWidth = canvas.width;
+    MainGame.GameHeight = canvas.height;
+    var preload = new PreloadGame();
+    preload.mainGame = mainGame;
+    preload.init();
     function handleFileLoad(event) {
     }
     function handleComplete(event) {

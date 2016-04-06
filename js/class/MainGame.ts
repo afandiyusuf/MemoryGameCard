@@ -36,8 +36,8 @@ class MainGame
 	private card2:createjs.Bitmap;
 	private preload:Object;
 	private backUrl:string = "../asset/Card/Back.png";
-	public static width:number = 2;
-	public static height:number = 2;
+	public static width:number = 4;
+	public static height:number = 4;
 	private margin:number = 5;
 	public  allContainer:createjs.MovieClip;
 	private id:number = 0;
@@ -115,6 +115,7 @@ class MainGame
 		this.ui.CallGameUi();
 		this.isPause = false;
 	}
+
 	public NextGame()
 	{
 		this.gameTimer.Destroy();
@@ -300,7 +301,7 @@ class MainGame
 		console.log(this.arrCard[0].trueWidth);
 		console.log(this.containerWidth);
 		this.allContainer.x = (MainGame.GameWidth - this.containerWidth)/2;
-		this.allContainer.y = (MainGame.GameHeight - this.containerWidth)/2;
+		this.allContainer.y = (MainGame.GameHeight - this.containerWidth) / 2 + MainGame.GameHeight/30;
 	}
 
 	private reArrangeAll()
@@ -327,4 +328,4 @@ class MainGame
 	}
 
 
-}
+};

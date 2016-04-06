@@ -200,7 +200,7 @@ class UI
     this.logoImage.scaleY = this.logoImage.scaleX;
 
     this.stage.addChild(this.logoImage);
-
+    this.logoImage.regY = -this.logoImage.image.height*0.5;
     this.logo2Image = new createjs.Bitmap(PreloadGame.queue.getResult("title-image"));
     this.logo2Image.scaleY = (MainGame.GameHeight-(MainGame.GameHeight/12))/this.logo2Image.image.width;
     this.logo2Image.scaleX =this.logo2Image.scaleY;
@@ -208,13 +208,14 @@ class UI
     this.stage.addChild(this.logo2Image);
 
     this.logoImage.x = MainGame.GameWidth/20;
-    this.logoImage.y = MainGame.GameHeight/20;
+    this.logoImage.y = MainGame.GameHeight/10;
     this.logo2Image.x = this.logoImage.x+(this.logoImage.image.width*this.logoImage.scaleX)+20;
     this.logo2Image.y = MainGame.GameHeight/2 - (this.logo2Image.image.height/2 * this.logo2Image.scaleY);
     var widthlogo2:number = this.logo2Image.image.width * this.logo2Image.scaleX;
 
     this.mainButton.x = this.logo2Image.x + widthlogo2 + (MainGame.GameWidth - (widthlogo2+this.logo2Image.x))/2 - (this.mainImage.image.width * this.mainButton.scaleX*0.5);
     this.mainButton.y = (this.logo2Image.image.height*this.logo2Image.scaleY)/2+this.logo2Image.y;
+    console.log((this.logo2Image.image.height*this.logo2Image.scaleY)/2+this.logo2Image.y);
     //craeteListener
     this.mainButton.addEventListener("click",()=>this.startGame());
   }
@@ -226,7 +227,7 @@ class UI
     this.pauseImage.scaleX = MainGame.GameWidth/25/this.pauseImage.image.width;
     this.pauseImage.scaleY = this.pauseImage.scaleX;
     this.pauseImage.x = MainGame.GameWidth - (this.pauseImage.image.width * this.pauseImage.scaleX) - (MainGame.GameWidth/25);
-    this.pauseImage.y = MainGame.GameHeight/25;
+    this.pauseImage.y = MainGame.GameHeight/10;
     this.pauseButton = new createjs.MovieClip();
     this.pauseButton.addChild(this.pauseImage);
     this.mainGame.stage.addChild(this.pauseButton);

@@ -3,7 +3,7 @@ function init()
 	window.scrollTo(0, 1);
 
 	var canvas:any = document.getElementById("game");
-	if(document.body.clientWidth > document.body.clientHeight){
+
 		if(document.body.clientWidth > 800)
 		{
 			if(document.body.clientHeight < 450)
@@ -37,9 +37,6 @@ function init()
 		preload.mainGame = mainGame;
 		preload.init();
 
-	}else{
-		window.alert("please refresh and use landscape mode");
-	}
 
 
 	function handleFileLoad(event:any):void{
