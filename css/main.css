@@ -6,7 +6,34 @@ body{
 #leaderboard-container{
 	padding-top: 2%;
 }
+#tnc-page{
 
+}
+#howto-page{
+	text-align: center;
+}
+.info-bg{
+	display: table;
+  width: 50%;
+  margin: auto;
+  margin-top: 5%;
+	background-image: url("../asset/final/Home and tnc.png");
+	background-size: 100% 100%;
+	color: white;
+	padding: 30px;
+}
+.ok-button{
+	display: table;
+	margin: auto;
+	width: 50px;
+}
+.title-image{
+	display: table;
+	margin: auto;
+}
+ul{
+	list-style-type:none;
+}
 #loading-text {
 
   margin: auto;
