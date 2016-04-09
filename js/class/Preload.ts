@@ -18,6 +18,11 @@ class PreloadGame
   	queue.loadFile({id:"card6", src:"../asset/final/6.png"});
   	queue.loadFile({id:"card7", src:"../asset/final/7.png"});
   	queue.loadFile({id:"card8", src:"../asset/final/8.png"});
+    queue.loadFile({id:"lvl1", src:"../asset/1.png"});
+    queue.loadFile({id:"lvl2", src:"../asset/2.png"});
+    queue.loadFile({id:"lvl3", src:"../asset/3.png"});
+    queue.loadFile({id:"lvl4", src:"../asset/4.png"});
+    queue.loadFile({id:"lvl5", src:"../asset/5.png"});
   	queue.loadFile({id:"card_back", src:"../asset/final/bcak.png"});
   	queue.loadFile({id:"bg", src:"../asset/final/BG.jpg"});
   	queue.loadFile({id:"border", src:"../asset/final/Border.png"});

@@ -2,7 +2,7 @@
 
 require_once('../php/config.php');
 require_once('../php/validate_access_token.php');
-
+$_SESSION['state'] = "udah maen";
 ?>
 <html>
 <head>

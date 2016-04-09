@@ -107,6 +107,7 @@ class MainGame
 		this.id = 0;
 		this.arrCard = new Array();
 		this.LongGameTimer = MainGame.ArrTimer[MainGame.thisLevel];
+
 		console.log(this.LongGameTimer);
 		MainGame.totalCard = 0;
 		this.allContainer = new createjs.MovieClip();

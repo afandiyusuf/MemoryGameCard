@@ -258,6 +258,11 @@ var PreloadGame = (function () {
         queue.loadFile({ id: "card6", src: "../asset/final/6.png" });
         queue.loadFile({ id: "card7", src: "../asset/final/7.png" });
         queue.loadFile({ id: "card8", src: "../asset/final/8.png" });
+        queue.loadFile({ id: "lvl1", src: "../asset/1.png" });
+        queue.loadFile({ id: "lvl2", src: "../asset/2.png" });
+        queue.loadFile({ id: "lvl3", src: "../asset/3.png" });
+        queue.loadFile({ id: "lvl4", src: "../asset/4.png" });
+        queue.loadFile({ id: "lvl5", src: "../asset/5.png" });
         queue.loadFile({ id: "card_back", src: "../asset/final/bcak.png" });
         queue.loadFile({ id: "bg", src: "../asset/final/BG.jpg" });
         queue.loadFile({ id: "border", src: "../asset/final/Border.png" });
@@ -372,6 +377,17 @@ var UI = (function () {
         this.mainGame.stage.addChild(this.lanjut);
         this.lanjut.addEventListener("click", function () { return _this.gotoLeaderboard(); });
         this.mainGame.stage.update();
+    };
+    UI.prototype.callLvlImage = function (lvl) {
+        this.lvlImage = new createjs.Bitmap(PreloadGame.queue.getResult("lvl" + lvl));
+        this.lvlImage.scaleX = 0.7;
+        this.lvlImage.scaleY = 0.7;
+        this.lvlImage.y = MainGame.GameHeight - (this.lvlImage.image.height * this.lvlImage.scaleX) - MainGame.GameHeight / 10;
+        this.lvlImage.x = MainGame.GameWidth - (this.lvlImage.image.width * this.lvlImage.scaleX) - MainGame.GameWidth / 10;
+        this.mainGame.stage.addChild(this.lvlImage);
+    };
+    UI.prototype.destroyLvlImage = function () {
+        this.mainGame.stage.removeChild(this.lvlImage);
     };
     UI.prototype.gotoLeaderboard = function () {
         $.ajax({
@@ -491,6 +507,7 @@ var UI = (function () {
     };
     UI.prototype.CallGameUi = function () {
         var _this = this;
+        this.callLvlImage(MainGame.thisLevel + 1);
         this.pauseImage = new createjs.Bitmap(PreloadGame.queue.getResult("pause"));
         this.pauseImage.scaleX = MainGame.GameWidth / 25 / this.pauseImage.image.width;
         this.pauseImage.scaleY = this.pauseImage.scaleX;
@@ -506,6 +523,8 @@ var UI = (function () {
         this.pauseButton.removeChild(this.pauseImage);
         this.mainGame.stage.removeChild(this.pauseButton);
         this.pauseButton.removeEventListener("click", function () { return _this.pauseGame(); });
+        this.destroyLvlImage();
+        this.mainGame.stage.update();
     };
     UI.prototype.pauseGame = function () {
         this.DestroyGameUI();
@@ -528,8 +547,8 @@ var UI = (function () {
         this.failedPanel.y = (MainGame.GameHeight - heightPanel) / 2;
         this.mainGame.stage.addChild(this.failedPanel);
         this.mainlagi2 = new createjs.Bitmap(PreloadGame.queue.getResult("main-lagi2"));
-        this.mainlagi2.scaleX = this.failedPanel.scaleX * 2;
-        this.mainlagi2.scaleY = this.mainlagi2.scaleX * 2;
+        this.mainlagi2.scaleX = this.failedPanel.scaleX;
+        this.mainlagi2.scaleY = this.mainlagi2.scaleX;
         var heightContinue = this.mainlagi2.image.height * this.mainlagi2.scaleY;
         this.mainlagi2.x = this.failedPanel.x + widthPanel / 2 - (this.mainlagi2.image.width * this.mainlagi2.scaleX * 0.5);
         this.mainlagi2.y = this.failedPanel.y + heightPanel - heightContinue - heightPanel / 10;
@@ -545,6 +564,7 @@ var UI = (function () {
         this.mainlagi2.removeEventListener("click", function () { return _this.GotoMainMenu(); });
     };
     UI.prototype.GotoMainMenu = function () {
+        this.mainGame.gameTimer.Destroy();
         this.DestroyFailScreen();
         this.mainGame.stage.update();
         this.mainGame.GotoMainMenu();

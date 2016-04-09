@@ -25,6 +25,7 @@ class UI
   private stage:createjs.Stage;
   private logoUrl:string;
   private mainGame:MainGame;
+  private lvlImage:createjs.Bitmap;
 
 
   constructor(mainGame:MainGame)
@@ -69,6 +70,19 @@ class UI
     this.lanjut.addEventListener("click",()=>this.gotoLeaderboard());
     this.mainGame.stage.update();
   }
+  public callLvlImage(lvl:number)
+  {
+    this.lvlImage = new createjs.Bitmap(PreloadGame.queue.getResult("lvl"+lvl));
+    this.lvlImage.scaleX = 0.7;
+    this.lvlImage.scaleY = 0.7;
+    this.lvlImage.y = MainGame.GameHeight - (this.lvlImage.image.height *this.lvlImage.scaleX) - MainGame.GameHeight/10;
+    this.lvlImage.x = MainGame.GameWidth - (this.lvlImage.image.width * this.lvlImage.scaleX) - MainGame.GameWidth/10;
+    this.mainGame.stage.addChild(this.lvlImage);
+  }
+  public destroyLvlImage()
+  {
+      this.mainGame.stage.removeChild(this.lvlImage);
+  }
   public gotoLeaderboard()
   {
 
@@ -83,14 +97,14 @@ class UI
       success: function(data){
         if(data.status_code == 200)
         {
-            window.location.href = MainGame.leaderboardUrl + "?game_token="+MainGame.gt;
+          window.location.href = MainGame.leaderboardUrl + "?game_token="+MainGame.gt;
         }else{
           window.location.href = MainGame.LogOutUrl;
         }
 
       },
       error : function(data){
-          console.log("error");
+        console.log("error");
       },
       dataType: "JSON"
     });
@@ -153,17 +167,17 @@ class UI
   private ShareFB()
   {
     FB.ui(
-    {
-      method: 'share',
-      href: 'http://www.siboskecil.com',
-    },
-    // callback
-    function(response) {
-      if (response && !response.error_message) {
-      } else {
+      {
+        method: 'share',
+        href: 'http://www.siboskecil.com',
+      },
+      // callback
+      function(response) {
+        if (response && !response.error_message) {
+        } else {
+        }
       }
-    }
-  );
+    );
   }
   private DestroyWinScreen()
   {
@@ -223,6 +237,7 @@ class UI
 
   public CallGameUi()
   {
+    this.callLvlImage(MainGame.thisLevel+1);
     this.pauseImage = new createjs.Bitmap(PreloadGame.queue.getResult("pause"));
     this.pauseImage.scaleX = MainGame.GameWidth/25/this.pauseImage.image.width;
     this.pauseImage.scaleY = this.pauseImage.scaleX;
@@ -239,6 +254,8 @@ class UI
     this.pauseButton.removeChild(this.pauseImage);
     this.mainGame.stage.removeChild(this.pauseButton);
     this.pauseButton.removeEventListener("click",()=>this.pauseGame());
+    this.destroyLvlImage();
+    this.mainGame.stage.update();
   }
 
   public pauseGame()
@@ -270,8 +287,8 @@ class UI
     this.mainGame.stage.addChild(this.failedPanel);
 
     this.mainlagi2 = new createjs.Bitmap(PreloadGame.queue.getResult("main-lagi2"));
-    this.mainlagi2.scaleX = this.failedPanel.scaleX*2;
-    this.mainlagi2.scaleY = this.mainlagi2.scaleX*2;
+    this.mainlagi2.scaleX = this.failedPanel.scaleX;
+    this.mainlagi2.scaleY = this.mainlagi2.scaleX;
 
     var heightContinue:number = this.mainlagi2.image.height*this.mainlagi2.scaleY;
 
@@ -293,9 +310,10 @@ class UI
 
   public GotoMainMenu()
   {
-      this.DestroyFailScreen();
-      this.mainGame.stage.update();
-      this.mainGame.GotoMainMenu();
+this.mainGame.gameTimer.Destroy();
+    this.DestroyFailScreen();
+    this.mainGame.stage.update();
+    this.mainGame.GotoMainMenu();
 
   }
 

@@ -1,4 +1,6 @@
 
+
+
 function fb_login(){
     FB.login(function(response) {
         if (response.authResponse) {
@@ -37,8 +39,18 @@ function registerWithFB() {
             window.location = $("#base-url").html()+"/page/game.php?access_token="+data.data.access_token;
         }else if(data.status_code == 404)
         {
-            $("#form-login").css("display","table");
-            $("#all-register-page").css("display","table");
+
+          $("#keterangan").css("display","none");
+
+          $("#tnc-page").css("display","none");
+          //$("#form-login").css("display","none");
+          $("#please-wait-screen").css("display","none");
+          //$("#all-register-page").css("display","none");
+          $("#how-to-play-page").css("display","none");
+          $("#username-register").val("");
+          $("#form-login").css("display","table");
+          $("#all-register-page").css("display","table");
+
             $("#email").val(response.email);
             $("#nama").val(response.name);
             $("#fb_id").val(response.id);
@@ -139,7 +151,9 @@ window.fbAsyncInit = function() {
 
 
 
-$(function(){  //-------------------------END LOGIN -------------------//
+$(function(){
+
+    //-------------------------END LOGIN -------------------//
   window.scrollTo(0, 1);
   AddListenerButton();
   function AddListenerButton()
@@ -207,7 +221,6 @@ $(function(){  //-------------------------END LOGIN -------------------//
 
   }
 
-
   function prosesRegister()
   {
     // var password = $("#password-register").val();
@@ -218,6 +231,9 @@ $(function(){  //-------------------------END LOGIN -------------------//
     var no_hp = $("#no_hp").val();
     var username = $("#username-register").val();
     var fb_id = $("#fb_id").val();
+    var at = $("#at").val();
+    var ats = $('#ats').val();
+    var twitter_id = $('#twitter_id').val();
     // console.log("password is "+password);
     // console.log("confirm password is "+confirm_password);
     // if(password != confirm_password || password == "" || password == null)
@@ -229,9 +245,14 @@ $(function(){  //-------------------------END LOGIN -------------------//
     $("#form-login").css("display","none");
     $("#please-wait-screen").css("display","table");
     var apiUri="";
+
     if($("#reg_using").val()=="facebook")
     {
       apiUri = "registerFb";
+    }else if($('#reg_using').val() == "twitter")
+    {
+      apiUri = "registerTw";
+      console.log($("#base-api-url").html()+"/user/"+apiUri);
     }
     $.ajax({
       type: "POST",
@@ -243,23 +264,33 @@ $(function(){  //-------------------------END LOGIN -------------------//
         email : email,
         alamat : alamat,
         no_hp : no_hp,
-        fb_id : fb_id
+        fb_id : fb_id,
+        at  : at,
+        ats  :ats,
+        twitter_id : twitter_id
       },
       success: function(data){
         if(data.status_code == 402)
         {
+          console.log("402");
           displayRegisterForm("data yang anda masukkan tidak lengkap");
         }else if(data.status_code == 401)
         {
+          console.log("401");
           displayRegisterForm("username sudah terpakai, pakai username yang lain");
         }else if(data.status_code == 200)
         {
-          var baseUrl = $("#base-url").html();
-          changeWarningText("register success, cek email untuk info lebih lanjut, atau anda bisa langsung bermain permainan siboskecil dengan mengeklik link di bawah <br/> <a href= '"+baseUrl+"/page/game.php?access_token="+data.data.access_token+"' class='close-button'> main </a> ");
+          console.log(data);
+          window.location = $("#base-url").html()+"/page/game.php?access_token="+data.data.access_token;
+          //var baseUrl = $("#base-url").html();
+          //changeWarningText("register success, cek email untuk info lebih lanjut, atau anda bisa langsung bermain permainan siboskecil dengan mengeklik link di bawah <br/> <a href= '"+baseUrl+"/page/game.php?access_token="+data.data.access_token+"' class='close-button'> main </a> ");
+        }else{
+          console.log(data);
         }
 
       },
       error : function(data){
+        console.log(data);
         displayRegisterForm("koneksi error");
       },
       dataType: "JSON"
@@ -285,7 +316,7 @@ $(function(){  //-------------------------END LOGIN -------------------//
   }
   function displayRegisterForm(keterangan)
   {
-    hideAllInfo();
+    //hideAllInfo();
     if(keterangan != null)
     {
       $("#keterangan").css("display","table");
@@ -293,8 +324,13 @@ $(function(){  //-------------------------END LOGIN -------------------//
     }else{
       $("#keterangan").css("display","none");
     }
+    $("#tnc-page").css("display","none");
+    //$("#form-login").css("display","none");
+    $("#please-wait-screen").css("display","none");
+    //$("#all-register-page").css("display","none");
+    $("#how-to-play-page").css("display","none");
+    $("#username-register").val("");
     $("#form-login").css("display","table");
-
     $("#all-register-page").css("display","table");
 
   }
@@ -328,4 +364,22 @@ $(function(){  //-------------------------END LOGIN -------------------//
     $("#how-to-play-page").css("display","table");
     $("#all-register-page").css("display","table");
   }
+
+
 });
+
+function register_tw ()
+  {
+    console.log("hello");
+    //$("#login-page").css("display","none");
+    //$("#title-image").css("display","none");
+    $("#tnc-page").css("display","none");
+    //$("#form-login").css("display","none");
+    //$("#please-wait-screen").css("display","none");
+    //$("#all-register-page").css("display","none");
+    $("#how-to-play-page").css("display","none");
+
+    $("#keterangan").css("display","none");
+    $("#form-login").css("display","table");
+    $("#all-register-page").css("display","table");
+  }

@@ -2,6 +2,12 @@
 session_start();
 
 $total_scores = 0;
+if(!isset($_GET["page"]))
+{
+  $page = $_GET["page"];
+}else{
+  $page = 0;
+}
 if(!isset($_GET["game_token"])){
   $gt = "null";
 }else{
@@ -28,18 +34,17 @@ if($access_token != "null"){
 
   if($jsonData->status_code == "200")
   {
-
     $username = $jsonData->data->user_data->user_name;
     $total_scores  = $jsonData->data->score_data->total_score;
   }else{
-
+  
   }
   curl_close($ch);
 
 }
 
 
-$ch2 = curl_init($base_api_url."/game/getScore/10");
+$ch2 = curl_init($base_api_url."/game/getScore/10/0");
 curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
 $result2 = curl_exec($ch2);
 $jsonData2 = json_decode($result2);

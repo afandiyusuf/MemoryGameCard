@@ -4,6 +4,13 @@ require_once('../php/validate_gt.php')
 ?>
 <html>
 <head>
+  <meta property="og:type"               content="article" />
+	<meta property="og:title"              content="Cek skorku di Tebak Si Boss kecil" />
+	<meta property="og:description"        content="Aku sudah bermain Tebak Si Boss Kecil, cek skorku di sini" />
+	<meta property="og:image:url"              content="http://www.siboskecil.com/asset/other/fbImage5.png" />
+
+	<meta property="fb:app_id"					content="1700571170226419"/>
+
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
   <!-- Optional theme -->
@@ -15,50 +22,79 @@ require_once('../php/validate_gt.php')
 
   <script src="https://code.jquery.com/jquery-2.2.2.min.js"   integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI="   crossorigin="anonymous"></script>
     <script src="../js/build/frontPage.js"  ></script>
-  <link rel="stylesheet" href="../css/main.css">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
 
 <body>
-  <div class="container" id="leaderboard-container">
+  <div class="container" class="leaderboard-container">
     <div class="col-xs-6" id="current_score">
-      <div class="col-xs-12 white-backGround">
-        <br/>
-        <br/>
         <?php if(isset($username)) { ?>
-        <h3>CONGRATS <?php echo $username; ?> YOUR SCORE IS</h3>
+      <div class="col-xs-12 white-backGround leaderboard-content">
+        <br/>
+        <br/>
+
+        <h3> <?php
+        if(isset($_GET['state'])){
+          echo "SCORE ";
+          echo $username;
+          echo " ADALAH";
+        }else{
+          echo "SELAMAT ";
+          echo $username;
+          echo " SKOR KAMU ADALAH";
+        }
+          ?></h3>
         <h3 id=""><?php echo 960-$total_scores; ?> detik</h3>
-        <?php }?>
+
+        <br/>
+        <div class="fb-share-button" data-href="<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>&state='shared'" data-layout="button"></div>
+        <div style="margin-top:5px"><a href="https://twitter.com/share" class="twitter-share-button" data-url="<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>&state='shared'" data-text="Ayo cek skorku disini tebak si bos kecil disini">Tweet</a></div>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <br/>
+        <br/>
       </div>
+      <?php }else{?>
+        <div id="left-image"/>
+          <img width=80% id="left-image-content" src="../asset/final/Title.png"/>
+        </div>
+        <?php }?>
+
     </div>
     <div class="col-xs-6" id="leaderboard">
-      <div class="col-xs-12 white-backGround" id="leaderboard-content">
-        <h3>LEADERBOARD</h3>
+      <?php
+      $adaLead = false;
+      if(count($leaderboardData)>0){
+        $adaLead = true;
+      ?>
+      <div class="col-xs-12 white-backGround leaderboard-content">
+
+        <img id="title-leaderboard" height="30px" src="../asset/final/leaderboardTitle.png">
         <?php
           for($i=0;$i<count($leaderboardData);$i++)
           {
-            echo "<div class ='col-xs-2'>";
-            echo $i+1;
+            echo "<div class='col-xs-12' id='leaderboard-data'>";
+            echo "<div class ='col-xs-4 profile-pict'>";
+            echo "<img class='profile-content' height=40px src='https://graph.facebook.com/".$leaderboardData[$i]->fb_id."/picture?type=small'>";
             echo "</div>";
-            echo "<div class='col-xs-5'>";
-            echo $leaderboardData[$i]->nama_depan;
+            echo "<div class='col-xs-8'>";
+            echo "<div class='nama-lead'>";
+            echo " ".$leaderboardData[$i]->user_name." ".($i+1);
             echo "</div>";
-            echo "<div class='col-xs-5'>";
-            echo  (960 - ($leaderboardData[$i]->score));
-            echo " detik";
+            echo "<div class='score-lead'>";
+            echo  " ".(960 - ($leaderboardData[$i]->score))." POINT";
+            echo "</div>";
+            echo "</div>";
             echo "</div>";
           }
+
          ?>
+
       </div>
-    </div>
-    <div class="container">
-      <button class="col-xs-12" id="home-button">
+      <?php } ?>
+      <a href="http://www.siboskecil.com"<?php if(!$adaLead){echo "style='margin-top:70%'";}?> class="col-xs-12 btn btn-primary btn-home-lead " id="home-button">
         BACK TO HOME
-      </button>
-  </div>
-  <div class="container" style="text-align:center">
-    All right reserved
-  </div>
+      </a>
+    </div>
   </div>
 
 </body>
