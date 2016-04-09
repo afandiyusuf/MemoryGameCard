@@ -97,8 +97,8 @@ class UI
       success: function(data){
         if(data.status_code == 200)
         {
-      console.log(data);
-          //window.location.href = "http://www.siboskecil.com";
+      //console.log(data);
+          window.location.href = "http://www.siboskecil.com";
         }else{
           window.location.href = MainGame.LogOutUrl;
         }

@@ -380,3 +380,20 @@ position: absolute;
 	/*margin-left: 10px;*/
 	/*margin-top: 50px;*/
 }
+
+.out-bg{
+	display: table;
+	width: 80%;
+	height: 60%;
+	margin: auto;
+	margin-top:  10%;
+	background-image: url("../asset/match boss/Out of Heart.png");
+	background-size: 100% 100%;
+	color: white;
+}
+.go-to-home{
+	margin: auto;
+  padding-top: 50%;
+  /* margin-top: 100px; */
+  display: table;
+}
