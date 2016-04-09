@@ -10,7 +10,8 @@ require_once('../php/validate_gt.php')
 	<meta property="og:image:url"              content="http://www.siboskecil.com/asset/other/fbImage5.png" />
 
 	<meta property="fb:app_id"					content="1700571170226419"/>
-
+  <link href='https://fonts.googleapis.com/css?family=Luckiest+Guy' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Dosis:800' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
   <!-- Optional theme -->
@@ -27,9 +28,9 @@ require_once('../php/validate_gt.php')
 
 <body>
   <div class="container" class="leaderboard-container">
-    <div class="col-xs-6" id="current_score">
+    <div class="col-xs-0" id="current_score" >
         <?php if(isset($username)) { ?>
-      <div class="col-xs-12 white-backGround leaderboard-content">
+      <div class="col-xs-0 white-backGround leaderboard-content">
         <br/>
         <br/>
 
@@ -47,9 +48,6 @@ require_once('../php/validate_gt.php')
         <h3 id=""><?php echo 960-$total_scores; ?> detik</h3>
 
         <br/>
-        <div class="fb-share-button" data-href="<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>&state='shared'" data-layout="button"></div>
-        <div style="margin-top:5px"><a href="https://twitter.com/share" class="twitter-share-button" data-url="<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>&state='shared'" data-text="Ayo cek skorku disini tebak si bos kecil disini">Tweet</a></div>
-        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
         <br/>
         <br/>
       </div>
@@ -60,28 +58,37 @@ require_once('../php/validate_gt.php')
         <?php }?>
 
     </div>
-    <div class="col-xs-6" id="leaderboard">
+
+
+    <div class="col-xs-12" id="leaderboard">
+
+
       <?php
       $adaLead = false;
       if(count($leaderboardData)>0){
         $adaLead = true;
       ?>
-      <div class="col-xs-12 white-backGround leaderboard-content">
-
-        <img id="title-leaderboard" height="30px" src="../asset/final/leaderboardTitle.png">
+      <div class="col-xs-8 col-xs-offset-2 white-backGround leaderboard-content">
+        <div class="col-xs-12">
+        <div class="fb-share-button" style="display:inline-block" data-href="<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>&state='shared'" data-layout="button"></div>
+        <a href="https://twitter.com/share" class="twitter-share-button" data-url="<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>&state='shared'" data-text="Ayo cek skorku disini tebak si bos kecil disini">Tweet</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </div>
+        <img id="title-leaderboard" height="50px" src="../asset/final/leaderboardTitle.png">
         <?php
           for($i=0;$i<count($leaderboardData);$i++)
           {
             echo "<div class='col-xs-12' id='leaderboard-data'>";
-            echo "<div class ='col-xs-4 profile-pict'>";
-            echo "<img class='profile-content' height=40px src='https://graph.facebook.com/".$leaderboardData[$i]->fb_id."/picture?type=small'>";
+
+            echo "<div class ='profile-pict'>";
+            echo "<img class='profile-content' height=50px width=50px src='https://graph.facebook.com/".$leaderboardData[$i]->fb_id."/picture?type=small'>";
             echo "</div>";
-            echo "<div class='col-xs-8'>";
+            echo "<div class='user-data'>";
             echo "<div class='nama-lead'>";
             echo " ".$leaderboardData[$i]->user_name." ".($i+1);
             echo "</div>";
             echo "<div class='score-lead'>";
-            echo  " ".(960 - ($leaderboardData[$i]->score))." POINT";
+            echo  " ".(960 - ($leaderboardData[$i]->score))." Second";
             echo "</div>";
             echo "</div>";
             echo "</div>";
@@ -91,7 +98,7 @@ require_once('../php/validate_gt.php')
 
       </div>
       <?php } ?>
-      <a href="http://www.siboskecil.com"<?php if(!$adaLead){echo "style='margin-top:70%'";}?> class="col-xs-12 btn btn-primary btn-home-lead " id="home-button">
+      <a href="http://www.siboskecil.com"<?php if(!$adaLead){echo "style='margin-top:70%'";}?> class="col-xs-8 col-xs-offset-2 btn btn-primary btn-home-lead " id="home-button">
         BACK TO HOME
       </a>
     </div>

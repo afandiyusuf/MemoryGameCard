@@ -139,6 +139,7 @@ var MainGame = (function () {
             this.ui.callWinALL();
         }
         else {
+            this.ui.DestroyGameUI();
             this.ui.callWinScreen();
         }
     };
@@ -236,8 +237,8 @@ var MainGame = (function () {
     MainGame.longSession = 60;
     MainGame.globalScale = .5;
     MainGame.deltaTime = 0;
-    MainGame.width = 4;
-    MainGame.height = 4;
+    MainGame.width = 2;
+    MainGame.height = 2;
     return MainGame;
 }());
 ;
@@ -400,7 +401,7 @@ var UI = (function () {
             },
             success: function (data) {
                 if (data.status_code == 200) {
-                    window.location.href = MainGame.leaderboardUrl + "?game_token=" + MainGame.gt;
+                    console.log(data);
                 }
                 else {
                     window.location.href = MainGame.LogOutUrl;

@@ -27,11 +27,18 @@ $jsonData = json_decode($result);
 
 if($jsonData->status_code == "200")
 {
-  if(isset($_GET["access_token"])){
-    header('Location: '.$base_url."/page/game.php");
+  $last_play= $jsonData->last_date_play;
+  $now =  date('d');
+  if($last_play != $now){
+    if(isset($_GET["access_token"])){
+      header('Location: '.$base_url."/page/game.php");
+    }
+  }else{
+    header('Location: '.$base_url."/page/stop.php");
   }
+
 }else{
-  header('Location: '.$base_url);
+  //header('Location: '.$base_url);
 }
 curl_close($ch);
 ?>
