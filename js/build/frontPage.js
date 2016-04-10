@@ -2,23 +2,23 @@
 
 
 function fb_login(){
-    FB.login(function(response) {
-        if (response.authResponse) {
-            console.log('Welcome!  Fetching your information.... ');
-            //console.log(response); // dump complete info
-            access_token = response.authResponse.accessToken; //get access token
-            user_id = response.authResponse.userID; //get FB UID
+  FB.login(function(response) {
+    if (response.authResponse) {
+      console.log('Welcome!  Fetching your information.... ');
+      //console.log(response); // dump complete info
+      access_token = response.authResponse.accessToken; //get access token
+      user_id = response.authResponse.userID; //get FB UID
 
-          registerWithFB();
+      registerWithFB();
 
-        } else {
-            //user hit cancel button
-            console.log('User cancelled login or did not fully authorize.');
+    } else {
+      //user hit cancel button
+      console.log('User cancelled login or did not fully authorize.');
 
-        }
-    }, {
-        scope: 'public_profile,email'
-    });
+    }
+  }, {
+    scope: 'public_profile,email'
+  });
 }
 
 function registerWithFB() {
@@ -36,7 +36,7 @@ function registerWithFB() {
         console.log(data);
         if(data.status_code == 200)
         {
-            window.location = $("#base-url").html()+"/page/game.php?access_token="+data.data.access_token;
+          window.location = $("#base-url").html()+"/page/game.php?access_token="+data.data.access_token;
         }else if(data.status_code == 404)
         {
 
@@ -51,10 +51,10 @@ function registerWithFB() {
           $("#form-login").css("display","table");
           $("#all-register-page").css("display","table");
 
-            $("#email").val(response.email);
-            $("#nama").val(response.name);
-            $("#fb_id").val(response.id);
-            $("#reg_using").val("facebook");
+          $("#email").val(response.email);
+          $("#nama").val(response.name);
+          $("#fb_id").val(response.id);
+          $("#reg_using").val("facebook");
           var password = $("#password-register").val();
           var confirm_password = $("#confirm-passowrd").val();
           var nama = $("#nama").val();
@@ -153,7 +153,7 @@ window.fbAsyncInit = function() {
 
 $(function(){
 
-    //-------------------------END LOGIN -------------------//
+  //-------------------------END LOGIN -------------------//
   window.scrollTo(0, 1);
   AddListenerButton();
   function AddListenerButton()
@@ -241,7 +241,11 @@ $(function(){
     //   $("#keterangan").html("password dan confirm password tidak sama");
     //   return;
     // }
-
+    if(nama ==""||nama== null||alamat=="" || alamat == null || no_hp == "" || no_hp==null || username == "" || username ==null)
+    {
+      displayRegisterForm("Data tidak lengkap");
+      return;
+    }
     $("#form-login").css("display","none");
     $("#please-wait-screen").css("display","table");
     var apiUri="";
@@ -369,17 +373,17 @@ $(function(){
 });
 
 function register_tw ()
-  {
-    console.log("hello");
-    //$("#login-page").css("display","none");
-    //$("#title-image").css("display","none");
-    $("#tnc-page").css("display","none");
-    //$("#form-login").css("display","none");
-    //$("#please-wait-screen").css("display","none");
-    //$("#all-register-page").css("display","none");
-    $("#how-to-play-page").css("display","none");
+{
+  console.log("hello");
+  //$("#login-page").css("display","none");
+  //$("#title-image").css("display","none");
+  $("#tnc-page").css("display","none");
+  //$("#form-login").css("display","none");
+  //$("#please-wait-screen").css("display","none");
+  //$("#all-register-page").css("display","none");
+  $("#how-to-play-page").css("display","none");
 
-    $("#keterangan").css("display","none");
-    $("#form-login").css("display","table");
-    $("#all-register-page").css("display","table");
-  }
+  $("#keterangan").css("display","none");
+  $("#form-login").css("display","table");
+  $("#all-register-page").css("display","table");
+}
