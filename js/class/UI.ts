@@ -14,18 +14,22 @@ class UI
 
   private failedPanel:createjs.Bitmap;
   private winPanel:createjs.Bitmap;
-
+  private konfirmasiPanel:createjs.Bitmap;
   private whiteBorder:createjs.Bitmap;
 
   public mainButton:createjs.MovieClip;
   public pauseButton:createjs.MovieClip;
   public continueButton:createjs.MovieClip;
   public homeButton:createjs.MovieClip;
+  public mainLagiButton:createjs.Bitmap;
+  public keluarButton:createjs.Bitmap;
 
   private stage:createjs.Stage;
   private logoUrl:string;
   private mainGame:MainGame;
   private lvlImage:createjs.Bitmap;
+
+
 
 
   constructor(mainGame:MainGame)
@@ -324,13 +328,73 @@ class UI
 
   public GotoMainMenu()
   {
-this.mainGame.gameTimer.Destroy();
+    this.mainGame.gameTimer.Destroy();
     this.DestroyFailScreen();
     this.mainGame.stage.update();
     this.mainGame.GotoMainMenu();
 
   }
+  public callKonfirmasiScreen()
+  {
+    this.DestroyPauseScreen();
+    this.whiteBorder = new createjs.Bitmap(PreloadGame.queue.getResult("white-border"));
+    this.whiteBorder.scaleX = MainGame.GameWidth/this.whiteBorder.image.width;
+    this.whiteBorder.scaleY = this.whiteBorder.scaleX;
 
+
+    this.mainGame.stage.addChild(this.whiteBorder);
+
+    this.konfirmasiPanel = new createjs.Bitmap(PreloadGame.queue.getResult("konfirmasi-panel"));
+    this.konfirmasiPanel.scaleY = (MainGame.GameHeight - MainGame.GameHeight/4)/this.konfirmasiPanel.image.height;
+    this.konfirmasiPanel.scaleX = this.konfirmasiPanel.scaleY;
+
+
+    var widthPanel:number = this.konfirmasiPanel.image.width * this.konfirmasiPanel.scaleX;
+    var heightPanel:number = this.konfirmasiPanel.image.height * this.konfirmasiPanel.scaleY;
+
+    this.konfirmasiPanel.x = (MainGame.GameWidth - widthPanel)/2;
+    this.konfirmasiPanel.y = (MainGame.GameHeight - heightPanel)/2;
+
+    this.mainGame.stage.addChild(this.konfirmasiPanel);
+
+
+
+     this.mainLagiButton = new createjs.Bitmap(PreloadGame.queue.getResult("main-lagi-button"));
+    this.mainLagiButton.scaleX = this.konfirmasiPanel.scaleX;
+    this.mainLagiButton.scaleY = this.konfirmasiPanel.scaleX;
+
+    var heightContinue:number = this.mainLagiButton.image.height*this.mainLagiButton.scaleY;
+
+    this.mainLagiButton.x = this.konfirmasiPanel.x + widthPanel/2 - (this.mainLagiButton.image.width * this.mainLagiButton.scaleX*0.5) - this.mainLagiButton.image.width * this.mainLagiButton.scaleX * 0.5;
+    this.mainLagiButton.y = this.konfirmasiPanel.y + heightPanel - heightContinue - heightPanel/20;
+    this.mainGame.stage.addChild(this.mainLagiButton);
+    this.mainLagiButton.addEventListener("click",()=>this.clickContinueFromKonfirmasi());
+
+
+    this.keluarButton = new createjs.Bitmap(PreloadGame.queue.getResult("keluar-button"));
+    this.keluarButton.scaleX = this.konfirmasiPanel.scaleX;
+    this.keluarButton.scaleY = this.konfirmasiPanel.scaleX;
+
+    var heightContinue:number = this.keluarButton.image.height*this.keluarButton.scaleY;
+
+    this.keluarButton.x =  this.mainLagiButton.x + (this.mainLagiButton.scaleX * this.mainLagiButton.image.width) +20;
+    this.keluarButton.y = this.mainLagiButton.y;
+    this.keluarButton.addEventListener("click",()=>this.clickHome());
+    this.mainGame.stage.addChild(this.keluarButton);
+
+    this.mainGame.stage.update();
+  }
+  public DestroyKonfirmasiPanel()
+  {
+    this.keluarButton.removeEventListener("click",()=>this.clickHome());
+    this.mainLagiButton.removeEventListener("click",()=>this.clickContinueFromKonfirmasi());
+      this.mainGame.stage.removeChild(this.whiteBorder);
+      this.mainGame.stage.removeChild(this.konfirmasiPanel);
+      this.mainGame.stage.removeChild(this.mainLagiButton);
+      this.mainGame.stage.removeChild(this.keluarButton);
+
+      this.mainGame.stage.update();
+  }
   public CallPauseScreen()
   {
     this.whiteBorder = new createjs.Bitmap(PreloadGame.queue.getResult("white-border"));
@@ -373,12 +437,18 @@ this.mainGame.gameTimer.Destroy();
     this.mainGame.stage.addChild(this.homeImage);
 
     this.continueImage.addEventListener("click",()=>this.clickContinue());
-    this.homeImage.addEventListener("click",()=>this.clickHome());
+    this.homeImage.addEventListener("click",()=>this.callKonfirmasiScreen());
   }
 
   public clickContinue()
   {
     this.DestroyPauseScreen();
+    this.mainGame.handleResume();
+    this.CallGameUi();
+  }
+  public clickContinueFromKonfirmasi()
+  {
+    this.DestroyKonfirmasiPanel();
     this.mainGame.handleResume();
     this.CallGameUi();
   }

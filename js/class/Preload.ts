@@ -54,7 +54,7 @@ class PreloadGame
     queue.loadFile({id:"time-container",src:"../asset/final/Time Container.png"});
     queue.loadFile({id:"bg1",src:"../asset/match boss/BG 1.png"});
     queue.loadFile({id:"fb-share",src:"../asset/match boss/FB Share.png"});
-
+    queue.loadFile({id:"konfirmasi-panel",src:"../asset/Card/Quit.png"});
   	queue.load();
 
     PreloadGame.queue = queue;

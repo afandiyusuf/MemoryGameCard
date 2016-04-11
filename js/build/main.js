@@ -328,6 +328,7 @@ var PreloadGame = (function () {
         queue.loadFile({ id: "time-container", src: "../asset/final/Time Container.png" });
         queue.loadFile({ id: "bg1", src: "../asset/match boss/BG 1.png" });
         queue.loadFile({ id: "fb-share", src: "../asset/match boss/FB Share.png" });
+        queue.loadFile({ id: "konfirmasi-panel", src: "../asset/Card/Quit.png" });
         queue.load();
         PreloadGame.queue = queue;
     };
@@ -592,6 +593,49 @@ var UI = (function () {
         this.mainGame.stage.update();
         this.mainGame.GotoMainMenu();
     };
+    UI.prototype.callKonfirmasiScreen = function () {
+        var _this = this;
+        this.DestroyPauseScreen();
+        this.whiteBorder = new createjs.Bitmap(PreloadGame.queue.getResult("white-border"));
+        this.whiteBorder.scaleX = MainGame.GameWidth / this.whiteBorder.image.width;
+        this.whiteBorder.scaleY = this.whiteBorder.scaleX;
+        this.mainGame.stage.addChild(this.whiteBorder);
+        this.konfirmasiPanel = new createjs.Bitmap(PreloadGame.queue.getResult("konfirmasi-panel"));
+        this.konfirmasiPanel.scaleY = (MainGame.GameHeight - MainGame.GameHeight / 4) / this.konfirmasiPanel.image.height;
+        this.konfirmasiPanel.scaleX = this.konfirmasiPanel.scaleY;
+        var widthPanel = this.konfirmasiPanel.image.width * this.konfirmasiPanel.scaleX;
+        var heightPanel = this.konfirmasiPanel.image.height * this.konfirmasiPanel.scaleY;
+        this.konfirmasiPanel.x = (MainGame.GameWidth - widthPanel) / 2;
+        this.konfirmasiPanel.y = (MainGame.GameHeight - heightPanel) / 2;
+        this.mainGame.stage.addChild(this.konfirmasiPanel);
+        this.mainLagiButton = new createjs.Bitmap(PreloadGame.queue.getResult("main-lagi-button"));
+        this.mainLagiButton.scaleX = this.konfirmasiPanel.scaleX;
+        this.mainLagiButton.scaleY = this.konfirmasiPanel.scaleX;
+        var heightContinue = this.mainLagiButton.image.height * this.mainLagiButton.scaleY;
+        this.mainLagiButton.x = this.konfirmasiPanel.x + widthPanel / 2 - (this.mainLagiButton.image.width * this.mainLagiButton.scaleX * 0.5) - this.mainLagiButton.image.width * this.mainLagiButton.scaleX * 0.5;
+        this.mainLagiButton.y = this.konfirmasiPanel.y + heightPanel - heightContinue - heightPanel / 20;
+        this.mainGame.stage.addChild(this.mainLagiButton);
+        this.mainLagiButton.addEventListener("click", function () { return _this.clickContinueFromKonfirmasi(); });
+        this.keluarButton = new createjs.Bitmap(PreloadGame.queue.getResult("keluar-button"));
+        this.keluarButton.scaleX = this.konfirmasiPanel.scaleX;
+        this.keluarButton.scaleY = this.konfirmasiPanel.scaleX;
+        var heightContinue = this.keluarButton.image.height * this.keluarButton.scaleY;
+        this.keluarButton.x = this.mainLagiButton.x + (this.mainLagiButton.scaleX * this.mainLagiButton.image.width) + 20;
+        this.keluarButton.y = this.mainLagiButton.y;
+        this.keluarButton.addEventListener("click", function () { return _this.clickHome(); });
+        this.mainGame.stage.addChild(this.keluarButton);
+        this.mainGame.stage.update();
+    };
+    UI.prototype.DestroyKonfirmasiPanel = function () {
+        var _this = this;
+        this.keluarButton.removeEventListener("click", function () { return _this.clickHome(); });
+        this.mainLagiButton.removeEventListener("click", function () { return _this.clickContinueFromKonfirmasi(); });
+        this.mainGame.stage.removeChild(this.whiteBorder);
+        this.mainGame.stage.removeChild(this.konfirmasiPanel);
+        this.mainGame.stage.removeChild(this.mainLagiButton);
+        this.mainGame.stage.removeChild(this.keluarButton);
+        this.mainGame.stage.update();
+    };
     UI.prototype.CallPauseScreen = function () {
         var _this = this;
         this.whiteBorder = new createjs.Bitmap(PreloadGame.queue.getResult("white-border"));
@@ -622,10 +666,15 @@ var UI = (function () {
         this.homeImage.x = widthPanel + this.pausePanel.x - widthHome - widthPanel / 10;
         this.mainGame.stage.addChild(this.homeImage);
         this.continueImage.addEventListener("click", function () { return _this.clickContinue(); });
-        this.homeImage.addEventListener("click", function () { return _this.clickHome(); });
+        this.homeImage.addEventListener("click", function () { return _this.callKonfirmasiScreen(); });
     };
     UI.prototype.clickContinue = function () {
         this.DestroyPauseScreen();
+        this.mainGame.handleResume();
+        this.CallGameUi();
+    };
+    UI.prototype.clickContinueFromKonfirmasi = function () {
+        this.DestroyKonfirmasiPanel();
         this.mainGame.handleResume();
         this.CallGameUi();
     };
