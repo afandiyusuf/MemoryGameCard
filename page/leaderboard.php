@@ -81,7 +81,12 @@ require_once('../php/validate_gt.php')
             echo "<div class='col-xs-12' id='leaderboard-data'>";
 
             echo "<div class ='profile-pict'>";
+            if($leaderboardData[$i]->twitter_profile_url == null)
+            {
             echo "<img class='profile-content' height=50px width=50px src='https://graph.facebook.com/".$leaderboardData[$i]->fb_id."/picture?type=small'>";
+          }else{
+              echo "<img class='profile-content' height=50px width=50px src='".$leaderboardData[$i]->twitter_profile_url."'>";
+          }
             echo "</div>";
             echo "<div class='user-data'>";
             echo "<div class='nama-lead'>";

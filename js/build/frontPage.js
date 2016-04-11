@@ -234,6 +234,7 @@ $(function(){
     var at = $("#at").val();
     var ats = $('#ats').val();
     var twitter_id = $('#twitter_id').val();
+    var twitter_profile_url = $('#twitter_profile_url').val();
     // console.log("password is "+password);
     // console.log("confirm password is "+confirm_password);
     // if(password != confirm_password || password == "" || password == null)
@@ -271,7 +272,8 @@ $(function(){
         fb_id : fb_id,
         at  : at,
         ats  :ats,
-        twitter_id : twitter_id
+        twitter_id : twitter_id,
+        twitter_profile_url : twitter_profile_url
       },
       success: function(data){
         if(data.status_code == 402)

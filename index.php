@@ -185,6 +185,14 @@ if($state == "register_tw")
 					<div id="keterangan"></div>
 					<input type="text" placeholder="Username" id="username-register">
 					<input type="hidden" id="fb_id">
+					<?php
+					 	if($state=='register_tw')
+						{
+							echo 	'<input type="hidden" id="twitter_profile_url" value="'.$_SESSION['profile_image'].'">';
+						}else{
+							echo 	'<input type="hidden" id="twitter_profile_url" value="_">';
+						}
+					 ?>
 					<input type="hidden" id="twitter_id" value=<?php  if($state=='register_tw'){echo "'".$_SESSION['tw_id']."'";}?>>
 					<input type="hidden" id="at" value=<?php  if($state=='register_tw'){echo "'".$_SESSION['at']."'";}?>>
 					<input type="hidden" id="ats" value=<?php  if($state=='register_tw'){echo "'".$_SESSION['ats']."'";}?>>
