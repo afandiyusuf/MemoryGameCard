@@ -13,7 +13,7 @@ class Card
   private thisStage:createjs.Stage;
   private InitScaleX:number = 0.6;
   public margin:number;
-
+  public cardFaceName:string;
   private mainGame:MainGame;
   private waitTime:number = 1000;
   public trueWidth:number;
@@ -34,12 +34,45 @@ class Card
     this.cardContainer = new createjs.MovieClip();
     this.thisStage = stage;
     this.container = container;
+    var isNew = Math.random();
     this.id = ((id)%(MainGame.width*MainGame.height/2)+1);
+    var arr1:Array<number> =[1,2,3,4,5,6,7,8];
+    var arr2:Array<number> = [1,2,3,4,5,6,7,8];
+    console.log(this.id);
+    if(MainGame.totalCard>(MainGame.width*MainGame.height)/2)
+    {
+      console.log("cek here");
+      var isSama = false;
+      //cek dengan yang sama aja
+      for(var i:number=0;i<this.mainGame.arrCard.length;i++)
+      {
+        if(this.mainGame.arrCard[i].cardFaceName == "card"+this.id)
+        {
+          isSama = true;
+        }
+      }
+      if(isSama == true)
+      {
+        this.cardFaceName = "card"+this.id;
+      }else{
+        this.cardFaceName =  "card"+(this.id+8);
+      }
+    }else{
+      if(isNew>0.5)
+      {
+        this.cardFaceName = "card"+(this.id+8);
+      }else{
+        this.cardFaceName = "card"+this.id;
+      }
+    }
+
+
     this.frontUrl = this.baseImageUrl+this.id+".png";
     this.backImageUrl = this.baseImageUrl+"bcak.png";
     this.picked = false;
     this.backImage = new createjs.Bitmap(PreloadGame.queue.getResult("card_back"));
-    this.frontImage = new createjs.Bitmap(PreloadGame.queue.getResult("card"+this.id));
+    console.log(this.cardFaceName);
+    this.frontImage = new createjs.Bitmap(PreloadGame.queue.getResult(this.cardFaceName));
 
     this.updateStage(this.backImage);
     this.updateStage(this.frontImage);
@@ -57,7 +90,7 @@ class Card
     this.trueWidth = this.backImage.image.width * this.InitScaleX;
     this.margin = this.trueWidth/25;
 
-     this.cardContainer.addEventListener("click",():void=>this.cardClick(this.cardContainer,this));
+    this.cardContainer.addEventListener("click",():void=>this.cardClick(this.cardContainer,this));
 
     this.cardContainer.addChild(this.frontImage);
     this.cardContainer.addChild(this.backImage);
@@ -81,52 +114,52 @@ class Card
   private cardClick(e:any=null,masterCard:Card=null):void
   {
     if(masterCard.picked)
-      return;
+    return;
 
     this.mainGame.idleCard = 0;
     //swap first card
     if(MainGame.firstId == 0){
-        MainGame.firstId = masterCard.id;
-        MainGame.firstCard = masterCard;
-        masterCard.swapToFace(masterCard);
+      MainGame.firstId = masterCard.id;
+      MainGame.firstCard = masterCard;
+      masterCard.swapToFace(masterCard);
     }
     //swap first swap secondCard
     else if(MainGame.secondId == 0){
 
-        //user click same card as firstcard
-        if(MainGame.firstCard == masterCard)
-        {
-          masterCard.swapToFace(masterCard);
-          MainGame.firstId = 0;
-          MainGame.secondId = 0;
-          return;
-        }
-
-
-        MainGame.secondId = masterCard.id;
-        MainGame.secondCard = masterCard
+      //user click same card as firstcard
+      if(MainGame.firstCard == masterCard)
+      {
         masterCard.swapToFace(masterCard);
+        MainGame.firstId = 0;
+        MainGame.secondId = 0;
+        return;
+      }
 
-        //CardMatch!!
-        if(MainGame.firstId == MainGame.secondId)
+
+      MainGame.secondId = masterCard.id;
+      MainGame.secondCard = masterCard
+      masterCard.swapToFace(masterCard);
+
+      //CardMatch!!
+      if(MainGame.firstId == MainGame.secondId)
+      {
+
+        MainGame.firstCard.picked = true;
+        MainGame.secondCard.picked = true;
+        MainGame.firstId = 0;
+        MainGame.secondId = 0;
+
+        createjs.Tween.get(MainGame.firstCard.cardContainer).wait(masterCard.waitTime).to({visible:false},0).call(completeTween,[masterCard],this);
+        createjs.Tween.get(MainGame.secondCard.cardContainer).wait(masterCard.waitTime).to({visible:false},0).call(completeTween,[masterCard],this);
+
+        function completeTween(target:Card)
         {
-
-          MainGame.firstCard.picked = true;
-          MainGame.secondCard.picked = true;
-          MainGame.firstId = 0;
-          MainGame.secondId = 0;
-
-          createjs.Tween.get(MainGame.firstCard.cardContainer).wait(masterCard.waitTime).to({visible:false},0).call(completeTween,[masterCard],this);
-          createjs.Tween.get(MainGame.secondCard.cardContainer).wait(masterCard.waitTime).to({visible:false},0).call(completeTween,[masterCard],this);
-
-          function completeTween(target:Card)
-          {
-            MainGame.totalCard--;
-            if(MainGame.totalCard == 0)
-              target.mainGame.handleWin();
-          }
-
+          MainGame.totalCard--;
+          if(MainGame.totalCard == 0)
+          target.mainGame.handleWin();
         }
+
+      }
     }
     else
     {
@@ -141,23 +174,23 @@ class Card
 
   public swapToFace(target:Card):void
   {
-      createjs.Tween.get(target.cardContainer).to({scaleX:0},100).call(completeTween,[target],this);
+    createjs.Tween.get(target.cardContainer).to({scaleX:0},100).call(completeTween,[target],this);
 
-      function completeTween(target:Card)
+    function completeTween(target:Card)
+    {
+
+      if(target.face == 0)
       {
-
-        if(target.face == 0)
-        {
-          target.face = 1;
-          target.backImage.visible = false;
-          target.frontImage.visible = true;
-        }else{
-          target.face = 0;
-          target.frontImage.visible = false;
-          target.backImage.visible = true;
-        }
-        createjs.Tween.get(target.cardContainer).to({scaleX:target.InitScaleX},100);
+        target.face = 1;
+        target.backImage.visible = false;
+        target.frontImage.visible = true;
+      }else{
+        target.face = 0;
+        target.frontImage.visible = false;
+        target.backImage.visible = true;
       }
+      createjs.Tween.get(target.cardContainer).to({scaleX:target.InitScaleX},100);
+    }
   }
 
   public Destroy()

@@ -32,12 +32,13 @@ class MainGame
 	public LongGameTimer:number;
 	public gameTimer:GameTimer;
 	public arrCard:Array<Card> = new Array();
+	public dummyCard:Array<Card> = new Array();
 	private card1:createjs.Bitmap;
 	private card2:createjs.Bitmap;
 	private preload:Object;
 	private backUrl:string = "../asset/Card/Back.png";
-	public static width:number = 4;
-	public static height:number = 4;
+	public static width:number = 2;
+	public static height:number = 2;
 	private margin:number = 5;
 	public  allContainer:createjs.MovieClip;
 	private id:number = 0;
@@ -120,7 +121,7 @@ class MainGame
 	public NextGame()
 	{
 		this.gameTimer.Destroy();
-
+		this.DestroyAllDummyCard();
 		this.DestroyAllCard();
 		this.arrScore.push(Math.round(this.LongGameTimer - this.timers));
 		var arrscore = this.arrScore;
@@ -170,6 +171,7 @@ class MainGame
 		this.isPause = true;
 		this.DestroyThis();
 
+		this.generateDummyCard();
 
 		if(MainGame.thisLevel == MainGame.ArrTimer.length-1)
 		{
@@ -279,6 +281,16 @@ class MainGame
 		this.stage.removeChild(this.allContainer);
 	}
 
+	public DestroyAllDummyCard()
+	{
+		for(var i=0;i<this.dummyCard.length;i++)
+		{
+			this.dummyCard[0].Destroy();
+		}
+
+		this.dummyCard = new Array();
+	}
+
 	private generateCard()
 	{
 		for(var i=0;i<MainGame.width;i++)
@@ -293,7 +305,6 @@ class MainGame
 			}
 		}
 
-
 		this.stage.update();
 
 		this.arrCard = this.shuffleArray(this.arrCard);
@@ -304,7 +315,45 @@ class MainGame
 		console.log(this.containerWidth);
 		this.allContainer.x = (MainGame.GameWidth - this.containerWidth)/2;
 		this.allContainer.y = (MainGame.GameHeight - this.containerWidth) / 2 + MainGame.GameHeight/30;
+
 	}
+
+	private generateDummyCard()
+	{
+
+		console.log("dummy");
+		this.allContainer = new createjs.MovieClip();
+		this.stage.addChild(this.allContainer);
+		for(var i=0;i<MainGame.width;i++)
+		{
+			for(var j=0;j<MainGame.height;j++)
+			{
+
+				var c:Card = new Card(this);
+				c.init(this.stage,this.allContainer,i,j,this.margin,0);
+				this.dummyCard.push(c);
+			}
+		}
+
+
+
+		var index:number = 0;
+		for(var i=0;i<MainGame.width;i++)
+		{
+			for(var j=0;j<MainGame.height;j++){
+				this.dummyCard[index].reposition(i,j);
+				index++;
+			}
+		}
+
+		this.containerWidth = (this.arrCard[0].trueWidth+this.arrCard[0].margin) * MainGame.width;
+		this.allContainer.x = (MainGame.GameWidth - this.containerWidth)/2;
+		this.allContainer.y = (MainGame.GameHeight - this.containerWidth) / 2 + MainGame.GameHeight/30;
+		this.stage.update();
+
+	}
+
+
 
 	private reArrangeAll()
 	{

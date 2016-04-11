@@ -5,6 +5,7 @@ var MainGame = (function () {
         this.urlBG = new Array("../asset/match boss/BG 1.png", "../asset/match boss/BG 2.png", "../asset/match boss/BG 3.png", "../asset/match boss/BG 1.png", "../asset/match boss/BG 2.png");
         this.timers = 0;
         this.arrCard = new Array();
+        this.dummyCard = new Array();
         this.backUrl = "../asset/Card/Back.png";
         this.margin = 5;
         this.id = 0;
@@ -68,6 +69,7 @@ var MainGame = (function () {
     };
     MainGame.prototype.NextGame = function () {
         this.gameTimer.Destroy();
+        this.DestroyAllDummyCard();
         this.DestroyAllCard();
         this.arrScore.push(Math.round(this.LongGameTimer - this.timers));
         var arrscore = this.arrScore;
@@ -105,6 +107,7 @@ var MainGame = (function () {
     MainGame.prototype.handleWin = function () {
         this.isPause = true;
         this.DestroyThis();
+        this.generateDummyCard();
         if (MainGame.thisLevel == MainGame.ArrTimer.length - 1) {
             console.log("FINISH");
             this.arrScore.push(Math.round(this.LongGameTimer - this.timers));
@@ -188,6 +191,12 @@ var MainGame = (function () {
         }
         this.stage.removeChild(this.allContainer);
     };
+    MainGame.prototype.DestroyAllDummyCard = function () {
+        for (var i = 0; i < this.dummyCard.length; i++) {
+            this.dummyCard[0].Destroy();
+        }
+        this.dummyCard = new Array();
+    };
     MainGame.prototype.generateCard = function () {
         for (var i = 0; i < MainGame.width; i++) {
             for (var j = 0; j < MainGame.height; j++) {
@@ -206,6 +215,29 @@ var MainGame = (function () {
         console.log(this.containerWidth);
         this.allContainer.x = (MainGame.GameWidth - this.containerWidth) / 2;
         this.allContainer.y = (MainGame.GameHeight - this.containerWidth) / 2 + MainGame.GameHeight / 30;
+    };
+    MainGame.prototype.generateDummyCard = function () {
+        console.log("dummy");
+        this.allContainer = new createjs.MovieClip();
+        this.stage.addChild(this.allContainer);
+        for (var i = 0; i < MainGame.width; i++) {
+            for (var j = 0; j < MainGame.height; j++) {
+                var c = new Card(this);
+                c.init(this.stage, this.allContainer, i, j, this.margin, 0);
+                this.dummyCard.push(c);
+            }
+        }
+        var index = 0;
+        for (var i = 0; i < MainGame.width; i++) {
+            for (var j = 0; j < MainGame.height; j++) {
+                this.dummyCard[index].reposition(i, j);
+                index++;
+            }
+        }
+        this.containerWidth = (this.arrCard[0].trueWidth + this.arrCard[0].margin) * MainGame.width;
+        this.allContainer.x = (MainGame.GameWidth - this.containerWidth) / 2;
+        this.allContainer.y = (MainGame.GameHeight - this.containerWidth) / 2 + MainGame.GameHeight / 30;
+        this.stage.update();
     };
     MainGame.prototype.reArrangeAll = function () {
         var index = 0;
@@ -237,8 +269,8 @@ var MainGame = (function () {
     MainGame.longSession = 60;
     MainGame.globalScale = .5;
     MainGame.deltaTime = 0;
-    MainGame.width = 4;
-    MainGame.height = 4;
+    MainGame.width = 2;
+    MainGame.height = 2;
     return MainGame;
 }());
 ;
@@ -251,14 +283,22 @@ var PreloadGame = (function () {
         queue.on("fileload", this.handleFileLoad, this);
         queue.on("complete", function () { return _this.handleComplete(null, _this.mainGame); }, this);
         queue.on('progress', this.onProgress);
-        queue.loadFile({ id: "card1", src: "../asset/final/1.png" });
-        queue.loadFile({ id: "card2", src: "../asset/final/2.png" });
-        queue.loadFile({ id: "card3", src: "../asset/final/3.png" });
-        queue.loadFile({ id: "card4", src: "../asset/final/4.png" });
-        queue.loadFile({ id: "card5", src: "../asset/final/5.png" });
-        queue.loadFile({ id: "card6", src: "../asset/final/6.png" });
-        queue.loadFile({ id: "card7", src: "../asset/final/7.png" });
-        queue.loadFile({ id: "card8", src: "../asset/final/8.png" });
+        queue.loadFile({ id: "card1", src: "../asset/Card/Card 1.png" });
+        queue.loadFile({ id: "card2", src: "../asset/Card/Card 2.png" });
+        queue.loadFile({ id: "card3", src: "../asset/Card/Card 3.png" });
+        queue.loadFile({ id: "card4", src: "../asset/Card/Card 4.png" });
+        queue.loadFile({ id: "card5", src: "../asset/Card/Card 5.png" });
+        queue.loadFile({ id: "card6", src: "../asset/Card/Card 6.png" });
+        queue.loadFile({ id: "card7", src: "../asset/Card/Card 7.png" });
+        queue.loadFile({ id: "card8", src: "../asset/Card/Card 8.png" });
+        queue.loadFile({ id: "card9", src: "../asset/Card/Card 9.png" });
+        queue.loadFile({ id: "card10", src: "../asset/Card/Card 10.png" });
+        queue.loadFile({ id: "card11", src: "../asset/Card/Card 11.png" });
+        queue.loadFile({ id: "card12", src: "../asset/Card/Card 12.png" });
+        queue.loadFile({ id: "card13", src: "../asset/Card/Card 13.png" });
+        queue.loadFile({ id: "card14", src: "../asset/Card/Card 14.png" });
+        queue.loadFile({ id: "card15", src: "../asset/Card/Card 15.png" });
+        queue.loadFile({ id: "card16", src: "../asset/Card/Card 16.png" });
         queue.loadFile({ id: "lvl1", src: "../asset/1.png" });
         queue.loadFile({ id: "lvl2", src: "../asset/2.png" });
         queue.loadFile({ id: "lvl3", src: "../asset/3.png" });
@@ -279,10 +319,10 @@ var PreloadGame = (function () {
         queue.loadFile({ id: "pause-panel", src: "../asset/match boss/Pause.png" });
         queue.loadFile({ id: "continue", src: "../asset/match boss/Continue.png" });
         queue.loadFile({ id: "home", src: "../asset/match boss/Home.png" });
-        queue.loadFile({ id: "failed-panel", src: "../asset/match boss/Failed.png" });
+        queue.loadFile({ id: "failed-panel", src: "../asset/Card/Failed.png" });
         queue.loadFile({ id: "main-lagi2", src: "../asset/match boss/Main Lagi 2.png" });
         queue.loadFile({ id: "lanjut", src: "../asset/match boss/Lanjut.png" });
-        queue.loadFile({ id: "win-lvl", src: "../asset/match boss/Succed.png" });
+        queue.loadFile({ id: "win-lvl", src: "../asset/Card/Succed.png" });
         queue.loadFile({ id: "time", src: "../asset/final/Time.png" });
         queue.loadFile({ id: "time-container", src: "../asset/final/Time Container.png" });
         queue.loadFile({ id: "bg1", src: "../asset/match boss/BG 1.png" });
@@ -435,23 +475,11 @@ var UI = (function () {
         this.winPanel.x = (MainGame.GameWidth - widthPanel) / 2;
         this.winPanel.y = (MainGame.GameHeight - heightPanel) / 2;
         this.mainGame.stage.addChild(this.winPanel);
-        this.lanjut = new createjs.Bitmap(PreloadGame.queue.getResult("lanjut"));
-        this.lanjut.scaleX = this.winPanel.scaleX * 1.5;
-        this.lanjut.scaleY = this.winPanel.scaleX * 1.5;
-        var heightContinue = this.lanjut.image.height * this.lanjut.scaleY;
-        this.lanjut.x = this.winPanel.x + widthPanel / 2 - (this.lanjut.image.width * this.lanjut.scaleX * 0.5) - this.lanjut.image.width * this.lanjut.scaleX * 0.5;
-        this.lanjut.y = this.winPanel.y + heightPanel - heightContinue - heightPanel / 20;
-        this.mainGame.stage.addChild(this.lanjut);
-        this.fb_button = new createjs.Bitmap(PreloadGame.queue.getResult("fb-share"));
-        this.fb_button.scaleX = this.winPanel.scaleX * 1.5;
-        this.fb_button.scaleY = this.winPanel.scaleX * 1.5;
-        var heightContinue = this.fb_button.image.height * this.fb_button.scaleY;
-        this.fb_button.x = this.lanjut.x + (this.lanjut.scaleX * this.lanjut.image.width) + 20;
-        this.fb_button.y = this.lanjut.y;
-        this.fb_button.addEventListener("click", function () { return _this.ShareFB(); });
-        this.mainGame.stage.addChild(this.fb_button);
-        this.lanjut.addEventListener("click", function () { return _this.LanjutGame(); });
         this.mainGame.stage.update();
+        createjs.Tween.get(null)
+            .wait(3000)
+            .to(null)
+            .call(function () { return _this.LanjutGame(); });
     };
     UI.prototype.ShareFB = function () {
         FB.ui({
@@ -465,13 +493,8 @@ var UI = (function () {
         });
     };
     UI.prototype.DestroyWinScreen = function () {
-        var _this = this;
-        this.lanjut.removeEventListener("click", function () { return _this.GotoMainMenu(); });
-        this.fb_button.removeEventListener("click", function () { return _this.ShareFB(); });
-        this.mainGame.stage.removeChild(this.fb_button);
         this.mainGame.stage.removeChild(this.whiteBorder);
         this.mainGame.stage.removeChild(this.winPanel);
-        this.mainGame.stage.removeChild(this.lanjut);
         this.mainGame.stage.update();
     };
     UI.prototype.LanjutGame = function () {
@@ -689,12 +712,40 @@ var Card = (function () {
         this.cardContainer = new createjs.MovieClip();
         this.thisStage = stage;
         this.container = container;
+        var isNew = Math.random();
         this.id = ((id) % (MainGame.width * MainGame.height / 2) + 1);
+        var arr1 = [1, 2, 3, 4, 5, 6, 7, 8];
+        var arr2 = [1, 2, 3, 4, 5, 6, 7, 8];
+        console.log(this.id);
+        if (MainGame.totalCard > (MainGame.width * MainGame.height) / 2) {
+            console.log("cek here");
+            var isSama = false;
+            for (var i = 0; i < this.mainGame.arrCard.length; i++) {
+                if (this.mainGame.arrCard[i].cardFaceName == "card" + this.id) {
+                    isSama = true;
+                }
+            }
+            if (isSama == true) {
+                this.cardFaceName = "card" + this.id;
+            }
+            else {
+                this.cardFaceName = "card" + (this.id + 8);
+            }
+        }
+        else {
+            if (isNew > 0.5) {
+                this.cardFaceName = "card" + (this.id + 8);
+            }
+            else {
+                this.cardFaceName = "card" + this.id;
+            }
+        }
         this.frontUrl = this.baseImageUrl + this.id + ".png";
         this.backImageUrl = this.baseImageUrl + "bcak.png";
         this.picked = false;
         this.backImage = new createjs.Bitmap(PreloadGame.queue.getResult("card_back"));
-        this.frontImage = new createjs.Bitmap(PreloadGame.queue.getResult("card" + this.id));
+        console.log(this.cardFaceName);
+        this.frontImage = new createjs.Bitmap(PreloadGame.queue.getResult(this.cardFaceName));
         this.updateStage(this.backImage);
         this.updateStage(this.frontImage);
         this.backImage.image.onload = function () { return _this.updateStage(_this.backImage); };
