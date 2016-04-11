@@ -332,7 +332,7 @@ this.mainGame.gameTimer.Destroy();
     this.mainGame.stage.addChild(this.whiteBorder);
 
     this.pausePanel = new createjs.Bitmap(PreloadGame.queue.getResult("pause-panel"));
-    this.pausePanel.scaleY = (MainGame.GameHeight - MainGame.GameHeight/4)/this.pausePanel.image.height;
+    this.pausePanel.scaleY = (MainGame.GameHeight - MainGame.GameHeight/4)/this.pausePanel.image.height/2;
     this.pausePanel.scaleX = this.pausePanel.scaleY;
 
     var widthPanel:number = this.pausePanel.image.width * this.pausePanel.scaleX;
