@@ -24,6 +24,7 @@ $_SESSION['state'] = "udah maen";
 	left: 50%;
 	transform: translate(-50%, -50%);" >
 </canvas>
+<div id="isOut"><?php echo $_SESSION['is_out_heart'] ?></div>
 <div id="access_token" style="display:none"><?php echo $access_token ?></div>
 <div id="base_api_url" style="display:none"><?php echo $base_api_url ?></div>
 <div id="state"></div>

@@ -53,13 +53,20 @@ class MainGame
 	public totalScore:number = 0;
 
 	public isPause:boolean = true;
-
+	public isOUt:string = "";
 	public init()
 	{
 
 		this.ui = new UI(this);
-		this.GotoMainMenu();
-		this.gameTimer = new GameTimer();
+
+		if(this.isOUt == "1"){
+			this.generateDummyCard();
+			this.ui.CreateCobaLagiBesok();
+		}else{
+			this.GotoMainMenu();
+			this.gameTimer = new GameTimer();
+		}
+
 		createjs.Ticker.addEventListener("tick", ()=>this.handleTick(this));
 		createjs.Ticker.addEventListener("tick",this.deltaTimeCatcher);
 
@@ -348,7 +355,7 @@ class MainGame
 			}
 		}
 
-		this.containerWidth = (this.arrCard[0].trueWidth+this.arrCard[0].margin) * MainGame.width;
+		this.containerWidth = (this.dummyCard[0].trueWidth+this.dummyCard[0].margin) * MainGame.width;
 		this.allContainer.x = (MainGame.GameWidth - this.containerWidth)/2;
 		this.allContainer.y = (MainGame.GameHeight - this.containerWidth) / 2 + MainGame.GameHeight/30;
 		this.stage.update();

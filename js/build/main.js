@@ -13,13 +13,20 @@ var MainGame = (function () {
         this.arrScore = new Array();
         this.totalScore = 0;
         this.isPause = true;
+        this.isOUt = "";
     }
     ;
     MainGame.prototype.init = function () {
         var _this = this;
         this.ui = new UI(this);
-        this.GotoMainMenu();
-        this.gameTimer = new GameTimer();
+        if (this.isOUt == "1") {
+            this.generateDummyCard();
+            this.ui.CreateCobaLagiBesok();
+        }
+        else {
+            this.GotoMainMenu();
+            this.gameTimer = new GameTimer();
+        }
         createjs.Ticker.addEventListener("tick", function () { return _this.handleTick(_this); });
         createjs.Ticker.addEventListener("tick", this.deltaTimeCatcher);
     };
@@ -235,7 +242,7 @@ var MainGame = (function () {
                 index++;
             }
         }
-        this.containerWidth = (this.arrCard[0].trueWidth + this.arrCard[0].margin) * MainGame.width;
+        this.containerWidth = (this.dummyCard[0].trueWidth + this.dummyCard[0].margin) * MainGame.width;
         this.allContainer.x = (MainGame.GameWidth - this.containerWidth) / 2;
         this.allContainer.y = (MainGame.GameHeight - this.containerWidth) / 2 + MainGame.GameHeight / 30;
         this.stage.update();
@@ -466,7 +473,7 @@ var UI = (function () {
         this.whiteBorder.scaleY = this.whiteBorder.scaleX;
         this.whiteBorder.addEventListener("click", function () { return _this.GotoMainMenu(); });
         this.mainGame.stage.addChild(this.whiteBorder);
-        this.failedPanel = new createjs.Bitmap(PreloadGame.queue.getResult("failed-panel"));
+        this.failedPanel = new createjs.Bitmap(PreloadGame.queue.getResult("nyawa-habis-panel"));
         this.failedPanel.scaleY = (MainGame.GameHeight - MainGame.GameHeight / 4) / this.failedPanel.image.height;
         this.failedPanel.scaleX = this.failedPanel.scaleY;
         this.failedPanel.addEventListener("click", function () { return _this.GotoMainMenu(); });
@@ -479,7 +486,7 @@ var UI = (function () {
         createjs.Tween.get(null)
             .wait(10000)
             .to(null)
-            .call(function () { return _this.GotoMainMenu(); });
+            .call(function () { return _this.gotoHome(); });
     };
     UI.prototype.callLvlImage = function (lvl) {
         this.lvlImage = new createjs.Bitmap(PreloadGame.queue.getResult("lvl" + lvl));
@@ -640,7 +647,10 @@ var UI = (function () {
         createjs.Tween.get(null)
             .wait(3000)
             .to(null)
-            .call(function () { return _this.GotoMainMenu(); });
+            .call(function () { return _this.gotoHome(); });
+    };
+    UI.prototype.gotoHome = function () {
+        window.location.href = "http://www.siboskecil.com";
     };
     UI.prototype.DestroyFailScreen = function () {
         var _this = this;
@@ -978,6 +988,7 @@ function init() {
     var preload = new PreloadGame();
     preload.mainGame = mainGame;
     preload.init();
+    mainGame.isOUt = $("#isOut").html();
     function handleFileLoad(event) {
     }
     function handleComplete(event) {

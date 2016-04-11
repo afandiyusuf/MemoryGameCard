@@ -36,7 +36,7 @@ function init()
 		var preload = new PreloadGame();
 		preload.mainGame = mainGame;
 		preload.init();
-
+		mainGame.isOUt = $("#isOut").html();
 
 
 	function handleFileLoad(event:any):void{

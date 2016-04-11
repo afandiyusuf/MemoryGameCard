@@ -137,7 +137,7 @@ class UI
 
     this.mainGame.stage.addChild(this.whiteBorder);
 
-    this.failedPanel = new createjs.Bitmap(PreloadGame.queue.getResult("failed-panel"));
+    this.failedPanel = new createjs.Bitmap(PreloadGame.queue.getResult("nyawa-habis-panel"));
     this.failedPanel.scaleY = (MainGame.GameHeight - MainGame.GameHeight/4)/this.failedPanel.image.height;
     this.failedPanel.scaleX = this.failedPanel.scaleY;
     this.failedPanel.addEventListener("click",()=>this.GotoMainMenu());
@@ -165,7 +165,7 @@ class UI
      createjs.Tween.get(null)
          .wait(10000)
          .to(null)
-         .call(()=>this.GotoMainMenu());
+         .call(()=>this.gotoHome());
   }
   public callLvlImage(lvl:number)
   {
@@ -408,7 +408,11 @@ class UI
      createjs.Tween.get(null)
          .wait(3000)
          .to(null)
-         .call(()=>this.GotoMainMenu());
+         .call(()=>this.gotoHome());
+  }
+  private gotoHome()
+  {
+    window.location.href = "http://www.siboskecil.com";
   }
 
   private DestroyFailScreen()

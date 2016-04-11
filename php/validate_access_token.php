@@ -31,11 +31,15 @@ if($jsonData->status_code == "200")
   $now =  date('d');
   if($last_play != $now){
     if(isset($_GET["access_token"])){
+        $_SESSION['is_out_heart'] = false;
       header('Location: '.$base_url."/page/game.php");
+
     }
   }else{
     if(isset($_GET["access_token"])){
+        $_SESSION['is_out_heart'] = true;
       header('Location: '.$base_url."/page/game.php");
+
     }
     //header('Location: '.$base_url."/page/stop.php");
   }
