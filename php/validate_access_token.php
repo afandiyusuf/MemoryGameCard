@@ -34,7 +34,10 @@ if($jsonData->status_code == "200")
       header('Location: '.$base_url."/page/game.php");
     }
   }else{
-    header('Location: '.$base_url."/page/stop.php");
+    if(isset($_GET["access_token"])){
+      header('Location: '.$base_url."/page/game.php");
+    }
+    //header('Location: '.$base_url."/page/stop.php");
   }
 
 }else{

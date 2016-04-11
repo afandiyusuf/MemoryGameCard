@@ -27,7 +27,7 @@ class MainGame
 	public idleCard:number = 0;
 	public longIdleCard:number = 3;
 	public static deltaTime:number = 0;
-	public urlBG:Array<string> = new Array("../asset/match boss/BG 1.png","../asset/match boss/BG 2.png","../asset/match boss/BG 3.png","../asset/match boss/BG 1.png","../asset/match boss/BG 2.png");
+	public urlBG:Array<string> = new Array("../asset/match boss/BG 1.png","../asset/match boss/BG 1.png","../asset/match boss/BG 2.png","../asset/match boss/BG 2.png","../asset/match boss/BG 3.png");
 	public timers:number = 0;
 	public LongGameTimer:number;
 	public gameTimer:GameTimer;
@@ -62,10 +62,12 @@ class MainGame
 		this.gameTimer = new GameTimer();
 		createjs.Ticker.addEventListener("tick", ()=>this.handleTick(this));
 		createjs.Ticker.addEventListener("tick",this.deltaTimeCatcher);
+
 	}
 
 	public GotoMainMenu()
 	{
+		this.ui.changeBodyBG(this.urlBG[0]);
 		this.arrScore = new Array();
 		createjs.Ticker.framerate = 60;
 		this.timers = 0;

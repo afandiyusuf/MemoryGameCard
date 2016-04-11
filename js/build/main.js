@@ -2,7 +2,7 @@ var MainGame = (function () {
     function MainGame() {
         this.idleCard = 0;
         this.longIdleCard = 3;
-        this.urlBG = new Array("../asset/match boss/BG 1.png", "../asset/match boss/BG 2.png", "../asset/match boss/BG 3.png", "../asset/match boss/BG 1.png", "../asset/match boss/BG 2.png");
+        this.urlBG = new Array("../asset/match boss/BG 1.png", "../asset/match boss/BG 1.png", "../asset/match boss/BG 2.png", "../asset/match boss/BG 2.png", "../asset/match boss/BG 3.png");
         this.timers = 0;
         this.arrCard = new Array();
         this.dummyCard = new Array();
@@ -24,6 +24,7 @@ var MainGame = (function () {
         createjs.Ticker.addEventListener("tick", this.deltaTimeCatcher);
     };
     MainGame.prototype.GotoMainMenu = function () {
+        this.ui.changeBodyBG(this.urlBG[0]);
         this.arrScore = new Array();
         createjs.Ticker.framerate = 60;
         this.timers = 0;
