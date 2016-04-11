@@ -6,7 +6,7 @@ class MainGame
 	public static LogOutUrl = "http://www.siboskecil.com/php/logout.php";
 	public static leaderboardUrl = "http://www.siboskecil.com/page/leaderboard.php";
 	public static thisLevel:number = 0;
-	public static ArrTimer:Array<number> = new Array(5,240,180,180,120);
+	public static ArrTimer:Array<number> = new Array(240,240,180,180,120);
 
 	public static firstId:number = 0;
 	public static secondId:number = 0;
@@ -36,8 +36,8 @@ class MainGame
 	private card2:createjs.Bitmap;
 	private preload:Object;
 	private backUrl:string = "../asset/Card/Back.png";
-	public static width:number = 2;
-	public static height:number = 2;
+	public static width:number = 4;
+	public static height:number = 4;
 	private margin:number = 5;
 	public  allContainer:createjs.MovieClip;
 	private id:number = 0;

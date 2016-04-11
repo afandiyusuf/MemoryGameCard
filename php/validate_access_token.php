@@ -38,7 +38,7 @@ if($jsonData->status_code == "200")
   }
 
 }else{
-  //header('Location: '.$base_url);
+  header('Location: '.$base_url);
 }
 curl_close($ch);
 ?>

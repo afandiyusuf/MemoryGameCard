@@ -37,7 +37,7 @@ if($access_token != "null"){
     $username = $jsonData->data->user_data->user_name;
     $total_scores  = $jsonData->data->score_data->total_score;
   }else{
-  
+
   }
   curl_close($ch);
 

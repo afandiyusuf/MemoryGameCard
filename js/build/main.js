@@ -228,7 +228,7 @@ var MainGame = (function () {
     MainGame.LogOutUrl = "http://www.siboskecil.com/php/logout.php";
     MainGame.leaderboardUrl = "http://www.siboskecil.com/page/leaderboard.php";
     MainGame.thisLevel = 0;
-    MainGame.ArrTimer = new Array(5, 240, 180, 180, 120);
+    MainGame.ArrTimer = new Array(240, 240, 180, 180, 120);
     MainGame.firstId = 0;
     MainGame.secondId = 0;
     MainGame.longIdle = 1;
@@ -237,8 +237,8 @@ var MainGame = (function () {
     MainGame.longSession = 60;
     MainGame.globalScale = .5;
     MainGame.deltaTime = 0;
-    MainGame.width = 2;
-    MainGame.height = 2;
+    MainGame.width = 4;
+    MainGame.height = 4;
     return MainGame;
 }());
 ;
@@ -401,7 +401,7 @@ var UI = (function () {
             },
             success: function (data) {
                 if (data.status_code == 200) {
-                    console.log(data);
+                    window.location.href = "http://www.siboskecil.com";
                 }
                 else {
                     window.location.href = MainGame.LogOutUrl;

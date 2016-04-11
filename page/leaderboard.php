@@ -70,8 +70,8 @@ require_once('../php/validate_gt.php')
       ?>
       <div class="col-xs-8 col-xs-offset-2 white-backGround leaderboard-content">
         <div class="col-xs-12">
-        <div class="fb-share-button" style="display:inline-block" data-href="<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>&state='shared'" data-layout="button"></div>
-        <a href="https://twitter.com/share" class="twitter-share-button" data-url="<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>&state='shared'" data-text="Ayo cek skorku disini tebak si bos kecil disini">Tweet</a>
+        <div class="fb-share-button" style="display:inline-block" data-href="<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>?state=shared" data-layout="button"></div>
+        <a href="https://twitter.com/share" class="twitter-share-button" data-url="<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>?state=shared" data-text="Ayo cek skorku disini tebak si bos kecil disini">Tweet</a>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
         </div>
         <img id="title-leaderboard" height="50px" src="../asset/final/leaderboardTitle.png">
