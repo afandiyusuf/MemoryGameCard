@@ -278,12 +278,14 @@ class UI
     this.whiteBorder = new createjs.Bitmap(PreloadGame.queue.getResult("white-border"));
     this.whiteBorder.scaleX = MainGame.GameWidth/this.whiteBorder.image.width;
     this.whiteBorder.scaleY = this.whiteBorder.scaleX;
+    this.whiteBorder.addEventListener("click",()=>this.GotoMainMenu());
 
     this.mainGame.stage.addChild(this.whiteBorder);
 
     this.failedPanel = new createjs.Bitmap(PreloadGame.queue.getResult("failed-panel"));
     this.failedPanel.scaleY = (MainGame.GameHeight - MainGame.GameHeight/4)/this.failedPanel.image.height;
     this.failedPanel.scaleX = this.failedPanel.scaleY;
+    this.failedPanel.addEventListener("click",()=>this.GotoMainMenu());
 
     var widthPanel:number = this.failedPanel.image.width * this.failedPanel.scaleX;
     var heightPanel:number = this.failedPanel.image.height * this.failedPanel.scaleY;
@@ -293,26 +295,31 @@ class UI
 
     this.mainGame.stage.addChild(this.failedPanel);
 
-    this.mainlagi2 = new createjs.Bitmap(PreloadGame.queue.getResult("main-lagi2"));
-    this.mainlagi2.scaleX = this.failedPanel.scaleX;
-    this.mainlagi2.scaleY = this.mainlagi2.scaleX;
-
-    var heightContinue:number = this.mainlagi2.image.height*this.mainlagi2.scaleY;
-
-    this.mainlagi2.x = this.failedPanel.x + widthPanel/2 - (this.mainlagi2.image.width * this.mainlagi2.scaleX*0.5);
-    this.mainlagi2.y = this.failedPanel.y + heightPanel - heightContinue - heightPanel/10;
-    this.mainGame.stage.addChild(this.mainlagi2);
-
-    this.mainlagi2.addEventListener("click",()=>this.GotoMainMenu());
-    this.mainGame.stage.update();
+    // this.mainlagi2 = new createjs.Bitmap(PreloadGame.queue.getResult("main-lagi2"));
+    // this.mainlagi2.scaleX = this.failedPanel.scaleX;
+    // this.mainlagi2.scaleY = this.mainlagi2.scaleX;
+    //
+    // var heightContinue:number = this.mainlagi2.image.height*this.mainlagi2.scaleY;
+    //
+    // this.mainlagi2.x = this.failedPanel.x + widthPanel/2 - (this.mainlagi2.image.width * this.mainlagi2.scaleX*0.5);
+    // this.mainlagi2.y = this.failedPanel.y + heightPanel - heightContinue - heightPanel/10;
+    // this.mainGame.stage.addChild(this.mainlagi2);
+    //
+    // this.mainlagi2.addEventListener("click",()=>this.GotoMainMenu());
+     this.mainGame.stage.update();
+     createjs.Tween.get(null)
+         .wait(3000)
+         .to(null)
+         .call(()=>this.GotoMainMenu());
   }
 
   private DestroyFailScreen()
   {
-    this.mainGame.stage.removeChild(this.mainlagi2);
+    // this.mainGame.stage.removeChild(this.mainlagi2);
     this.mainGame.stage.removeChild(this.failedPanel);
     this.mainGame.stage.removeChild(this.whiteBorder);
-    this.mainlagi2.removeEventListener("click",()=>this.GotoMainMenu());
+    this.failedPanel.removeEventListener("click",()=>this.GotoMainMenu());
+    this.whiteBorder.removeEventListener("click",()=>this.GotoMainMenu());
   }
 
   public GotoMainMenu()

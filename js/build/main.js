@@ -260,7 +260,7 @@ var MainGame = (function () {
     MainGame.LogOutUrl = "http://www.siboskecil.com/php/logout.php";
     MainGame.leaderboardUrl = "http://www.siboskecil.com/page/leaderboard.php";
     MainGame.thisLevel = 0;
-    MainGame.ArrTimer = new Array(240, 240, 180, 180, 120);
+    MainGame.ArrTimer = new Array(5, 240, 180, 180, 120);
     MainGame.firstId = 0;
     MainGame.secondId = 0;
     MainGame.longIdle = 1;
@@ -561,31 +561,29 @@ var UI = (function () {
         this.whiteBorder = new createjs.Bitmap(PreloadGame.queue.getResult("white-border"));
         this.whiteBorder.scaleX = MainGame.GameWidth / this.whiteBorder.image.width;
         this.whiteBorder.scaleY = this.whiteBorder.scaleX;
+        this.whiteBorder.addEventListener("click", function () { return _this.GotoMainMenu(); });
         this.mainGame.stage.addChild(this.whiteBorder);
         this.failedPanel = new createjs.Bitmap(PreloadGame.queue.getResult("failed-panel"));
         this.failedPanel.scaleY = (MainGame.GameHeight - MainGame.GameHeight / 4) / this.failedPanel.image.height;
         this.failedPanel.scaleX = this.failedPanel.scaleY;
+        this.failedPanel.addEventListener("click", function () { return _this.GotoMainMenu(); });
         var widthPanel = this.failedPanel.image.width * this.failedPanel.scaleX;
         var heightPanel = this.failedPanel.image.height * this.failedPanel.scaleY;
         this.failedPanel.x = (MainGame.GameWidth - widthPanel) / 2;
         this.failedPanel.y = (MainGame.GameHeight - heightPanel) / 2;
         this.mainGame.stage.addChild(this.failedPanel);
-        this.mainlagi2 = new createjs.Bitmap(PreloadGame.queue.getResult("main-lagi2"));
-        this.mainlagi2.scaleX = this.failedPanel.scaleX;
-        this.mainlagi2.scaleY = this.mainlagi2.scaleX;
-        var heightContinue = this.mainlagi2.image.height * this.mainlagi2.scaleY;
-        this.mainlagi2.x = this.failedPanel.x + widthPanel / 2 - (this.mainlagi2.image.width * this.mainlagi2.scaleX * 0.5);
-        this.mainlagi2.y = this.failedPanel.y + heightPanel - heightContinue - heightPanel / 10;
-        this.mainGame.stage.addChild(this.mainlagi2);
-        this.mainlagi2.addEventListener("click", function () { return _this.GotoMainMenu(); });
         this.mainGame.stage.update();
+        createjs.Tween.get(null)
+            .wait(3000)
+            .to(null)
+            .call(function () { return _this.GotoMainMenu(); });
     };
     UI.prototype.DestroyFailScreen = function () {
         var _this = this;
-        this.mainGame.stage.removeChild(this.mainlagi2);
         this.mainGame.stage.removeChild(this.failedPanel);
         this.mainGame.stage.removeChild(this.whiteBorder);
-        this.mainlagi2.removeEventListener("click", function () { return _this.GotoMainMenu(); });
+        this.failedPanel.removeEventListener("click", function () { return _this.GotoMainMenu(); });
+        this.whiteBorder.removeEventListener("click", function () { return _this.GotoMainMenu(); });
     };
     UI.prototype.GotoMainMenu = function () {
         this.mainGame.gameTimer.Destroy();

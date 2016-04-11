@@ -6,7 +6,7 @@ class MainGame
 	public static LogOutUrl = "http://www.siboskecil.com/php/logout.php";
 	public static leaderboardUrl = "http://www.siboskecil.com/page/leaderboard.php";
 	public static thisLevel:number = 0;
-	public static ArrTimer:Array<number> = new Array(240,240,180,180,120);
+	public static ArrTimer:Array<number> = new Array(5,240,180,180,120);
 
 	public static firstId:number = 0;
 	public static secondId:number = 0;
