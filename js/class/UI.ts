@@ -14,20 +14,28 @@ class UI
 
   private failedPanel:createjs.Bitmap;
   private winPanel:createjs.Bitmap;
+  private winPanelAll:createjs.Bitmap;
   private konfirmasiPanel:createjs.Bitmap;
   private whiteBorder:createjs.Bitmap;
+  private whiteBorder2:createjs.Bitmap;
+  private scorePanel:createjs.Bitmap;
+
 
   public mainButton:createjs.MovieClip;
+  private leaderboardButton:createjs.Bitmap;
   public pauseButton:createjs.MovieClip;
   public continueButton:createjs.MovieClip;
   public homeButton:createjs.MovieClip;
   public mainLagiButton:createjs.Bitmap;
   public keluarButton:createjs.Bitmap;
+  public checkScoreButton:createjs.Bitmap;
 
   private stage:createjs.Stage;
   private logoUrl:string;
   private mainGame:MainGame;
   private lvlImage:createjs.Bitmap;
+  private scoreText:createjs.Text;
+
 
 
 
@@ -43,37 +51,121 @@ class UI
   }
   public callWinALL()
   {
+
+
+    this.whiteBorder2 = new createjs.Bitmap(PreloadGame.queue.getResult("white-border"));
+    this.whiteBorder2.scaleX = MainGame.GameWidth/this.whiteBorder2.image.width;
+    this.whiteBorder2.scaleY = this.whiteBorder2.scaleX;
+    this.mainGame.stage.addChild(this.whiteBorder2);
+    this.whiteBorder = new createjs.Bitmap(PreloadGame.queue.getResult("sinar"));
+    this.whiteBorder.scaleX = MainGame.GameWidth/this.whiteBorder.image.width;
+    this.whiteBorder.scaleY = this.whiteBorder.scaleX;
+    this.mainGame.stage.addChild(this.whiteBorder);
+
+    this.winPanelAll = new createjs.Bitmap(PreloadGame.queue.getResult("win-lvl"));
+    this.winPanelAll.scaleY = (MainGame.GameHeight - MainGame.GameHeight/4)/this.winPanelAll.image.height;
+    this.winPanelAll.scaleX = this.winPanel.scaleY;
+
+    var widthPanel:number = this.winPanelAll.image.width * this.winPanelAll.scaleX;
+    var heightPanel:number = this.winPanelAll.image.height * this.winPanelAll.scaleY;
+
+    this.winPanelAll.x = (MainGame.GameWidth - widthPanel)/2;
+    this.winPanelAll.y = (MainGame.GameHeight - heightPanel)/2;
+
+    this.mainGame.stage.addChild(this.winPanelAll);
+
+    this.checkScoreButton = new createjs.Bitmap(PreloadGame.queue.getResult("check-score-button"));
+    this.checkScoreButton.scaleX = this.winPanelAll.scaleX;
+    this.checkScoreButton.scaleY = this.winPanelAll.scaleX;
+
+    var heightContinue:number = this.checkScoreButton.image.height*this.checkScoreButton.scaleY;
+
+    this.checkScoreButton.x = this.winPanelAll.x + widthPanel/2 - (this.checkScoreButton.image.width * this.checkScoreButton.scaleX*0.5);
+    this.checkScoreButton.y = this.winPanelAll.y + heightPanel - heightContinue - heightPanel/10;
+    this.mainGame.stage.addChild(this.checkScoreButton);
+
+    this.checkScoreButton.addEventListener("click",()=>this.ShowScorePanel());
+    this.mainGame.stage.update();
+
+  }
+  public ShowScorePanel()
+  {
+    this.checkScoreButton.removeEventListener("click",()=>this.ShowScorePanel());
+    this.scorePanel = new createjs.Bitmap(PreloadGame.queue.getResult("score-panel"));
+    this.scorePanel.scaleY = (MainGame.GameHeight - MainGame.GameHeight/3)/this.scorePanel.image.height;
+    this.scorePanel.scaleX = this.scorePanel.scaleY;
+
+    var widthPanel:number = this.scorePanel.image.width * this.scorePanel.scaleX;
+    var heightPanel:number = this.scorePanel.image.height * this.scorePanel.scaleY;
+
+    this.scorePanel.x = (MainGame.GameWidth - widthPanel)/2;
+    this.scorePanel.y = (MainGame.GameHeight - heightPanel)/2;
+
+    this.mainGame.stage.addChild(this.scorePanel);
+
+
+
+    this.checkScoreButton = new createjs.Bitmap(PreloadGame.queue.getResult("check-leaderboard-button"));
+    this.checkScoreButton.scaleX = this.scorePanel.scaleX;
+    this.checkScoreButton.scaleY = this.scorePanel.scaleX;
+
+    var heightContinue:number = this.checkScoreButton.image.height*this.checkScoreButton.scaleY;
+
+    this.checkScoreButton.x = this.scorePanel.x + widthPanel/2 - (this.checkScoreButton.image.width * this.checkScoreButton.scaleX*0.5);
+    this.checkScoreButton.y = this.scorePanel.y + heightPanel - heightContinue - heightPanel/10;
+    this.mainGame.stage.addChild(this.checkScoreButton);
+
+    this.checkScoreButton.addEventListener("click",()=>this.gotoLeaderboard());
+
+    this.scoreText = new createjs.Text();
+    this.scoreText.text = (960-this.mainGame.totalScore).toString()+" Detik";
+    this.scoreText.font = "bold 80px Luckiest Guy"
+    this.scoreText.color = "black";
+
+    this.scoreText.x = this.checkScoreButton.x + ((this.checkScoreButton.image.width * this.checkScoreButton.scaleX)/2)/2;
+    this.scoreText.y = this.checkScoreButton.y - heightContinue - heightContinue;
+    this.mainGame.stage.addChild(this.scoreText);
+    this.mainGame.stage.update();
+
+  }
+  public CreateCobaLagiBesok()
+  {
     this.whiteBorder = new createjs.Bitmap(PreloadGame.queue.getResult("white-border"));
     this.whiteBorder.scaleX = MainGame.GameWidth/this.whiteBorder.image.width;
     this.whiteBorder.scaleY = this.whiteBorder.scaleX;
+    this.whiteBorder.addEventListener("click",()=>this.GotoMainMenu());
 
     this.mainGame.stage.addChild(this.whiteBorder);
 
-    this.winPanel = new createjs.Bitmap(PreloadGame.queue.getResult("win-lvl"));
-    this.winPanel.scaleY = (MainGame.GameHeight - MainGame.GameHeight/4)/this.winPanel.image.height;
-    this.winPanel.scaleX = this.winPanel.scaleY;
+    this.failedPanel = new createjs.Bitmap(PreloadGame.queue.getResult("failed-panel"));
+    this.failedPanel.scaleY = (MainGame.GameHeight - MainGame.GameHeight/4)/this.failedPanel.image.height;
+    this.failedPanel.scaleX = this.failedPanel.scaleY;
+    this.failedPanel.addEventListener("click",()=>this.GotoMainMenu());
 
-    var widthPanel:number = this.winPanel.image.width * this.winPanel.scaleX;
-    var heightPanel:number = this.winPanel.image.height * this.winPanel.scaleY;
+    var widthPanel:number = this.failedPanel.image.width * this.failedPanel.scaleX;
+    var heightPanel:number = this.failedPanel.image.height * this.failedPanel.scaleY;
 
-    this.winPanel.x = (MainGame.GameWidth - widthPanel)/2;
-    this.winPanel.y = (MainGame.GameHeight - heightPanel)/2;
+    this.failedPanel.x = (MainGame.GameWidth - widthPanel)/2;
+    this.failedPanel.y = (MainGame.GameHeight - heightPanel)/2;
 
-    this.mainGame.stage.addChild(this.winPanel);
+    this.mainGame.stage.addChild(this.failedPanel);
 
-    this.lanjut = new createjs.Bitmap(PreloadGame.queue.getResult("lanjut"));
-    this.lanjut.scaleX = this.winPanel.scaleX*1.5;
-    this.lanjut.scaleY = this.winPanel.scaleX*1.5;
-
-    var heightContinue:number = this.lanjut.image.height*this.lanjut.scaleY;
-
-    this.lanjut.x = this.winPanel.x + widthPanel/2 - (this.lanjut.image.width * this.lanjut.scaleX*0.5);
-    this.lanjut.y = this.winPanel.y + heightPanel - heightContinue - heightPanel/10;
-    this.mainGame.stage.addChild(this.lanjut);
-
-    this.lanjut.addEventListener("click",()=>this.gotoLeaderboard());
-    this.mainGame.stage.update();
-
+    // this.mainlagi2 = new createjs.Bitmap(PreloadGame.queue.getResult("main-lagi2"));
+    // this.mainlagi2.scaleX = this.failedPanel.scaleX;
+    // this.mainlagi2.scaleY = this.mainlagi2.scaleX;
+    //
+    // var heightContinue:number = this.mainlagi2.image.height*this.mainlagi2.scaleY;
+    //
+    // this.mainlagi2.x = this.failedPanel.x + widthPanel/2 - (this.mainlagi2.image.width * this.mainlagi2.scaleX*0.5);
+    // this.mainlagi2.y = this.failedPanel.y + heightPanel - heightContinue - heightPanel/10;
+    // this.mainGame.stage.addChild(this.mainlagi2);
+    //
+    // this.mainlagi2.addEventListener("click",()=>this.GotoMainMenu());
+     this.mainGame.stage.update();
+     createjs.Tween.get(null)
+         .wait(10000)
+         .to(null)
+         .call(()=>this.GotoMainMenu());
   }
   public callLvlImage(lvl:number)
   {
@@ -90,7 +182,9 @@ class UI
   }
   public gotoLeaderboard()
   {
-
+        this.checkScoreButton.removeEventListener("click",()=>this.gotoLeaderboard());
+        this.mainGame.stage.removeChild(this.checkScoreButton);
+        this.stage.update();
     $.ajax({
       type: "POST",
       url: $("#base_api_url").html()+"/game/postTotalScore",
@@ -103,7 +197,7 @@ class UI
         if(data.status_code == 200)
         {
       //console.log(data);
-          window.location.href = "http://www.siboskecil.com";
+          window.location.href = "http://www.siboskecil.com/page/leaderboard.php";
         }else{
           window.location.href = MainGame.LogOutUrl;
         }
@@ -118,10 +212,10 @@ class UI
   }
   public DestroyWinAll()
   {
-    this.lanjut.removeEventListener("click",()=>this.gotoLeaderboard());
+    //this.lanjut.removeEventListener("click",()=>this.gotoLeaderboard());
     this.mainGame.stage.removeChild(this.whiteBorder);
-    this.mainGame.stage.removeChild(this.winPanel);
-    this.mainGame.stage.removeChild(this.lanjut);
+    this.mainGame.stage.removeChild(this.winPanelAll);
+    this.mainGame.stage.removeChild(this.checkScoreButton);
 
     this.mainGame.stage.update();
   }

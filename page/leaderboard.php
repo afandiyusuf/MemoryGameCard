@@ -76,7 +76,7 @@ require_once('../php/validate_gt.php')
         </div>
         <img id="title-leaderboard" height="50px" src="../asset/final/leaderboardTitle.png">
         <?php
-          for($i=0;$i<count($leaderboardData);$i++)
+          for($i=0;$i<count($leaderboardData)&&$i<10;$i++)
           {
             echo "<div class='col-xs-12' id='leaderboard-data'>";
 

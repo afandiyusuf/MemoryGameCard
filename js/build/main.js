@@ -261,7 +261,7 @@ var MainGame = (function () {
     MainGame.LogOutUrl = "http://www.siboskecil.com/php/logout.php";
     MainGame.leaderboardUrl = "http://www.siboskecil.com/page/leaderboard.php";
     MainGame.thisLevel = 0;
-    MainGame.ArrTimer = new Array(5, 240, 180, 180, 120);
+    MainGame.ArrTimer = new Array(240, 240, 180, 180, 120);
     MainGame.firstId = 0;
     MainGame.secondId = 0;
     MainGame.longIdle = 1;
@@ -270,8 +270,8 @@ var MainGame = (function () {
     MainGame.longSession = 60;
     MainGame.globalScale = .5;
     MainGame.deltaTime = 0;
-    MainGame.width = 2;
-    MainGame.height = 2;
+    MainGame.width = 4;
+    MainGame.height = 4;
     return MainGame;
 }());
 ;
@@ -329,6 +329,12 @@ var PreloadGame = (function () {
         queue.loadFile({ id: "bg1", src: "../asset/match boss/BG 1.png" });
         queue.loadFile({ id: "fb-share", src: "../asset/match boss/FB Share.png" });
         queue.loadFile({ id: "konfirmasi-panel", src: "../asset/Card/Quit.png" });
+        queue.loadFile({ id: "check-leaderboard-button", src: "../asset/Card/Button Check Leaderboard.png" });
+        queue.loadFile({ id: "check-score-button", src: "../asset/Card/Button Check skor.png" });
+        queue.loadFile({ id: "victory-all", src: "../asset/Card/Victory end.png" });
+        queue.loadFile({ id: "sinar", src: "../asset/Card/sinar.png" });
+        queue.loadFile({ id: "score-panel", src: "../asset/Card/Wadah Score.png" });
+        queue.loadFile({ id: "nyawa-habis-panel", src: "../asset/Card/Out of Heart.png" });
         queue.load();
         PreloadGame.queue = queue;
     };
@@ -399,27 +405,81 @@ var UI = (function () {
     };
     UI.prototype.callWinALL = function () {
         var _this = this;
-        this.whiteBorder = new createjs.Bitmap(PreloadGame.queue.getResult("white-border"));
+        this.whiteBorder2 = new createjs.Bitmap(PreloadGame.queue.getResult("white-border"));
+        this.whiteBorder2.scaleX = MainGame.GameWidth / this.whiteBorder2.image.width;
+        this.whiteBorder2.scaleY = this.whiteBorder2.scaleX;
+        this.mainGame.stage.addChild(this.whiteBorder2);
+        this.whiteBorder = new createjs.Bitmap(PreloadGame.queue.getResult("sinar"));
         this.whiteBorder.scaleX = MainGame.GameWidth / this.whiteBorder.image.width;
         this.whiteBorder.scaleY = this.whiteBorder.scaleX;
         this.mainGame.stage.addChild(this.whiteBorder);
-        this.winPanel = new createjs.Bitmap(PreloadGame.queue.getResult("win-lvl"));
-        this.winPanel.scaleY = (MainGame.GameHeight - MainGame.GameHeight / 4) / this.winPanel.image.height;
-        this.winPanel.scaleX = this.winPanel.scaleY;
-        var widthPanel = this.winPanel.image.width * this.winPanel.scaleX;
-        var heightPanel = this.winPanel.image.height * this.winPanel.scaleY;
-        this.winPanel.x = (MainGame.GameWidth - widthPanel) / 2;
-        this.winPanel.y = (MainGame.GameHeight - heightPanel) / 2;
-        this.mainGame.stage.addChild(this.winPanel);
-        this.lanjut = new createjs.Bitmap(PreloadGame.queue.getResult("lanjut"));
-        this.lanjut.scaleX = this.winPanel.scaleX * 1.5;
-        this.lanjut.scaleY = this.winPanel.scaleX * 1.5;
-        var heightContinue = this.lanjut.image.height * this.lanjut.scaleY;
-        this.lanjut.x = this.winPanel.x + widthPanel / 2 - (this.lanjut.image.width * this.lanjut.scaleX * 0.5);
-        this.lanjut.y = this.winPanel.y + heightPanel - heightContinue - heightPanel / 10;
-        this.mainGame.stage.addChild(this.lanjut);
-        this.lanjut.addEventListener("click", function () { return _this.gotoLeaderboard(); });
+        this.winPanelAll = new createjs.Bitmap(PreloadGame.queue.getResult("win-lvl"));
+        this.winPanelAll.scaleY = (MainGame.GameHeight - MainGame.GameHeight / 4) / this.winPanelAll.image.height;
+        this.winPanelAll.scaleX = this.winPanel.scaleY;
+        var widthPanel = this.winPanelAll.image.width * this.winPanelAll.scaleX;
+        var heightPanel = this.winPanelAll.image.height * this.winPanelAll.scaleY;
+        this.winPanelAll.x = (MainGame.GameWidth - widthPanel) / 2;
+        this.winPanelAll.y = (MainGame.GameHeight - heightPanel) / 2;
+        this.mainGame.stage.addChild(this.winPanelAll);
+        this.checkScoreButton = new createjs.Bitmap(PreloadGame.queue.getResult("check-score-button"));
+        this.checkScoreButton.scaleX = this.winPanelAll.scaleX;
+        this.checkScoreButton.scaleY = this.winPanelAll.scaleX;
+        var heightContinue = this.checkScoreButton.image.height * this.checkScoreButton.scaleY;
+        this.checkScoreButton.x = this.winPanelAll.x + widthPanel / 2 - (this.checkScoreButton.image.width * this.checkScoreButton.scaleX * 0.5);
+        this.checkScoreButton.y = this.winPanelAll.y + heightPanel - heightContinue - heightPanel / 10;
+        this.mainGame.stage.addChild(this.checkScoreButton);
+        this.checkScoreButton.addEventListener("click", function () { return _this.ShowScorePanel(); });
         this.mainGame.stage.update();
+    };
+    UI.prototype.ShowScorePanel = function () {
+        var _this = this;
+        this.checkScoreButton.removeEventListener("click", function () { return _this.ShowScorePanel(); });
+        this.scorePanel = new createjs.Bitmap(PreloadGame.queue.getResult("score-panel"));
+        this.scorePanel.scaleY = (MainGame.GameHeight - MainGame.GameHeight / 3) / this.scorePanel.image.height;
+        this.scorePanel.scaleX = this.scorePanel.scaleY;
+        var widthPanel = this.scorePanel.image.width * this.scorePanel.scaleX;
+        var heightPanel = this.scorePanel.image.height * this.scorePanel.scaleY;
+        this.scorePanel.x = (MainGame.GameWidth - widthPanel) / 2;
+        this.scorePanel.y = (MainGame.GameHeight - heightPanel) / 2;
+        this.mainGame.stage.addChild(this.scorePanel);
+        this.checkScoreButton = new createjs.Bitmap(PreloadGame.queue.getResult("check-leaderboard-button"));
+        this.checkScoreButton.scaleX = this.scorePanel.scaleX;
+        this.checkScoreButton.scaleY = this.scorePanel.scaleX;
+        var heightContinue = this.checkScoreButton.image.height * this.checkScoreButton.scaleY;
+        this.checkScoreButton.x = this.scorePanel.x + widthPanel / 2 - (this.checkScoreButton.image.width * this.checkScoreButton.scaleX * 0.5);
+        this.checkScoreButton.y = this.scorePanel.y + heightPanel - heightContinue - heightPanel / 10;
+        this.mainGame.stage.addChild(this.checkScoreButton);
+        this.checkScoreButton.addEventListener("click", function () { return _this.gotoLeaderboard(); });
+        this.scoreText = new createjs.Text();
+        this.scoreText.text = (960 - this.mainGame.totalScore).toString() + " Detik";
+        this.scoreText.font = "bold 80px Luckiest Guy";
+        this.scoreText.color = "black";
+        this.scoreText.x = this.checkScoreButton.x + ((this.checkScoreButton.image.width * this.checkScoreButton.scaleX) / 2) / 2;
+        this.scoreText.y = this.checkScoreButton.y - heightContinue - heightContinue;
+        this.mainGame.stage.addChild(this.scoreText);
+        this.mainGame.stage.update();
+    };
+    UI.prototype.CreateCobaLagiBesok = function () {
+        var _this = this;
+        this.whiteBorder = new createjs.Bitmap(PreloadGame.queue.getResult("white-border"));
+        this.whiteBorder.scaleX = MainGame.GameWidth / this.whiteBorder.image.width;
+        this.whiteBorder.scaleY = this.whiteBorder.scaleX;
+        this.whiteBorder.addEventListener("click", function () { return _this.GotoMainMenu(); });
+        this.mainGame.stage.addChild(this.whiteBorder);
+        this.failedPanel = new createjs.Bitmap(PreloadGame.queue.getResult("failed-panel"));
+        this.failedPanel.scaleY = (MainGame.GameHeight - MainGame.GameHeight / 4) / this.failedPanel.image.height;
+        this.failedPanel.scaleX = this.failedPanel.scaleY;
+        this.failedPanel.addEventListener("click", function () { return _this.GotoMainMenu(); });
+        var widthPanel = this.failedPanel.image.width * this.failedPanel.scaleX;
+        var heightPanel = this.failedPanel.image.height * this.failedPanel.scaleY;
+        this.failedPanel.x = (MainGame.GameWidth - widthPanel) / 2;
+        this.failedPanel.y = (MainGame.GameHeight - heightPanel) / 2;
+        this.mainGame.stage.addChild(this.failedPanel);
+        this.mainGame.stage.update();
+        createjs.Tween.get(null)
+            .wait(10000)
+            .to(null)
+            .call(function () { return _this.GotoMainMenu(); });
     };
     UI.prototype.callLvlImage = function (lvl) {
         this.lvlImage = new createjs.Bitmap(PreloadGame.queue.getResult("lvl" + lvl));
@@ -433,6 +493,10 @@ var UI = (function () {
         this.mainGame.stage.removeChild(this.lvlImage);
     };
     UI.prototype.gotoLeaderboard = function () {
+        var _this = this;
+        this.checkScoreButton.removeEventListener("click", function () { return _this.gotoLeaderboard(); });
+        this.mainGame.stage.removeChild(this.checkScoreButton);
+        this.stage.update();
         $.ajax({
             type: "POST",
             url: $("#base_api_url").html() + "/game/postTotalScore",
@@ -443,7 +507,7 @@ var UI = (function () {
             },
             success: function (data) {
                 if (data.status_code == 200) {
-                    window.location.href = "http://www.siboskecil.com";
+                    window.location.href = "http://www.siboskecil.com/page/leaderboard.php";
                 }
                 else {
                     window.location.href = MainGame.LogOutUrl;
@@ -456,11 +520,9 @@ var UI = (function () {
         });
     };
     UI.prototype.DestroyWinAll = function () {
-        var _this = this;
-        this.lanjut.removeEventListener("click", function () { return _this.gotoLeaderboard(); });
         this.mainGame.stage.removeChild(this.whiteBorder);
-        this.mainGame.stage.removeChild(this.winPanel);
-        this.mainGame.stage.removeChild(this.lanjut);
+        this.mainGame.stage.removeChild(this.winPanelAll);
+        this.mainGame.stage.removeChild(this.checkScoreButton);
         this.mainGame.stage.update();
     };
     UI.prototype.callWinScreen = function () {

@@ -55,6 +55,12 @@ class PreloadGame
     queue.loadFile({id:"bg1",src:"../asset/match boss/BG 1.png"});
     queue.loadFile({id:"fb-share",src:"../asset/match boss/FB Share.png"});
     queue.loadFile({id:"konfirmasi-panel",src:"../asset/Card/Quit.png"});
+    queue.loadFile({id:"check-leaderboard-button",src:"../asset/Card/Button Check Leaderboard.png"});
+    queue.loadFile({id:"check-score-button",src:"../asset/Card/Button Check skor.png"});
+    queue.loadFile({id:"victory-all",src:"../asset/Card/Victory end.png"});
+    queue.loadFile({id:"sinar",src:"../asset/Card/sinar.png"});
+    queue.loadFile({id:"score-panel",src:"../asset/Card/Wadah Score.png"});
+    queue.loadFile({id:"nyawa-habis-panel",src:"../asset/Card/Out of Heart.png"});
   	queue.load();
 
     PreloadGame.queue = queue;
