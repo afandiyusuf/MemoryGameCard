@@ -38,8 +38,6 @@ class UI
 
 
 
-
-
   constructor(mainGame:MainGame)
   {
     this.mainGame = mainGame;
@@ -121,10 +119,14 @@ class UI
     this.scoreText.text = (960-this.mainGame.totalScore).toString()+" Detik";
     this.scoreText.font = "bold 80px Luckiest Guy"
     this.scoreText.color = "black";
-
-    this.scoreText.x = this.checkScoreButton.x + ((this.checkScoreButton.image.width * this.checkScoreButton.scaleX)/2)/2;
-    this.scoreText.y = this.checkScoreButton.y - heightContinue - heightContinue;
     this.mainGame.stage.addChild(this.scoreText);
+    this.mainGame.stage.update();
+
+    var a = this.scoreText.getBounds();
+    var b = this.checkScoreButton.getBounds();
+    console.log(a,b);
+    this.scoreText.x = (MainGame.GameWidth - a.width)/2;
+    this.scoreText.y = (this.checkScoreButton.y - a.height)- (a.height/5);
     this.mainGame.stage.update();
 
   }
@@ -309,16 +311,21 @@ class UI
     this.mainImage = new createjs.Bitmap(PreloadGame.queue.getResult("main-button"));
     this.mainButton = new createjs.MovieClip();
     this.mainButton.addChild(this.mainImage);
+    this.keluarButton = new createjs.Bitmap(PreloadGame.queue.getResult("keluar-button"));
+
+    this.mainButton.addChild(this.mainImage);
     this.mainButton.scaleX = MainGame.GameWidth/6/this.mainImage.image.width;
     this.mainButton.scaleY = this.mainButton.scaleX;
     this.stage.addChild(this.mainButton);
+    this.keluarButton.scaleX = this.mainButton.scaleX;
+    this.keluarButton.scaleY = this.mainButton.scaleY;
 
     //create logo
     this.logoImage = new createjs.Bitmap(PreloadGame.queue.getResult("corner-logo"));
-    this.logoImage.scaleX = MainGame.GameWidth/10/this.logoImage.image.width;
+    this.logoImage.scaleX = MainGame.GameWidth/4/this.logoImage.image.width;
     this.logoImage.scaleY = this.logoImage.scaleX;
 
-    this.stage.addChild(this.logoImage);
+    //this.stage.addChild(this.logoImage);
     this.logoImage.regY = -this.logoImage.image.height*0.5;
     this.logo2Image = new createjs.Bitmap(PreloadGame.queue.getResult("title-image"));
     this.logo2Image.scaleY = (MainGame.GameHeight-(MainGame.GameHeight/12))/this.logo2Image.image.width;
@@ -326,17 +333,23 @@ class UI
 
     this.stage.addChild(this.logo2Image);
 
-    this.logoImage.x = MainGame.GameWidth/20;
-    this.logoImage.y = MainGame.GameHeight/10;
-    this.logo2Image.x = this.logoImage.x+(this.logoImage.image.width*this.logoImage.scaleX)+20;
+    this.logoImage.x = 10;
+    this.logoImage.y = 0;
+    this.logo2Image.x = MainGame.GameWidth/10;
     this.logo2Image.y = MainGame.GameHeight/2 - (this.logo2Image.image.height/2 * this.logo2Image.scaleY);
     var widthlogo2:number = this.logo2Image.image.width * this.logo2Image.scaleX;
 
     this.mainButton.x = this.logo2Image.x + widthlogo2 + (MainGame.GameWidth - (widthlogo2+this.logo2Image.x))/2 - (this.mainImage.image.width * this.mainButton.scaleX*0.5);
     this.mainButton.y = (this.logo2Image.image.height*this.logo2Image.scaleY)/2+this.logo2Image.y;
     console.log((this.logo2Image.image.height*this.logo2Image.scaleY)/2+this.logo2Image.y);
+    var a = this.mainButton.getBounds();
+    this.keluarButton.x = this.mainButton.x;
+    this.keluarButton.y = this.mainButton.y + a.height + a.height/10;
+    this.stage.addChild(this.keluarButton);
     //craeteListener
     this.mainButton.addEventListener("click",()=>this.startGame());
+    this.keluarButton.addEventListener("click",()=>this.gotoHome());
+    this.mainGame.stage.update();
   }
 
 
@@ -564,6 +577,8 @@ class UI
 
   public DestroyMainMenu():void
   {
+  this.keluarButton.removeEventListener("click",()=>this.gotoHome());
+    this.stage.removeChild(this.keluarButton)
     this.mainButton.removeEventListener("click",()=>this.startGame());
     this.mainButton.removeChild(this.mainImage);
     this.stage.removeChild(this.mainButton);
