@@ -119,10 +119,10 @@ class UI
 
     this.scoreText = new createjs.Text();
     this.scoreText.text = (960-this.mainGame.totalScore).toString()+" Detik";
-    this.scoreText.font = "bold 80px Luckiest Guy"
+    this.scoreText.font = "bold 72px Luckiest Guy"
     this.scoreText.color = "black";
-
-    this.scoreText.x = this.checkScoreButton.x + ((this.checkScoreButton.image.width * this.checkScoreButton.scaleX)/2)/2;
+    var a = this.scoreText.getBounds();
+    this.scoreText.x = this.checkScoreButton.x + ((this.checkScoreButton.image.width * this.checkScoreButton.scaleX)-a.width)/2;
     this.scoreText.y = this.checkScoreButton.y - heightContinue - heightContinue;
     this.mainGame.stage.addChild(this.scoreText);
     this.mainGame.stage.update();
