@@ -47,7 +47,7 @@ var MainGame = (function () {
             success: function (data) {
                 if (data.status_code == 200) {
                     MainGame.gt = data.data.game_token;
-                    console.log(MainGame.gt);
+                    //console.logg(MainGame.gt);
                 }
                 else {
                     window.location.href = MainGame.LogOutUrl;
@@ -67,7 +67,7 @@ var MainGame = (function () {
         this.id = 0;
         this.arrCard = new Array();
         this.LongGameTimer = MainGame.ArrTimer[MainGame.thisLevel];
-        console.log(this.LongGameTimer);
+        //console.log(this.LongGameTimer);
         MainGame.totalCard = 0;
         this.allContainer = new createjs.MovieClip();
         this.stage.addChild(this.allContainer);
@@ -117,7 +117,7 @@ var MainGame = (function () {
         this.DestroyThis();
         this.generateDummyCard();
         if (MainGame.thisLevel == MainGame.ArrTimer.length - 1) {
-            console.log("FINISH");
+            //console.log("FINISH");
             this.arrScore.push(Math.round(this.LongGameTimer - this.timers));
             var arrscore = this.arrScore;
             var level = MainGame.thisLevel;
@@ -132,14 +132,14 @@ var MainGame = (function () {
                 },
                 success: function (data) {
                     if (data.status_code == 200) {
-                        console.log(data);
+                        //console.log(data);
                     }
                     else {
                         window.location.href = MainGame.LogOutUrl;
                     }
                 },
                 error: function (data) {
-                    console.log("error");
+                    //console.log("error");
                 },
                 dataType: "JSON"
             });
@@ -219,13 +219,13 @@ var MainGame = (function () {
         this.arrCard = this.shuffleArray(this.arrCard);
         this.reArrangeAll();
         this.containerWidth = (this.arrCard[0].trueWidth + this.arrCard[0].margin) * MainGame.width;
-        console.log(this.arrCard[0].trueWidth);
-        console.log(this.containerWidth);
+        //console.log(this.arrCard[0].trueWidth);
+        //console.log(this.containerWidth);
         this.allContainer.x = (MainGame.GameWidth - this.containerWidth) / 2;
         this.allContainer.y = (MainGame.GameHeight - this.containerWidth) / 2 + MainGame.GameHeight / 30;
     };
     MainGame.prototype.generateDummyCard = function () {
-        console.log("dummy");
+        //console.log("dummy");
         this.allContainer = new createjs.MovieClip();
         this.stage.addChild(this.allContainer);
         for (var i = 0; i < MainGame.width; i++) {
@@ -407,7 +407,7 @@ var UI = (function () {
         this.mainGame = mainGame;
     }
     UI.prototype.changeBodyBG = function (string2) {
-        console.log("change bg" + string2);
+        //console.log("change bg" + string2);
         $(document.body).css("background-image", "url('" + string2 + "')");
     };
     UI.prototype.callWinALL = function () {
@@ -461,10 +461,18 @@ var UI = (function () {
         this.scoreText.text = (960 - this.mainGame.totalScore).toString() + " Detik";
         this.scoreText.font = "bold 72px Luckiest Guy";
         this.scoreText.color = "black";
+        
         var a = this.scoreText.getBounds();
         this.scoreText.x = this.checkScoreButton.x + ((this.checkScoreButton.image.width * this.checkScoreButton.scaleX) - a.width) / 2;
         this.scoreText.y = this.checkScoreButton.y - heightContinue - heightContinue;
+
         this.mainGame.stage.addChild(this.scoreText);
+        this.mainGame.stage.update();
+        var a = this.scoreText.getBounds();
+        var b = this.checkScoreButton.getBounds();
+        //console.log(a, b);
+        this.scoreText.x = (MainGame.GameWidth - a.width) / 2;
+        this.scoreText.y = (this.checkScoreButton.y - a.height) - (a.height / 5);
         this.mainGame.stage.update();
     };
     UI.prototype.CreateCobaLagiBesok = function () {
@@ -522,7 +530,7 @@ var UI = (function () {
                 }
             },
             error: function (data) {
-                console.log("error");
+                //console.log("error");
             },
             dataType: "JSON"
         });
@@ -579,27 +587,36 @@ var UI = (function () {
         this.mainImage = new createjs.Bitmap(PreloadGame.queue.getResult("main-button"));
         this.mainButton = new createjs.MovieClip();
         this.mainButton.addChild(this.mainImage);
+        this.keluarButton = new createjs.Bitmap(PreloadGame.queue.getResult("keluar-button"));
+        this.mainButton.addChild(this.mainImage);
         this.mainButton.scaleX = MainGame.GameWidth / 6 / this.mainImage.image.width;
         this.mainButton.scaleY = this.mainButton.scaleX;
         this.stage.addChild(this.mainButton);
+        this.keluarButton.scaleX = this.mainButton.scaleX;
+        this.keluarButton.scaleY = this.mainButton.scaleY;
         this.logoImage = new createjs.Bitmap(PreloadGame.queue.getResult("corner-logo"));
-        this.logoImage.scaleX = MainGame.GameWidth / 10 / this.logoImage.image.width;
+        this.logoImage.scaleX = MainGame.GameWidth / 4 / this.logoImage.image.width;
         this.logoImage.scaleY = this.logoImage.scaleX;
-        this.stage.addChild(this.logoImage);
         this.logoImage.regY = -this.logoImage.image.height * 0.5;
         this.logo2Image = new createjs.Bitmap(PreloadGame.queue.getResult("title-image"));
         this.logo2Image.scaleY = (MainGame.GameHeight - (MainGame.GameHeight / 12)) / this.logo2Image.image.width;
         this.logo2Image.scaleX = this.logo2Image.scaleY;
         this.stage.addChild(this.logo2Image);
-        this.logoImage.x = MainGame.GameWidth / 20;
-        this.logoImage.y = MainGame.GameHeight / 10;
-        this.logo2Image.x = this.logoImage.x + (this.logoImage.image.width * this.logoImage.scaleX) + 20;
+        this.logoImage.x = 10;
+        this.logoImage.y = 0;
+        this.logo2Image.x = MainGame.GameWidth / 10;
         this.logo2Image.y = MainGame.GameHeight / 2 - (this.logo2Image.image.height / 2 * this.logo2Image.scaleY);
         var widthlogo2 = this.logo2Image.image.width * this.logo2Image.scaleX;
         this.mainButton.x = this.logo2Image.x + widthlogo2 + (MainGame.GameWidth - (widthlogo2 + this.logo2Image.x)) / 2 - (this.mainImage.image.width * this.mainButton.scaleX * 0.5);
         this.mainButton.y = (this.logo2Image.image.height * this.logo2Image.scaleY) / 2 + this.logo2Image.y;
-        console.log((this.logo2Image.image.height * this.logo2Image.scaleY) / 2 + this.logo2Image.y);
+        //console.log((this.logo2Image.image.height * this.logo2Image.scaleY) / 2 + this.logo2Image.y);
+        var a = this.mainButton.getBounds();
+        this.keluarButton.x = this.mainButton.x;
+        this.keluarButton.y = this.mainButton.y + a.height + a.height / 10;
+        this.stage.addChild(this.keluarButton);
         this.mainButton.addEventListener("click", function () { return _this.startGame(); });
+        this.keluarButton.addEventListener("click", function () { return _this.gotoHome(); });
+        this.mainGame.stage.update();
     };
     UI.prototype.CallGameUi = function () {
         var _this = this;
@@ -760,6 +777,8 @@ var UI = (function () {
     };
     UI.prototype.DestroyMainMenu = function () {
         var _this = this;
+        this.keluarButton.removeEventListener("click", function () { return _this.gotoHome(); });
+        this.stage.removeChild(this.keluarButton);
         this.mainButton.removeEventListener("click", function () { return _this.startGame(); });
         this.mainButton.removeChild(this.mainImage);
         this.stage.removeChild(this.mainButton);
@@ -837,9 +856,9 @@ var Card = (function () {
         this.id = ((id) % (MainGame.width * MainGame.height / 2) + 1);
         var arr1 = [1, 2, 3, 4, 5, 6, 7, 8];
         var arr2 = [1, 2, 3, 4, 5, 6, 7, 8];
-        console.log(this.id);
+        //console.log(this.id);
         if (MainGame.totalCard > (MainGame.width * MainGame.height) / 2) {
-            console.log("cek here");
+            //console.log("cek here");
             var isSama = false;
             for (var i = 0; i < this.mainGame.arrCard.length; i++) {
                 if (this.mainGame.arrCard[i].cardFaceName == "card" + this.id) {

@@ -37,9 +37,8 @@ if($jsonData->status_code == "200")
     }
   }else{
     if(isset($_GET["access_token"])){
-        $_SESSION['is_out_heart'] = true;
+      $_SESSION['is_out_heart'] = true;
       header('Location: '.$base_url."/page/game.php");
-
     }
     //header('Location: '.$base_url."/page/stop.php");
   }

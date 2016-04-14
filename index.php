@@ -19,10 +19,10 @@ if(isset($_SESSION['tw_id']) && isset($_SESSION['state']))
 
 <head>
 	<meta property="og:type"               content="article" />
-	<meta property="og:title"              content="Memory Tebak Game Si Boss kecil" />
+	<meta property="og:title"              content="Tebak Si Bos Kecil" />
 
 	<meta property="og:url"                content="http://www.siboskecil.com" />
-	<meta property="og:description"        content="Aku sudah bermain tebak si boss kecil, Ayo kalian juga ikut main!!" />
+	<meta property="og:description"        content="Aku sudah bermain Tebak Si Bos Kecil. Ayo kamu ikut bermain!" />
 	<meta property="og:image:url"              content="http://www.siboskecil.com/asset/other/fbImage5.png" />
 
 	<meta property="fb:app_id"					content="1700571170226419"/>
@@ -38,7 +38,7 @@ if(isset($_SESSION['tw_id']) && isset($_SESSION['state']))
 	<link rel="stylesheet" href="css/main.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<script src="https://code.jquery.com/jquery-2.2.2.min.js"   integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI="   crossorigin="anonymous"></script>
-	<script src="js/build/frontPage.js"> </script>
+	<script src="js/build/frontPage.min.js"> </script>
 	<script src="js/build/forceLandscape.js"> </script>
 </head>
 
@@ -120,20 +120,22 @@ if($state == "register_tw")
 		<br/>
 		<ol type="1">
 			<li>Program Tebak Si Bos Kecil diselenggarakan oleh Tao Kae Noi Indonesia. </li>
-			<li>Program Tebak Si Bos Kecil hanya berlaku di Indonesia. </li>
-			<li>Tebak Si Bos Kecil diselenggarakan dari tanggal <font color="red">11 April s/d 30 Aprill 2016</font></li>
+			<li>PProgram Tebak Si Bos Kecil hanya berlaku di Indonesia dan akan diselenggarakan dari tanggal <font color="red">14 April s/d 05 Mei 2016.</font> </li>
 			<li>Tentang Permainan dan skor: </li>
 			<ol type="a">
 				<li>Wajib likes FB fanpages "Tao Kae Noi Indonesia" dan follow twitter @Taokaenoi_ID.</li>
 				<li>Sign-in menggunakan akun Facebook atau Twitter.</li>
+				<li>Saat registrasi, nama yang didaftarkan harus sesuai dengan kartu identitas (KTP/SIM).</li>
+				<li>Peserta hanya boleh menggunakan 1 (satu) akun dengan nama yang sesuai dengan kartu identitas yang didaftarkan.</li>
 				<li>Cari dan tebak ikon Bos Kecil yang sama dari 16 ikon yang ada dalam setiap level.</li>
 				<li>16 ikon tersebut terdiri dari 8 ikon yang berbeda untuk kemudian dicari ikon yang sama dari masing masing 8 ikon tersebut.</li>
 				<li>Terdiri dari 5 level dengan durasi tiap level yang telah ditentukan. Total waktu keseluruhan dari 5 level adalah 16 menit.</li>
 				<li>Pemain hanya memiliki kesempatan 1x bermain per harinya.</li>
-				<li>Sistem skor dihitung berdasarkan waktu.</li>
-				<li>Pemain yang dinyatakan sebagai peserta dan berkesempatan mendapatkan hadiah adalah pemain yang berhasil menyelesaikan 5 level dalam waktu maksimal.</li>
+				<li>Skor adalah durasi menyelesaikan permainan.</li>
+				<li>Durasi bermain semakin kecil maka kesempatan untuk menang akan besar.</li>
+				<li>Pemain yang dinyatakan sebagai peserta dan berkesempatan mendapatkan hadiah adalah pemain yang berhasil menyelesaikan 5 level dalam waktu tercepat.</li>
 			</ol>
-			<li>Pemenang adalah 10 peserta yang mendapatkan skor teratas.</li>
+			<li>Pemenang adalah 10 peserta yang mendapatkan skor teratas yaitu peserta dengan waktu tercepat.</li>
 			<li>Tentang hadiah: </li>
 
 			<ol type="a">
@@ -144,18 +146,18 @@ if($state == "register_tw")
 					<br/>Pemenang 5: GV18 Smart Bluetooth Watch GSM NFC Camera TF Card Wristwatch
 					<br/>Pemenang 6: Sades Wolfang SA-901 Headset Gaming Biru USB 2.0
 					<br/>Pemenang 7: SENNHEISER Earphone CX 213
-					<br/>Pemenang 8: Voucer MAP 300 Rb
-					<br/>Pemenang 9: Voucer MAP 200 Rb
-					<br/>Pemenang 10: Voucer MAP 100 Rb
-					<li><font color="red">Hadiah akan dikirim ke alamat pemenang</font></li>
-					<li>Pemenang akan dihubungi via pesan dari akun sosial media yang digunakan untuk mengikuti permainanTebak Si Bos Kecil.</li>
+					<br/>Pemenang 8: Voucer MAP 300 Rb
+					<br/>Pemenang 9: Voucer MAP 200 Rb
+					<br/>Pemenang 10: Voucer MAP 100 Rb
+					<li>Hadiah akan dikirim ke alamat pemenang</li>
+					<li>Pemenang akan dihubungi via pesan dari akun sosial media yang digunakan untuk mengikuti permainan Tebak Si Bos Kecil.</li>
 				</ol>
 
 
 				<li>Kuis Tebak Si Bos Kecil ini berlaku untuk umum..</li>
 				<li>Keputusan juri tidak dapat diganggu gugat.</li>
 				<li>Kuis ini tidak berlaku untuk karyawan, agency, biro iklan dan pihak ketiga (termasuk anggota keluarga dari jajaran karyawan Tao Kae Noi) yang turut bekerjasama menyelenggarakan program ini.</li>
-				<li>Pihak panitia berhak untuk memodifikasi syarat dan ketentuan serta peraturan-peraturan dari kuis ini tanpa pemberitahuan terlebih dahulu</li>
+				<li>Pihak panitia berhak untuk memodifikasi syarat dan ketentuan serta peraturan-peraturan dari kuis ini tanpa pemberitahuan terlebih dahulu.</li>
 			</ol>
 			<button id="tnc-ok" class="btn btn-primary ok-button">OK</button>
 		</div>
@@ -171,8 +173,9 @@ if($state == "register_tw")
 				<li>16 ikon tersebut terdiri dari 8 ikon yang berbeda untuk kemudian dicari ikon yang sama dari masing masing 8 ikon tersebut.</li>
 				<li>Terdiri dari 5 level dengan durasi tiap level yang telah ditentukan. Total waktu keseluruhan dari 5 level adalah 16 menit. </li>
 				<li>Pemain hanya memiliki kesempatan 1x bermain per harinya. </li>
-				<li>Sistem skor dihitung berdasarkan waktu. </li>
-				<li>Pemain yang dinyatakan sebagai peserta dan berkesempatan mendapatkan hadiah adalah pemain yang berhasil menyelesaikan 5 level dalam waktu maksimal.</li>
+				<li>Skor adalah durasi menyelesaikan permainan. </li>
+				<li>Durasi bermain semakin kecil maka kesempatan untuk menang akan besar.</li>
+				<li>Pemain yang dinyatakan sebagai peserta dan berkesempatan mendapatkan hadiah adalah pemain yang berhasil menyelesaikan 5 level dalam waktu tercepat.</li>
 			</ol>
 			<button id="howto-ok" class="btn btn-primary ok-button">OK</button>
 		</div>
