@@ -5,10 +5,10 @@ require_once('../php/validate_gt.php')
 <html>
 <head>
   <meta property="og:type"               content="article" />
-	<meta property="og:title"              content="Cek skorku di Tebak Si Boss kecil" />
-	<meta property="og:description"        content="Aku sudah bermain Tebak Si Boss Kecil, cek skorku di sini" />
-	<meta property="og:image:url"              content="http://www.siboskecil.com/asset/other/fbImage5.png" />
-
+	<meta property="og:title"              content="Cek skorku di Tebak Si Bos kecil" />
+	<meta property="og:description"        content="Aku sudah bermain Tebak Si Bos Kecil, cek skorku di sini" />
+	<meta property="og:image"              content="http://www.siboskecil.com/asset/other/fbImage5.png" />
+  <meta property="og:url"               content="http://www.siboskecil.com/page/leaderboard.php"/>
 	<meta property="fb:app_id"					content="1700571170226419"/>
   <link href='https://fonts.googleapis.com/css?family=Luckiest+Guy' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Dosis:800' rel='stylesheet' type='text/css'>
@@ -22,7 +22,7 @@ require_once('../php/validate_gt.php')
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   <script src="https://code.jquery.com/jquery-2.2.2.min.js"   integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI="   crossorigin="anonymous"></script>
-    <script src="../js/build/frontPage.js"  ></script>
+    <script src="../js/build/frontPage.min.js"  ></script>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
 
@@ -71,7 +71,7 @@ require_once('../php/validate_gt.php')
       <div class="col-xs-8 col-xs-offset-2 white-backGround leaderboard-content">
         <div class="col-xs-12">
         <div class="fb-share-button" style="display:inline-block" data-href="<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>?state=shared" data-layout="button"></div>
-        <a href="https://twitter.com/share" class="twitter-share-button" data-url="<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>?state=shared" data-text="Ayo cek skorku disini tebak si bos kecil disini">Tweet</a>
+        <a href="https://twitter.com/share" class="twitter-share-button" data-url="<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>?state=shared" data-text="Cek skor ku disini dan ayo kamu ikut bermain!">Tweet</a>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
         </div>
         <img id="title-leaderboard" height="50px" src="../asset/final/leaderboardTitle.png">
@@ -90,7 +90,7 @@ require_once('../php/validate_gt.php')
             echo "</div>";
             echo "<div class='user-data'>";
             echo "<div class='nama-lead'>";
-            echo " ".$leaderboardData[$i]->user_name." ".($i+1);
+            echo ($i+1).". ".$leaderboardData[$i]->user_name;
             echo "</div>";
             echo "<div class='score-lead'>";
             echo  " ".(960 - ($leaderboardData[$i]->score))." Second";
