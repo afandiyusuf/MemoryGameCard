@@ -50,5 +50,3 @@ $result2 = curl_exec($ch2);
 $jsonData2 = json_decode($result2);
 $leaderboardData = $jsonData2->data;
 curl_close($ch2);
-
-?>
